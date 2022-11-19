@@ -32,3 +32,9 @@ PassPushPosh is a PowerShell module for the [Password Pusher](/pglombardo/Passwo
 - [ ] Support localization (multiple languages)
 - [ ] Support localization in secret link and 1-step link
 - [ ] Documentation for [PasswordPush] class
+- [ ] Finish documentation in /Docs
+- [ ] Implement automated testing with Pester
+- [ ] Implement automatic builds / deploys
+- [ ] Module documentation
+- [ ] Align validation requirements in functions for the same data (e.g. URL Token)
+- [ ] Fix inconsistent indentation

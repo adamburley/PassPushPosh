@@ -182,6 +182,81 @@ function Get-Push {
         }
     }
 }
+function Get-PushAuditLog {
+    <#
+    .SYNOPSIS
+    Get the view log of an authenticated Push
+    
+    .DESCRIPTION
+    Retrieves the view log of a Push created under an authenticated session.
+    
+    .INPUTS
+    [string] 
+    
+    .OUTPUTS
+    [PsCustomObject[]] Array of entries.
+    [PsCustomObject] If there's an error in the call, it will be returned an object with a property
+    named 'error'.  The value of that member will contain more information
+
+    .EXAMPLE
+    Get-PushAuditLog -URLToken 'mytokenfromapush'
+    
+    .NOTES
+    General notes
+    #>
+  [CmdletBinding()]
+  param(
+    # URL Token from a secret
+    [parameter(ValueFromPipeline)]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $URLToken,
+
+    # Return content of API call directly
+    [Parameter()]
+    [switch]
+    $Raw
+  )
+  begin {
+    if (-not $Global:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+  }
+  process {
+    try { 
+        $uri = "$Script:PPPBaseUrl/p/$URLToken/audit.json"
+        Write-Debug 'Requesting $uri'
+        Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
+    } catch {
+        Write-Verbose "An exception was caught: $($_.Exception.Message)"
+        if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
+            Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
+            Write-Debug -Message 'Response object set to global variable $PPPLastError'
+            return @{
+                'Error'        = $_.Exception.Message
+                'ErrorCode'    = [int]$_.Exception.Response.StatusCode
+                'ErrorMessage' = $_.Exception.Response.ReasonPhrase
+            }
+        }
+        return 
+    }    
+  }
+}
+
+# Invalid API key / email - 401
+# Invalid URL Token - 404
+# Valid token but not mine - 200, content =  {"error":"That push doesn't belong to you."}
+# Success but no views - 200, content = : {"views":[]}
+# Success with view history {"views":[{"ip":"75.118.137.58,172.70.135.200","user_agent":"Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101; en-US) PowerShell/7.2.7","referrer":"","successful":true,"created_at":"2022-11-19T18:32:42.277Z","updated_at":"2022-11-19T18:32:42.277Z","kind":0}]}
+# Content.Views
+<#
+ip         : 75.118.137.58,172.70.135.200
+user_agent : Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101; 
+             en-US) PowerShell/7.2.7
+referrer   : 
+successful : True
+created_at : 11/19/2022 6:32:42 PM
+updated_at : 11/19/2022 6:32:42 PM
+kind       : 0
+#>
 function Get-SecretLink {
   <#
   .SYNOPSIS
@@ -194,10 +269,11 @@ function Get-SecretLink {
   but the Push is expired or deleted.
   
   .INPUTS
-  [string]
+  [string] URL Token value
 
   .OUTPUTS
-  [string] or [bool]
+  [string] Fully qualified URL
+  [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link.
 
   .EXAMPLE
   Get-SecretLink -URLToken gzv65wiiuciy
@@ -207,6 +283,9 @@ function Get-SecretLink {
   # En France
   PS > Get-SecretLink -URLToken gzv65wiiuciy -Language fr
   https://pwpush.com/fr/p/gzv65wiiuciy/r
+
+  .LINK
+  https://pwpush.com/api/1.0/passwords/preview.en.html
 
   .NOTES
   Including this endpoint for completeness - however it is generally unnecessary.
@@ -271,20 +350,16 @@ function Initialize-PassPushPosh {
     # Initialize with default settings
     PS > Initialize-PassPushPosh
 
-    # or with more feedback to the terminal
-    PS> Initialize-PassPushPosh
-    VERBOSE: Initializing PassPushPosh. ApiKey: [None], BaseUrl: https://pwpush.com
-    DEBUG: Detected Culture: English (United States)
-    DEBUG: Language is supported in Password Pusher.
-
     .EXAMPLE
     # Initialize with authentication
     PS > Initialize-PassPushPosh -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
+
     VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://pwpush.com
 
     .EXAMPLE
     # Initialize with another server with authentication
     PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
+    
     VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
 
     .NOTES
@@ -333,7 +408,7 @@ function Initialize-PassPushPosh {
             Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
-            $Script:PPPHeaders = @{
+            $Global:PPPHeaders = @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
