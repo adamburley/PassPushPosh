@@ -1,62 +1,82 @@
----
+﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version:
+online version: https://pwpush.com/api/1.0/passwords/preview.en.html
 schema: 2.0.0
 ---
 
-# Get-SecretLink
+# Initialize-PassPushPosh
 
 ## SYNOPSIS
-Returns a fully qualified secret link to a push of given URL Token
+Initialize the PassPushPosh module
 
 ## SYNTAX
 
+### Anonymous (Default)
 ```
-Get-SecretLink [-URLToken] <String> [[-Language] <String>] [<CommonParameters>]
+Initialize-PassPushPosh [[-BaseUrl] <String>] [-Language <String>] [-Force] [<CommonParameters>]
+```
+
+### Authenticated
+```
+Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] <String>] [-Language <String>]
+ [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Accepts a string value for a URL Token and retrieves a full URL link to the secret.
-Returned value is a 1-step retrieval link depending on option selected during Push creation.
-Returns false if URL Token is invalid, however it will return a URL if the token is valid
-but the Push is expired or deleted.
+Sets global variables to handle the server URL, headers (authentication), and language.
+Called automatically by module Functions if it is not called explicitly prior, so you don't actually need
+to call it unless you're going to use the authenticated API or alternate server, etc
+Default parameters use the pwpush.com domain, anonymous authentication, and whatever language your computer
+is set to.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-SecretLink -URLToken gzv65wiiuciy
-https://pwpush.com/en/p/gzv65wiiuciy/r
+# Initialize with default settings
+PS > Initialize-PassPushPosh
 ```
 
 ### EXAMPLE 2
 ```
-# En France
-PS > Get-SecretLink -URLToken gzv65wiiuciy -Language fr
-https://pwpush.com/fr/p/gzv65wiiuciy/r
+# Initialize with authentication
+PS > Initialize-PassPushPosh -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
 ```
+
+VERBOSE: Initializing PassPushPosh.
+ApiKey: \[x-kdjf\], BaseUrl: https://pwpush.com
+
+### EXAMPLE 3
+```
+# Initialize with another server with authentication
+PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
+```
+
+VERBOSE: Initializing PassPushPosh.
+ApiKey: \[x-kdjf\], BaseUrl: https://myprivatepwpushinstance.com
 
 ## PARAMETERS
 
-### -URLToken
-Secret URL token of a previously created push.
+### -ApiKey
+API Key for authenticated calls.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Authenticated
 Aliases:
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Language
-Language for returned links.
-Defaults to system language, can be overridden here.
+### -BaseUrl
+Base URL for API calls.
+Allows use of module with private instances of Password Pusher
+Default: https://pwpush.com
 
 ```yaml
 Type: String
@@ -64,8 +84,58 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
-Default value: En
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EmailAddress
+Email address to use for authenticated calls.
+
+```yaml
+Type: String
+Parameter Sets: Authenticated
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+Force setting new information.
+If module is already initialized you can use this to
+Re-initialize with default settings.
+Implied if either ApiKey or BaseUrl is provided.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Language
+Language to render resulting links in.
+Defaults to host OS language, or English if
+host OS language is not available
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -75,19 +145,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### [string]
 ## OUTPUTS
 
-### [string] or [bool]
 ## NOTES
-Including this endpoint for completeness - however it is generally unnecessary.
-The only thing this endpoint does is return a different value depending if "Use 1-click retrieval step"
-was selected when the Push was created. 
-Since both the 1-click and the direct links are available
-regardless if that option is selected, the links are calculable and both are included by default in a
-\[PasswordPush\] object.
-
-As it returns false if a Push URL token is not valid you can use it to test if a Push exists without
-burning a view.
+TODO: Review API key pattern for parameter validation
 
 ## RELATED LINKS

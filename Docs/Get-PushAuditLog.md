@@ -1,58 +1,35 @@
 ﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/preview.en.html
+online version:
 schema: 2.0.0
 ---
 
-# Remove-Push
+# Get-PushAuditLog
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Get the view log of an authenticated Push
 
 ## SYNTAX
 
-### Token (Default)
 ```
-Remove-Push [-URLToken <String>] [-Raw] [<CommonParameters>]
-```
-
-### Object
-```
-Remove-Push [-PushObject <PasswordPush>] [-Raw] [<CommonParameters>]
+Get-PushAuditLog [[-URLToken] <String>] [-Raw] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Retrieves the view log of a Push created under an authenticated session.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Get-PushAuditLog -URLToken 'mytokenfromapush'
+```
 
 ## PARAMETERS
 
-### -PushObject
-{{ Fill PushObject Description }}
-
-```yaml
-Type: PasswordPush
-Parameter Sets: Object
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### -Raw
-{{ Fill Raw Description }}
+Return content of API call directly
 
 ```yaml
 Type: SwitchParameter
@@ -61,21 +38,21 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -URLToken
-{{ Fill URLToken Description }}
+URL Token from a secret
 
 ```yaml
 Type: String
-Parameter Sets: Token
+Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -86,13 +63,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
-### PasswordPush
+### [string]
 ## OUTPUTS
 
-### PasswordPush
-### System.String
-### System.Boolean
+### [PsCustomObject[]] Array of entries.
+### [PsCustomObject] If there's an error in the call, it will be returned an object with a property
+### named 'error'.  The value of that member will contain more information
 ## NOTES
+General notes
 
 ## RELATED LINKS

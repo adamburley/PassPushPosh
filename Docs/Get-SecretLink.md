@@ -1,7 +1,7 @@
----
+﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version:
+online version: https://pwpush.com/api/1.0/passwords/preview.en.html
 schema: 2.0.0
 ---
 
@@ -39,21 +39,6 @@ https://pwpush.com/fr/p/gzv65wiiuciy/r
 
 ## PARAMETERS
 
-### -URLToken
-Secret URL token of a previously created push.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### -Language
 Language for returned links.
 Defaults to system language, can be overridden here.
@@ -70,15 +55,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -URLToken
+Secret URL token of a previously created push.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [string]
+### [string] URL Token value
 ## OUTPUTS
 
-### [string] or [bool]
+### [string] Fully qualified URL
+### [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link.
 ## NOTES
 Including this endpoint for completeness - however it is generally unnecessary.
 The only thing this endpoint does is return a different value depending if "Use 1-click retrieval step"
@@ -91,3 +92,6 @@ As it returns false if a Push URL token is not valid you can use it to test if a
 burning a view.
 
 ## RELATED LINKS
+
+[https://pwpush.com/api/1.0/passwords/preview.en.html](https://pwpush.com/api/1.0/passwords/preview.en.html)
+
