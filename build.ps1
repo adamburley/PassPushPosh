@@ -10,7 +10,6 @@ foreach($folder in @('PassPushPosh/Classes','PassPushPosh/Private', 'PassPushPos
         Write-Host "Processing folder $root"
         $files = Get-ChildItem -Path $root -Filter *.ps1
 
-        # dot source each file
         $files | where-Object{ $_.name -NotLike '*.Tests.ps1'} | 
             ForEach-Object{
                 Write-Host $_.name;
@@ -18,3 +17,30 @@ foreach($folder in @('PassPushPosh/Classes','PassPushPosh/Private', 'PassPushPos
             }
     }
 }
+
+Import-Module ./PassPushPosh -Force
+
+$parameters = @{
+    Path = './Docs'
+    RefreshModulePage = $true
+    AlphabeticParamsOrder = $true
+    UpdateInputOutput = $true
+    ExcludeDontShow = $true
+    LogPath = './LastHelpModuleUpdate.txt'
+    Encoding = [System.Text.Encoding]::UTF8
+}
+Update-MarkdownHelpModule @parameters
+
+<#
+$OutputFolder = './Docs'
+$parameters = @{
+    Module = 'PassPushPosh'
+    OutputFolder = $OutputFolder
+    AlphabeticParamsOrder = $true
+    WithModulePage = $true
+    ExcludeDontShow = $true
+    Encoding = [System.Text.Encoding]::UTF8
+}
+New-MarkdownHelp @parameters -force
+New-MarkdownAboutHelp -OutputFolder './Docs' -AboutName "PassPushPosh"
+#>
