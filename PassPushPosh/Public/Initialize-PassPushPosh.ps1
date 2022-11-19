@@ -98,7 +98,7 @@ function Initialize-PassPushPosh {
             }
         }
 
-        $Script:PPPBaseUrl = $BaseUrl.TrimEnd('/')
-        $Script:PPPLanguage = $Language
+        $Global:PPPBaseUrl = $BaseUrl.TrimEnd('/')
+        $Global:PPPLanguage = $Language
     }
 }

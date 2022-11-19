@@ -38,7 +38,7 @@ function Get-PushAuditLog {
   }
   process {
     try { 
-        $uri = "$Script:PPPBaseUrl/p/$URLToken/audit.json"
+        $uri = "$Global:PPPBaseUrl/p/$URLToken/audit.json"
         Write-Debug 'Requesting $uri'
         Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
     } catch {
