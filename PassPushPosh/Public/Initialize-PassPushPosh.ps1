@@ -14,20 +14,16 @@ function Initialize-PassPushPosh {
     # Initialize with default settings
     PS > Initialize-PassPushPosh
 
-    # or with more feedback to the terminal
-    PS> Initialize-PassPushPosh
-    VERBOSE: Initializing PassPushPosh. ApiKey: [None], BaseUrl: https://pwpush.com
-    DEBUG: Detected Culture: English (United States)
-    DEBUG: Language is supported in Password Pusher.
-
     .EXAMPLE
     # Initialize with authentication
     PS > Initialize-PassPushPosh -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
+
     VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://pwpush.com
 
     .EXAMPLE
     # Initialize with another server with authentication
     PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
+    
     VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
 
     .NOTES
@@ -76,7 +72,7 @@ function Initialize-PassPushPosh {
             Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
-            $Script:PPPHeaders = @{
+            $Global:PPPHeaders = @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }

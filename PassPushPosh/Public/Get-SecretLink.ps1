@@ -10,10 +10,11 @@ function Get-SecretLink {
   but the Push is expired or deleted.
   
   .INPUTS
-  [string]
+  [string] URL Token value
 
   .OUTPUTS
-  [string] or [bool]
+  [string] Fully qualified URL
+  [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link.
 
   .EXAMPLE
   Get-SecretLink -URLToken gzv65wiiuciy
@@ -23,6 +24,9 @@ function Get-SecretLink {
   # En France
   PS > Get-SecretLink -URLToken gzv65wiiuciy -Language fr
   https://pwpush.com/fr/p/gzv65wiiuciy/r
+
+  .LINK
+  https://pwpush.com/api/1.0/passwords/preview.en.html
 
   .NOTES
   Including this endpoint for completeness - however it is generally unnecessary.
