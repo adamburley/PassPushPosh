@@ -145,9 +145,36 @@ function ConvertTo-PasswordPush {
     }
 }
 function Get-Push {
+    <#
+    .SYNOPSIS
+    Retrieve the secret contents of a Push
+    
+    .DESCRIPTION
+    Accepts a URL Token string, returns a Push object
+    
+    .INPUTS
+    [string]
+
+    .OUTPUTS
+    [PasswordPush]
+
+    .EXAMPLE
+    Get-Push -URLToken gzv65wiiuciy
+    
+    TODO example output
+
+    .EXAMPLE
+    Get-Push -URLToken gzv65wiiuciy -Raw
+
+    TODO example output
+    
+    .NOTES
+    TODO rewrite
+    #>
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param(
+        # URL Token for the secret
         [parameter(Mandatory,ValueFromPipeline,Position=0)]
         [ValidateNotNullOrEmpty()]
         [Alias('Token')]

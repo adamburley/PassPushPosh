@@ -29,7 +29,7 @@ $parameters = @{
     LogPath = './LastHelpModuleUpdate.txt'
     Encoding = [System.Text.Encoding]::UTF8
 }
-Update-MarkdownHelpModule @parameters
+Update-MarkdownHelpModule @parameters -Force
 
 <#
 $OutputFolder = './Docs'

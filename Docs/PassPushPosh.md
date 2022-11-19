@@ -14,9 +14,6 @@ Locale: en-US
 ### [ConvertTo-PasswordPush](ConvertTo-PasswordPush.md)
 Convert API call response to a PasswordPush object
 
-### [Get-Push](Get-Push.md)
-{{ Fill in the Synopsis }}
-
 ### [Get-PushAuditLog](Get-PushAuditLog.md)
 Get the view log of an authenticated Push
 
