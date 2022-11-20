@@ -23,12 +23,13 @@ function Initialize-PassPushPosh {
     .EXAMPLE
     # Initialize with another server with authentication
     PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
-    
+
     VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
 
     .NOTES
     TODO: Review API key pattern for parameter validation
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(DefaultParameterSetName='Anonymous')]
     param (
         # Email address to use for authenticated calls.
@@ -72,10 +73,12 @@ function Initialize-PassPushPosh {
             Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
-            $Global:PPPHeaders = @{
+            Set-Variable -Scope Global -Name PPPHeaders -Value @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
+        } elseif ($Global:PPPHeaders) { # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
+            Remove-Variable -Scope Global -Name PPPHeaders
         }
         $availableLanguages = ('en','ca','cs','da','de','es','fi','fr','hu','it','nl','no','pl','pt-BR','sr','sv')
         if (-not $Language) {
@@ -98,7 +101,7 @@ function Initialize-PassPushPosh {
             }
         }
 
-        $Global:PPPBaseUrl = $BaseUrl.TrimEnd('/')
-        $Global:PPPLanguage = $Language
+        Set-Variable -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
+        Set-Variable -Scope Global -Name PPPLanguage -Value $Language
     }
 }
