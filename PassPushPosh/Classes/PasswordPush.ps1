@@ -76,6 +76,14 @@ class PasswordPush {
     }
 }
 
+function New-PasswordPush {
+    [CmdletBinding()]
+    param (
+        
+    )
+    return [PasswordPush]::new()
+    
+}
 function ConvertTo-PasswordPush {
     <#
     .SYNOPSIS

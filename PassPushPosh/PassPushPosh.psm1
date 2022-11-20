@@ -76,6 +76,14 @@ class PasswordPush {
     }
 }
 
+function New-PasswordPush {
+    [CmdletBinding()]
+    param (
+        
+    )
+    return [PasswordPush]::new()
+    
+}
 function ConvertTo-PasswordPush {
     <#
     .SYNOPSIS
@@ -457,12 +465,13 @@ function Initialize-PassPushPosh {
     .EXAMPLE
     # Initialize with another server with authentication
     PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
-    
+
     VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
 
     .NOTES
     TODO: Review API key pattern for parameter validation
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(DefaultParameterSetName='Anonymous')]
     param (
         # Email address to use for authenticated calls.
@@ -506,10 +515,12 @@ function Initialize-PassPushPosh {
             Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
-            $Global:PPPHeaders = @{
+            Set-Variable -Scope Global -Name PPPHeaders -Value @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
+        } elseif ($Global:PPPHeaders) { # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
+            Remove-Variable -Scope Global -Name PPPHeaders
         }
         $availableLanguages = ('en','ca','cs','da','de','es','fi','fr','hu','it','nl','no','pl','pt-BR','sr','sv')
         if (-not $Language) {
@@ -532,61 +543,109 @@ function Initialize-PassPushPosh {
             }
         }
 
-        $Global:PPPBaseUrl = $BaseUrl.TrimEnd('/')
-        $Global:PPPLanguage = $Language
+        Set-Variable -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
+        Set-Variable -Scope Global -Name PPPLanguage -Value $Language
     }
 }
 function New-Push {
-    [CmdletBinding()]
-    [OutputType([PSCustomObject])]
+    <#
+    .SYNOPSIS
+    Create a new Password Push
+
+    .DESCRIPTION
+    Create a new Push on the specified Password Pusher instance. The
+    programmatic equivalent of going to pwpush.com and entering info.
+    Returns [PasswordPush] object. Link member is a link created based on
+    1-step setting and language specified, however both 1-step and direct links
+    are always provided at LinkRetrievalStep and LinkDirect.
+
+    .EXAMPLE
+    $myPush = New-Push "Here's my secret!"
+    PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
+
+    Link              : https://pwpush.com/en/p/gzv65wiiuciy   # Requested style
+    LinkRetrievalStep : https://pwpush.com/en/p/gzv65wiiuciy/r # 1-step
+    LinkDirect        : https://pwpush.com/en/p/gzv65wiiuciy   # Direct
+
+    .EXAMPLE
+    "Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
+
+    https://pwpush.com/en/p/gzv65wiiuciy/r
+
+
+    .EXAMPLE
+    # "Burn after reading" style Push
+    PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
+
+    .INPUTS
+    [string]
+
+    .OUTPUTS
+    [PasswordPush] Push object
+    [string] Raw result of API call
+    [bool] Fail on error
+
+    .LINK
+    Get-SecretLink
+
+    .NOTES
+    Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default
+    values for Password Pusher and what's used on the public instance
+    (pwpush.com). If you're using this with a private instance and want to
+    override that value you'll need to fork this module.
+
+    TODO: Support [PasswordPush] input objects
+    #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
+    [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='Anonymous')]
+    [OutputType([PasswordPush],[string],[bool])]
     param(
         # The password or secret text to share.
-        [parameter(Mandatory=$true,Position=0)]
+        [Parameter(Mandatory=$true,ValueFromPipeline,Position=0)]
         [Alias('Password')]
         [ValidateNotNullOrEmpty()]
         [string]$Payload,
 
-        # If authenticated, the note to label this push.
-        [Parameter()]
+        # Label for this Push (requires Authenticated session)
+        [Parameter(ParameterSetName='Authenticated')]
         [ValidateNotNullOrEmpty()]
         [string]$Note,
 
         # Expire secret link and delete after this many days.
-        # Default maximum is 90 days but we'll use 365 here for a bit more flexibility.
-        # Note if server does not support the lifetime you specify you'll receive an error.
         [Parameter()]
-        [ValidateRange(1,365)]
+        [ValidateRange(1,90)]
         [int]
         $ExpireAfterDays,
 
-        # Expire secret link and delete after this many views.
-        # Default max is 100, if using a larger default you may need to fork this function
+        # Expire secret link after this many views.
         [Parameter()]
         [ValidateRange(1,100)]
         [int]
         $ExpireAfterViews,
 
-        # Allow users to delete passwords once retrieved.
+        # Allow the recipient of a Push to delete it.
         [Parameter()]
         [switch]
         $DeletableByViewer,
 
-        # PassPushPosh requests a 1-click retrieval step by default. Set this to disable it.
+        # Require recipient click an extra link to view Push payload.
         # Helps to avoid chat systems and URL scanners from eating up views.
-        # Note that the retrieval step URL is always available for a push. This switch only changes
-        # the link provided by the preview helper endpoint. This cmdlet will return all links
+        # Note that the retrieval step URL is always available for a push. This
+        # parameter changes if the 1-click link is used in the Link parameter
+        # and returned from the secret link helper (Get-SecretLink)
         [Parameter()]
         [switch]
-        $DisableRetrievalStep,
+        $RetrievalStep,
 
-        # Override Language set in global variable PPPLanguage (default: Host OS Language)
-        # You can change this after the fact by changing the URL or by requesting a link for the given
-        # token from the preview helper endpoint ( See @Request-SecretLink )
+        # Override Language. Useful if sending to someone who speaks a
+        # different language. You can change this after the fact by changing
+        # the URL by hand or by requesting a link for the given token from the
+        # preview helper endpoint ( See Request-SecretLink )
         [Parameter()]
         [string]
-        $Language = 'en',
+        $Language = $Global:PPPLanguage,
 
-        # Return the raw response from the API as a PSCustomObject
+        # Return the raw response from the API call
         [Parameter()]
         [switch]
         $Raw
@@ -597,64 +656,72 @@ function New-Push {
     }
 
     process {
-        if ($Note -and -not $Script:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
+        if ($PSCmdlet.ParameterSetName -eq 'Authenticated' -and -not $Script:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
 
         $body = @{
             'password' = @{
                 'payload' = $Payload
             }
         }
-        if ($Note) { $body.password.note = $note }
-        if ($ExpireAfterDays) { $body.password.expire_after_days = $ExpireAfterDays }
-        if ($ExpireAfterViews) { $body.password.expire_after_views = $ExpireAfterViews }
-        if ($DeletableByViewer) { $body.password.deletable_by_viewer = $DeletableByViewer }
-        $body.password.retrieval_step = if ($DisableRetrievalStep) { $false } else { $true }
-        Write-Debug ($body | ConvertTo-Json).tostring()
-        try {
-            $response = Invoke-WebRequest -Uri "$Script:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
-            if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name PPPLastCall -Value $response
-                Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
-            }
-            if ($Raw) { 
-                Write-Debug "Returning raw object: $($response.Content)"
-                return $response.Content
-            }
-            return $response.Content | ConvertTo-PasswordPush
-        } catch { 
-            Write-Verbose "An exception was caught: $($_.Exception.Message)"
-            if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name PPPLastError -Value $_
-                Write-Debug -Message 'Response object set to global variable $PPPLastError'
-            }
-            return @{
-                'Error' = $_.Exception.Message
-                'ErrorCode' = [int]$_.Exception.Response.StatusCode
-                'ErrorMessage' = $_.Exception.Response.ReasonPhrase
+        $shouldString = 'Submit {0} push with Payload of length {1}' -f $PSCmdlet.ParameterSetName, $Payload.Length
+        if ($Note) {
+            $body.password.note = $note
+            $shouldString += " with note $note"
+        }
+        if ($ExpireAfterDays) {
+            $body.password.expire_after_days = $ExpireAfterDays
+            $shouldString += ', expire after {0} days' -f $ExpireAfterDays
+        }
+        if ($ExpireAfterViews) {
+            $body.password.expire_after_views = $ExpireAfterViews
+            $shouldString += ', expire after {0} views' -f $ExpireAfterViews
+        }
+        $body.password.deletable_by_viewer = if ($DeletableByViewer) {
+            $shouldString += ', deletable by viewer'
+            $true
+        } else {
+            $shouldString += ', NOT deletable by viewer'
+            $false
+        }
+        $body.password.retrieval_step = if ($RetrievalStep) {
+            $shouldString += ', with a 1-click retrieval step'
+            $true
+        } else {
+            $shouldString += ', with a direct link'
+            $false
+        }
+        $shouldString += ' in language "{0}"' -f $Language
+        Write-Debug "Call body: $(($body | ConvertTo-Json).tostring())"
+
+        $iwrSplat = @{
+            'Method' = 'Post'
+            'ContentType' = 'application/json'
+            'Body' = ($body | ConvertTo-Json)
+            'Uri' = "$Script:PPPBaseUrl/$Language/p.json"
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Authenticated') { $iwrSplat['Headers'] = $Global:PPPHeaders }
+        if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
+            try {
+                #$response = Invoke-WebRequest -Uri "$Script:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
+                if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
+                    Set-Variable -Scope Global -Name PPPLastCall -Value $response
+                    Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
+                }
+                if ($Raw) {
+                    Write-Debug "Returning raw object: $($response.Content)"
+                    return $response.Content
+                }
+                return $response.Content | ConvertTo-PasswordPush
+            } catch {
+                Write-Verbose "An exception was caught: $($_.Exception.Message)"
+                if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
+                    Set-Variable -Scope Global -Name PPPLastError -Value $_
+                    Write-Debug -Message 'Response object set to global variable $PPPLastError'
+                }
             }
         }
     }
 }
-
-
-<# Sample API Response
-Raw:
-    {"expire_after_days":1,"expire_after_views":1,"expired":false,"url_token":"esqz_4hyfvjvrmpcka","created_at":"2022-11-17T16:16:10.731Z","updated_at":"2022-11-17T16:16:10.731Z","deleted":false,"deletable_by_viewer":true,"retrieval_step":false,"expired_on":null,"days_remaining":1,"views_remaining":1}
-
-PSCustomObject:
-    expire_after_days   : 1
-    expire_after_views  : 1
-    expired             : False
-    url_token           : esqz_4hyfvjvrmpcka
-    created_at          : 11/17/2022 4:16:10 PM
-    updated_at          : 11/17/2022 4:16:10 PM
-    deleted             : False
-    deletable_by_viewer : True
-    retrieval_step      : False
-    expired_on          : 
-    days_remaining      : 1
-    views_remaining     : 1
-#>
 function Remove-Push {
   [CmdletBinding(DefaultParameterSetName='Token')]
   [OutputType([PasswordPush],[string],[bool])]
