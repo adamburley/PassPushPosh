@@ -49,7 +49,7 @@ function New-Push {
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='Anonymous')]
-    [OutputType([PasswordPush],[string],[bool])]
+    [OutputType([PSCustomObject],[string],[bool])] # Returntype should be [PasswordPush] but I've yet to find a way to add class access to a function on a module...
     param(
         # The password or secret text to share.
         [Parameter(Mandatory=$true,ValueFromPipeline,Position=0)]
