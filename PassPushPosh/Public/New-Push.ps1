@@ -49,8 +49,8 @@ function New-Push {
     TODO: Support [PasswordPush] input objects
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
-    [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='Anonymous')]
-    [OutputType([PSCustomObject],[string],[bool])] # Returntype should be [PasswordPush] but I've yet to find a way to add class access to a function on a module...
+    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='Low',DefaultParameterSetName='Anonymous')]
+    [OutputType([PasswordPush],[string],[bool])] # Returntype should be [PasswordPush] but I've yet to find a way to add class access to a function on a module...
     param(
         # The password or secret text to share.
         [Parameter(Mandatory=$true,ValueFromPipeline,Position=0)]
@@ -95,9 +95,9 @@ function New-Push {
         # preview helper endpoint ( See Request-SecretLink )
         [Parameter()]
         [string]
-        $Language = $Global:PPPLanguage,
+        $Language,
 
-        # Return the raw response from the API call
+        # Return the raw response body from the API call
         [Parameter()]
         [switch]
         $Raw
@@ -142,6 +142,7 @@ function New-Push {
             $shouldString += ', with a direct link'
             $false
         }
+        if (-not $Language) { $Language = $Global:PPPLanguage }
         $shouldString += ' in language "{0}"' -f $Language
         Write-Debug "Call body: $(($body | ConvertTo-Json).tostring())"
 
@@ -153,6 +154,7 @@ function New-Push {
             'UserAgent' = $Global:PPPUserAgent
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') { $iwrSplat['Headers'] = $Global:PPPHeaders }
+        Write-Debug ('Call URI: ' + $iwrSplat.Uri)
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
             try {
                 $response = Invoke-WebRequest -Uri "$Global:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)

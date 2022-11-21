@@ -7,7 +7,8 @@ PassPushPosh is a PowerShell module for the [Password Pusher](/pglombardo/Passwo
 - 🟢 **Class:** PasswordPush
   - ⚫️ Format File
 - 🟡 Get-Dashboard
-- 🟡 Get-Push
+- 🟢 Get-Push
+  - [ ] Examples and testing
 - 🟡 Get-PushAuditLog
 - 🟡 Get-SecretLink
 - 🟢 Initialize-PassPushPosh
@@ -30,7 +31,8 @@ PassPushPosh is a PowerShell module for the [Password Pusher](/pglombardo/Passwo
 - [ ] Finish documentation in /Docs
 - [ ] Implement automated testing with Pester
 - [ ] Implement automatic builds / deploys
-- [ ] Module documentation
+- [ ] External Module documentation
 - [ ] Align validation requirements in functions for the same data (e.g. URL Token)
 - [ ] Fix inconsistent indentation
 - [ ] Issue: Importing class to use in returntype for function [e.g. New-Push]
+- [ ] Add UserAgent handling to Initialize-PassPushPosh and all calls

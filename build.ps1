@@ -8,7 +8,7 @@ foreach($folder in @('PassPushPosh/Classes','PassPushPosh/Private', 'PassPushPos
     if(Test-Path -Path $root)
     { 
         Write-Host "Processing folder $root"
-        $files = Get-ChildItem -Path $root -Filter *.ps1
+        $files = Get-ChildItem -Path $root -Filter *.ps1 -Recurse
 
         $files | where-Object{ $_.name -NotLike '*.Tests.ps1'} | 
             ForEach-Object{
