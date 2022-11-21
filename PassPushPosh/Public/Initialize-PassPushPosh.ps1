@@ -26,7 +26,17 @@ function Initialize-PassPushPosh {
 
     VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
 
+    .EXAMPLE
+    # Set a custom User Agent
+    PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
+
     .NOTES
+    All variables set by this function start with PPP.
+    - PPPHeaders
+    - PPPLanguage
+    - PPPUserAgent
+    - PPPBaseUrl
+
     TODO: Review API key pattern for parameter validation
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
@@ -55,11 +65,20 @@ function Initialize-PassPushPosh {
         [string]
         $Language,
 
+        # Set a specific user agent. Default user agent is a combination of the
+        # module info, what your OS reports itself as, and a hash based on
+        # your username + workstation or domain name. This way the UA can be
+        # semi-consistent across sessions but not identifying.
+        [Parameter()]
+        [ValidateNotNullOrEmpty()]
+        [string]
+        $UserAgent,
+
         # Force setting new information. If module is already initialized you can use this to
         # Re-initialize with default settings. Implied if either ApiKey or BaseUrl is provided.
         [Parameter()][switch]$Force
     )
-    if ($Script:PPPBaseURL -and -not $Force -and -not $ApiKey -and -not $BaseUrl) { Write-Debug -Message 'PassPushPosh is already initialized.' }
+    if ($Script:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
     else {
         $defaultBaseUrl = 'https://pwpush.com'
         $apiKeyOutput = if ($ApiKey) { 'x-' + $ApiKey.Substring($ApiKey.Length-4) } else { 'None' }
@@ -101,7 +120,19 @@ function Initialize-PassPushPosh {
             }
         }
 
+        if (-not $UserAgent) {
+            $osVersion = [System.Environment]::OSVersion
+            $userAtDomain = "{0}@{1}" -f [System.Environment]::UserName, [System.Environment]::UserDomainName
+            $uAD64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($userAtDomain))
+            Write-Debug "$userAtDomain transformed to $uAD64. First 20 characters $($uAD64.Substring(0,20))"
+            $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $Language $osVersion/$($uAD64.Substring(0,20))"
+            Write-Verbose "Generated user agent: $UserAgent"
+        } else {
+            Write-Verbose "Using specified user agent: $UserAgent"
+        }
+
         Set-Variable -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
         Set-Variable -Scope Global -Name PPPLanguage -Value $Language
+        Set-Variable -Scope Global -Name PPPUserAgent -Value $UserAgent
     }
 }
