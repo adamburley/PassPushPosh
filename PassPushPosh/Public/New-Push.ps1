@@ -32,7 +32,8 @@ function New-Push {
     [string]
 
     .OUTPUTS
-    [PasswordPush] Push object
+    [PasswordPush] Push object* Note this is defined as [PSCustomObject] in the
+    OutputType function attribute. See Issue [TODO: add issue number]
     [string] Raw result of API call
     [bool] Fail on error
 
@@ -148,12 +149,13 @@ function New-Push {
             'Method' = 'Post'
             'ContentType' = 'application/json'
             'Body' = ($body | ConvertTo-Json)
-            'Uri' = "$Script:PPPBaseUrl/$Language/p.json"
+            'Uri' = "$Global:PPPBaseUrl/$Language/p.json"
+            'UserAgent' = $Global:PPPUserAgent
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') { $iwrSplat['Headers'] = $Global:PPPHeaders }
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
             try {
-                $response = Invoke-WebRequest -Uri "$Script:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
+                $response = Invoke-WebRequest -Uri "$Global:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
                     Set-Variable -Scope Global -Name PPPLastCall -Value $response
                     Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
