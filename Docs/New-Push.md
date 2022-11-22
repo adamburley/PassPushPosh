@@ -12,9 +12,16 @@ schema: 2.0.0
 
 ## SYNTAX
 
+### Anonymous (Default)
+```
+New-Push [-Payload] <String> [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>] [-DeletableByViewer]
+ [-RetrievalStep] [-Language <String>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### RequiresAuthentication
 ```
 New-Push [-Payload] <String> [-Note <String>] [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>]
- [-DeletableByViewer] [-DisableRetrievalStep] [-Language <String>] [-Raw] [<CommonParameters>]
+ [-DeletableByViewer] [-RetrievalStep] [-Language <String>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -33,21 +40,6 @@ PS C:\> {{ Add example code here }}
 
 ### -DeletableByViewer
 {{ Fill DeletableByViewer Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableRetrievalStep
-{{ Fill DisableRetrievalStep Description }}
 
 ```yaml
 Type: SwitchParameter
@@ -111,7 +103,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: RequiresAuthentication
 Aliases:
 
 Required: False
@@ -130,9 +122,9 @@ Parameter Sets: (All)
 Aliases: Password
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -151,15 +143,67 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -RetrievalStep
+Require recipient click an extra link to view Push payload.
+Helps to avoid chat systems and URL scanners from eating up views.
+Note that the retrieval step URL is always available for a push. This
+parameter changes if the 1-click link is used in the Link parameter
+and returned from the secret link helper (Get-SecretLink)
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### [string]
 ## OUTPUTS
 
-### System.Management.Automation.PSObject
+### [PasswordPush] Push object* Note this is defined as [PSCustomObject] in the
+### OutputType function attribute. See Issue [TODO: add issue number]
+### [string] Raw result of API call
+### [bool] Fail on error
 ## NOTES
 
 ## RELATED LINKS

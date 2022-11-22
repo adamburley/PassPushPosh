@@ -14,12 +14,12 @@ schema: 2.0.0
 
 ### Token (Default)
 ```
-Remove-Push [-URLToken <String>] [-Raw] [<CommonParameters>]
+Remove-Push [-URLToken <String>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Object
 ```
-Remove-Push [-PushObject <PasswordPush>] [-Raw] [<CommonParameters>]
+Remove-Push [-PushObject <PasswordPush>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: Token
-Aliases:
+Aliases: Token
 
 Required: False
 Position: Named
@@ -81,18 +81,46 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### System.String
-### PasswordPush
+### [string] URL Token
+### [PasswordPush] representing the Push to remove
 ## OUTPUTS
 
-### PasswordPush
-### System.String
-### System.Boolean
+### [bool] True on success, otherwise False
 ## NOTES
 
 ## RELATED LINKS

@@ -94,6 +94,13 @@ function ConvertTo-PasswordPush {
     This allows calculated push retrieval URLs, language enumeration, and a more "PowerShell" experience.
     Generally you won't need to use this directly, it's automatically invoked within Register-Push and Request-Push.
     
+    .INPUTS
+    [string]
+
+    .OUTPUTS
+    [PasswordPush] for single object
+    [PasswordPush[]] for Json array data
+
     .EXAMPLE
     # Common usage - from within the Register-Push cmdlet
     PS> $myPush = Register-Push -Payload "This is my secret!"
@@ -132,19 +139,36 @@ function ConvertTo-PasswordPush {
     DateCreated         : 11/18/2022 2:16:29 PM
     DateUpdated         : 11/18/2022 2:16:29 PM
     DateExpired         : 1/1/0001 12:00:00 AM
+
+    .EXAMPLE
+    # Invoking for a multi-Push response - only coming from the Dashboard endpoint at this time.
+    PS > $webRequestResponse.Content | ConvertTo-PasswordPush -JsonIsArray
+
     .NOTES
-    General notes
+    Needs a rewrite / cleanup
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Single')]
     [OutputType([PasswordPush])]
     param(
-        [parameter(Mandatory,ValueFromPipeline)]
+        [parameter(Mandatory,ValueFromPipeline,ParameterSetName='Single')]
         [ValidateNotNullOrEmpty()]
-        [string]$JsonResponse
+        [string]$JsonResponse,
+
+        [parameter(Mandatory, ValueFromPipeline, ParameterSetName = 'Array')]
+        [ValidateNotNullOrEmpty()]
+        [string]$JsonResponseArray,
+
+        # When sending an array of values (dashboard)
+        [Parameter(ParameterSetName='Array')]
+        [switch]
+        $JsonIsArray
     )
     process {
         try {
-            return [PasswordPush]$JsonResponse
+            $jsonObject = $JsonResponseArray | ConvertFrom-Json
+            foreach ($o in $jsonObject) {
+                [PasswordPush]($o | ConvertTo-Json) # TODO fix this mess
+            }
         } catch {
             Write-Debug 'Error in ConvertTo-PasswordPush coercing JSON object to PasswordPush object'
             Write-Debug "JsonResponse parameter value: [[$JsonResponse]]"

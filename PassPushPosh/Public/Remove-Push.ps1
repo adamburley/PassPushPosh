@@ -17,19 +17,22 @@ function Remove-Push {
     
     .INPUTS
     [string] URL Token
-    [PasswordPush] representing the Push
+    [PasswordPush] representing the Push to remove
 
     .OUTPUTS
     [bool] True on success, otherwise False
 
     .EXAMPLE
-    Remove-Push -URLToken 
+    Remove-Push -URLToken bwzehzem_xu-
 
     .EXAMPLE
     Remove-Push -URLToken -Raw
 
     {"expired":true,"deleted":true,"expired_on":"2022-11-21T13:23:45.341Z","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
     
+    .LINK
+    https://pwpush.com/api/1.0/passwords/destroy.en.html
+
     .NOTES
     TODO testing and debugging
     #>
@@ -37,7 +40,7 @@ function Remove-Push {
     [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='Token')]
     [OutputType([PasswordPush],[string],[bool])]
     param(
-        # URL Token string from a Push
+        # URL Token for the secret
         [parameter(ValueFromPipeline,ParameterSetName='Token')]
         [ValidateNotNullOrEmpty()]
         [Alias('Token')]
@@ -77,31 +80,30 @@ function Remove-Push {
                 'UserAgent' = $Global:PPPUserAgent
             }
             if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
-            $response = Invoke-WebRequest @iwrSplat
-            if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name PPPLastCall -Value $response
-                Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
+            Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
+            if ($PSCmdlet.ShouldProcess('Delete',"Push with token [$URLToken]")) {
+                $response = Invoke-WebRequest @iwrSplat
+                if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
+                    Set-Variable -Scope Global -Name PPPLastCall -Value $response
+                    Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
+                }
+                if ($Raw) { 
+                    Write-Debug "Returning raw object: $($response.Content)"
+                    return $response.Content
+                }
+                return $response.Content | ConvertTo-PasswordPush
             }
-            if ($Raw) { 
-                Write-Debug "Returning raw object: $($response.Content)"
-                return $response.Content
-            }
-            return $response.Content | ConvertTo-PasswordPush
         } catch { 
             if ($_.Exception.Response.StatusCode -eq 404) {
-                Write-Warning "Failed to delete Push. This can indicate an invalid URL Token, that the password was not marked deletable, or that you are not the owner."
-                return $false
+            Write-Warning "Failed to delete Push. This can indicate an invalid URL Token, that the password was not marked deletable, or that you are not the owner."
+            return $false
             } else {
                 Write-Verbose "An exception was caught: $($_.Exception.Message)"
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
                     Set-Variable -Scope Global -Name PPPLastError -Value $_
                     Write-Debug -Message 'Response object set to global variable $PPPLastError'
                 }
-                return @{
-                    'Error' = $_.Exception.Message
-                    'ErrorCode' = [int]$_.Exception.Response.StatusCode
-                    'ErrorMessage' = $_.Exception.Response.ReasonPhrase
-                }
+                $_
             }
         }
     }

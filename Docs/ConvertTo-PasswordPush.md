@@ -12,8 +12,14 @@ Convert API call response to a PasswordPush object
 
 ## SYNTAX
 
+### Single (Default)
 ```
-ConvertTo-PasswordPush [-JsonResponse] <String> [<CommonParameters>]
+ConvertTo-PasswordPush -JsonResponse <String> [<CommonParameters>]
+```
+
+### Array
+```
+ConvertTo-PasswordPush -JsonResponseArray <String> [-JsonIsArray] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -68,16 +74,46 @@ DateExpired         : 1/1/0001 12:00:00 AM
 
 ## PARAMETERS
 
+### -JsonIsArray
+When sending an array of values (dashboard)
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Array
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -JsonResponse
 {{ Fill JsonResponse Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Single
 Aliases:
 
 Required: True
-Position: 1
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -JsonResponseArray
+{{ Fill JsonResponseArray Description }}
+
+```yaml
+Type: String
+Parameter Sets: Array
+Aliases:
+
+Required: True
+Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -88,9 +124,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### [string]
 ## OUTPUTS
 
-### PasswordPush
+### [PasswordPush] for single object
+### [PasswordPush[]] for Json array data
 ## NOTES
 General notes
 

@@ -14,6 +14,12 @@ Locale: en-US
 ### [ConvertTo-PasswordPush](ConvertTo-PasswordPush.md)
 Convert API call response to a PasswordPush object
 
+### [Get-Dashboard](Get-Dashboard.md)
+Get a list of active or expired Pushes for an authenticated user
+
+### [Get-Push](Get-Push.md)
+Retrieve the secret contents of a Push
+
 ### [Get-PushAuditLog](Get-PushAuditLog.md)
 Get the view log of an authenticated Push
 
@@ -22,6 +28,9 @@ Returns a fully qualified secret link to a push of given URL Token
 
 ### [Initialize-PassPushPosh](Initialize-PassPushPosh.md)
 Initialize the PassPushPosh module
+
+### [New-PasswordPush](New-PasswordPush.md)
+{{ Fill in the Synopsis }}
 
 ### [New-Push](New-Push.md)
 {{ Fill in the Synopsis }}

@@ -1,4 +1,4 @@
----
+﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
 online version:
@@ -13,7 +13,7 @@ Retrieve the secret contents of a Push
 
 ## SYNTAX
 
-```powershell
+```
 Get-Push [-URLToken] <Object> [-Raw] [<CommonParameters>]
 ```
 
@@ -74,17 +74,14 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string]
-
 ## OUTPUTS
 
-### [PasswordPush]
-
+### [PasswordPush] or [string]
 ## NOTES
 
 TODO rewrite

@@ -17,15 +17,14 @@
     .EXAMPLE
     Get-Push -URLToken gzv65wiiuciy
 
-    TODO example output
-
     .EXAMPLE
     Get-Push -URLToken gzv65wiiuciy -Raw
 
-    TODO example output
+    {"payload":"I am your payload!","expired":false,"deleted":false,"expired_on":"","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
 
-    .NOTES
-    TODO test if an authenticated query gets different data
+    .LINK
+    https://pwpush.com/api/1.0/passwords/show.en.html
+
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding()]
@@ -53,6 +52,7 @@
                 'UserAgent' = $Global:PPPUserAgent
             }
             if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             $response = Invoke-WebRequest @iwrSplat -ErrorAction Stop
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
                 Set-Variable -Scope Global -Name PPPLastCall -Value $response

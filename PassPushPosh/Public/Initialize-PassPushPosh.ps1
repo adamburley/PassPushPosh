@@ -1,4 +1,4 @@
-function Initialize-PassPushPosh {
+﻿function Initialize-PassPushPosh {
     <#
     .SYNOPSIS
     Initialize the PassPushPosh module
@@ -36,6 +36,10 @@ function Initialize-PassPushPosh {
     - PPPLanguage
     - PPPUserAgent
     - PPPBaseUrl
+
+    -WhatIf setting for Set-Variable -Global is disabled, otherwise -WhatIf
+    calls for other functions would return incorrect data in the case this
+    function has not yet run.
 
     TODO: Review API key pattern for parameter validation
     #>
@@ -78,26 +82,26 @@ function Initialize-PassPushPosh {
         # Re-initialize with default settings. Implied if either ApiKey or BaseUrl is provided.
         [Parameter()][switch]$Force
     )
-    if ($Script:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
+    if ($Global:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
     else {
         $defaultBaseUrl = 'https://pwpush.com'
         $apiKeyOutput = if ($ApiKey) { 'x-' + $ApiKey.Substring($ApiKey.Length-4) } else { 'None' }
 
-        if (-not $Script:PPPBaseURL) { # Not initialized
+        if (-not $Global:PPPBaseURL) { # Not initialized
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
             Write-Verbose "Initializing PassPushPosh. ApiKey: [$apiKeyOutput], BaseUrl: $BaseUrl"
         } elseif ($Force -or $ApiKey -or $BaseURL) {
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
-            $oldApiKeyOutput = if ($Script:PPPApiKey) { 'x-' + $Script:PPPApiKey.Substring($Script:PPPApiKey.Length-4) } else { 'None' }
-            Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
+            $oldApiKeyOutput = if ($Global:PPPApiKey) { 'x-' + $Global:PPPApiKey.Substring($Global:PPPApiKey.Length-4) } else { 'None' }
+            Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Global:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
-            Set-Variable -Scope Global -Name PPPHeaders -Value @{
+            Set-Variable -Scope Global -Name PPPHeaders -WhatIf:$false -Value @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
         } elseif ($Global:PPPHeaders) { # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
-            Remove-Variable -Scope Global -Name PPPHeaders
+            Remove-Variable -Scope Global -Name PPPHeaders -WhatIf:$false
         }
         $availableLanguages = ('en','ca','cs','da','de','es','fi','fr','hu','it','nl','no','pl','pt-BR','sr','sv')
         if (-not $Language) {
@@ -131,8 +135,8 @@ function Initialize-PassPushPosh {
             Write-Verbose "Using specified user agent: $UserAgent"
         }
 
-        Set-Variable -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
-        Set-Variable -Scope Global -Name PPPLanguage -Value $Language
-        Set-Variable -Scope Global -Name PPPUserAgent -Value $UserAgent
+        Set-Variable -WhatIf:$false -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
+        Set-Variable -WhatIf:$false -Scope Global -Name PPPLanguage -Value $Language
+        Set-Variable -WhatIf:$false -Scope Global -Name PPPUserAgent -Value $UserAgent
     }
 }

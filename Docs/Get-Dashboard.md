@@ -1,4 +1,4 @@
----
+﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
 online version:
@@ -85,7 +85,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### [string] 'Active' or 'Expired'
 ## OUTPUTS
 
-### [PasswordPush[]]
+### [PasswordPush[]] Array of pushes with data
+### [string] raw response body from API call
 ## NOTES
 TODO rewrite and error-catching
 

@@ -38,7 +38,7 @@ function New-Push {
     [bool] Fail on error
 
     .LINK
-    Get-SecretLink
+    https://pwpush.com/api/1.0/passwords/create.en.html
 
     .NOTES
     Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default
@@ -59,7 +59,7 @@ function New-Push {
         [string]$Payload,
 
         # Label for this Push (requires Authenticated session)
-        [Parameter(ParameterSetName='Authenticated')]
+        [Parameter(ParameterSetName='RequiresAuthentication')]
         [ValidateNotNullOrEmpty()]
         [string]$Note,
 
@@ -108,7 +108,7 @@ function New-Push {
     }
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'Authenticated' -and -not $Script:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
+        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Global:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
 
         $body = @{
             'password' = @{
@@ -144,7 +144,13 @@ function New-Push {
         }
         if (-not $Language) { $Language = $Global:PPPLanguage }
         $shouldString += ' in language "{0}"' -f $Language
-        Write-Debug "Call body: $(($body | ConvertTo-Json).tostring())"
+        if ($VerbosePreference -eq [System.Management.Automation.ActionPreference]::Continue) {
+            # Sanitize input so we're not logging or outputting the payload
+            $vBody = $body.Clone()
+            $vBody.password.payload = "A payload of length $($body.password.payload.Length.ToString())"
+            $vBs = $vBody | ConvertTo-Json | Out-String
+            Write-Verbose "Call Body (sanitized): $vBs"
+        }
 
         $iwrSplat = @{
             'Method' = 'Post'
@@ -153,8 +159,8 @@ function New-Push {
             'Uri' = "$Global:PPPBaseUrl/$Language/p.json"
             'UserAgent' = $Global:PPPUserAgent
         }
-        if ($PSCmdlet.ParameterSetName -eq 'Authenticated') { $iwrSplat['Headers'] = $Global:PPPHeaders }
-        Write-Debug ('Call URI: ' + $iwrSplat.Uri)
+        if ($Global:PPPHeaders.'X-User-Token') { $iwrSplat['Headers'] = $Global:PPPHeaders }
+        Write-Verbose "Sending HTTP request (minus body): $($iwrSplat | Select-Object Method,ContentType,Uri,UserAgent,Headers | Out-String)"
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
             try {
                 $response = Invoke-WebRequest -Uri "$Global:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)

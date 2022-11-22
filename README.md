@@ -9,11 +9,11 @@ PassPushPosh is a PowerShell module for the [Password Pusher](/pglombardo/Passwo
 - 🟡 Get-Dashboard
 - 🟢 Get-Push
   - [ ] Examples and testing
-- 🟡 Get-PushAuditLog
-- 🟡 Get-SecretLink
+- 🟢 Get-PushAuditLog
+- 🟢 Get-SecretLink
 - 🟢 Initialize-PassPushPosh
 - 🟢 New-Push
-- 🟡 Remove-Push
+- 🟢 Remove-Push
 
 # Notes
 
@@ -22,6 +22,7 @@ PassPushPosh is a PowerShell module for the [Password Pusher](/pglombardo/Passwo
 - [Password Pusher API Documentation](https://pwpush.com/api/1.0.en.html)
 - Read-only class properties: [OCRam85:  PowerShell Read Only Class Properties](https://ocram85.com/posts/pwsh-read-only-class-properties/)
 - [PowerShell Utility Modules](https://learn.microsoft.com/en-us/powershell/utility-modules/overview?view=ps-modules) including PSScriptAnalyizer
+- Functions properly support -Verbose, -Debug, -WhatIf.  For Verbose and Debug there's been an attempt to sanitize output to prevent payloads from being written to screen.
 
 # TODO
 
@@ -36,3 +37,5 @@ PassPushPosh is a PowerShell module for the [Password Pusher](/pglombardo/Passwo
 - [ ] Fix inconsistent indentation
 - [ ] Issue: Importing class to use in returntype for function [e.g. New-Push]
 - [ ] Add UserAgent handling to Initialize-PassPushPosh and all calls
+- [ ] add psversion to ua
+- [ ] add burn option to getpush

@@ -13,7 +13,7 @@ Returns a fully qualified secret link to a push of given URL Token
 ## SYNTAX
 
 ```
-Get-SecretLink [-URLToken] <String> [[-Language] <String>] [<CommonParameters>]
+Get-SecretLink [-URLToken] <String> [[-Language] <String>] [-Raw] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -51,6 +51,21 @@ Aliases:
 Required: False
 Position: 2
 Default value: En
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Raw
+Return the raw response body from the API call
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

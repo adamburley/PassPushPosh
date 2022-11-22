@@ -1,0 +1,1355 @@
+
+[Update-MarkdownHelpModule] 11/22/2022 09:40:05 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 09:40:05 [Update-MarkdownHelpModule]11/22/2022 9:40:05 AM
+[Update-MarkdownHelpModule] 11/22/2022 09:40:05 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Added: Raw
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+	Parameter Added: UserAgent
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+	Parameter Set Added: Authenticated
+
+	Parameter Set Deleted: 
+
+	Parameter Added: Confirm
+
+	Parameter Added: RetrievalStep
+
+	Parameter Added: WhatIf
+
+	Parameter Deleted: DisableRetrievalStep
+
+	Parameter Updated: Payload
+		Position updated from 0 to 1
+
+	Parameter Updated: Payload
+		Accepts Pipeline Input updated from False to True (ByValue)
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	Parameter Added: Confirm
+
+	Parameter Added: WhatIf
+
+	Parameter Updated: URLToken
+		Aliases updated from  to Token
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 09:41:55 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 09:41:55 [Update-MarkdownHelpModule]11/22/2022 9:41:55 AM
+[Update-MarkdownHelpModule] 11/22/2022 09:41:55 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 09:46:40 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 09:46:40 [Update-MarkdownHelpModule]11/22/2022 9:46:40 AM
+[Update-MarkdownHelpModule] 11/22/2022 09:46:40 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 09:49:33 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 09:49:33 [Update-MarkdownHelpModule]11/22/2022 9:49:33 AM
+[Update-MarkdownHelpModule] 11/22/2022 09:49:33 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+	Parameter Set Added: RequiresAuthentication
+
+	Parameter Set Deleted: Authenticated
+
+	Parameter Set Name Updated: RequiresAuthentication
+		Old Set: Authenticated
+		New Set: RequiresAuthentication
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 09:50:56 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 09:50:56 [Update-MarkdownHelpModule]11/22/2022 9:50:56 AM
+[Update-MarkdownHelpModule] 11/22/2022 09:50:56 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 12:02:02 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 12:02:02 [Update-MarkdownHelpModule]11/22/2022 12:02:02 PM
+[Update-MarkdownHelpModule] 11/22/2022 12:02:02 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 12:03:50 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 12:03:50 [Update-MarkdownHelpModule]11/22/2022 12:03:50 PM
+[Update-MarkdownHelpModule] 11/22/2022 12:03:50 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 12:05:02 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 12:05:02 [Update-MarkdownHelpModule]11/22/2022 12:05:02 PM
+[Update-MarkdownHelpModule] 11/22/2022 12:05:02 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 14:38:02 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 14:38:02 [Update-MarkdownHelpModule]11/22/2022 2:38:02 PM
+[Update-MarkdownHelpModule] 11/22/2022 14:38:02 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 14:47:55 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 14:47:55 [Update-MarkdownHelpModule]11/22/2022 2:47:55 PM
+[Update-MarkdownHelpModule] 11/22/2022 14:47:55 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 14:55:01 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 14:55:01 [Update-MarkdownHelpModule]11/22/2022 2:55:01 PM
+[Update-MarkdownHelpModule] 11/22/2022 14:55:01 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	Parameter Set Added: Array
+
+	Parameter Set Added: Single
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: Single
+		Old Set: 
+		New Set: Single
+
+	Parameter Added: JsonIsArray
+
+	Parameter Added: JsonResponseArray
+
+	Parameter Updated: JsonResponse
+		Position updated from 1 to Named
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 14:57:01 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 14:57:01 [Update-MarkdownHelpModule]11/22/2022 2:57:01 PM
+[Update-MarkdownHelpModule] 11/22/2022 14:57:01 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+
+[Update-MarkdownHelpModule] 11/22/2022 15:05:35 Determined module name for './Docs' as 'PassPushPosh'.
+[Update-MarkdownHelpModule] 11/22/2022 15:05:35 [Update-MarkdownHelpModule]11/22/2022 3:05:35 PM
+[Update-MarkdownHelpModule] 11/22/2022 15:05:35 Updating documents for module 'PassPushPosh' in ./Docs
+---- UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : ConvertTo-PasswordPush ----
+
+
+---- UPDATING Cmdlet : Get-Dashboard ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Dashboard ----
+
+
+---- UPDATING Cmdlet : Get-Push ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-Push ----
+
+
+---- UPDATING Cmdlet : Get-PushAuditLog ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-PushAuditLog ----
+
+
+---- UPDATING Cmdlet : Get-SecretLink ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : Get-SecretLink ----
+
+
+---- UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : Initialize-PassPushPosh ----
+
+
+---- UPDATING Cmdlet : New-PasswordPush ----
+
+	Parameter Set Added: __AllParameterSets
+
+	Parameter Set Deleted: 
+
+	Parameter Set Name Updated: __AllParameterSets
+		Old Set: 
+		New Set: __AllParameterSets
+
+---- COMPLETED UPDATING Cmdlet : New-PasswordPush ----
+
+
+---- UPDATING Cmdlet : New-Push ----
+
+	Parameter Set Added: Anonymous
+
+---- COMPLETED UPDATING Cmdlet : New-Push ----
+
+
+---- UPDATING Cmdlet : Remove-Push ----
+
+	No updates done
+
+---- COMPLETED UPDATING Cmdlet : Remove-Push ----
+
+

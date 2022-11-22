@@ -14,13 +14,14 @@ Initialize the PassPushPosh module
 
 ### Anonymous (Default)
 ```
-Initialize-PassPushPosh [[-BaseUrl] <String>] [-Language <String>] [-Force] [<CommonParameters>]
+Initialize-PassPushPosh [[-BaseUrl] <String>] [-Language <String>] [-UserAgent <String>] [-Force]
+ [<CommonParameters>]
 ```
 
 ### Authenticated
 ```
 Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] <String>] [-Language <String>]
- [-Force] [<CommonParameters>]
+ [-UserAgent <String>] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -127,6 +128,24 @@ Accept wildcard characters: False
 Language to render resulting links in.
 Defaults to host OS language, or English if
 host OS language is not available
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UserAgent
+Set a specific user agent. Default user agent is a combination of the
+module info, what your OS reports itself as, and a hash based on
+your username + workstation or domain name. This way the UA can be
+semi-consistent across sessions but not identifying.
 
 ```yaml
 Type: String
