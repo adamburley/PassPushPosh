@@ -28,8 +28,9 @@ class PasswordPush {
     PasswordPush([PSCustomObject]$APIresponseObject) {
         throw NotImplementedException
     }
-    
+
     # Allow casting or explicit import from the raw Content of an API call
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope = 'Function', Justification = 'Global variables are used for module session helpers.')]
     PasswordPush([string]$JsonResponse) {
         Write-Debug 'New PasswordPush object instantiated from JsonResponse string'
         Initialize-PassPushPosh # Initialize the module if not yet done.
@@ -77,23 +78,24 @@ class PasswordPush {
 }
 
 function New-PasswordPush {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
     [CmdletBinding()]
     param (
-        
+
     )
     return [PasswordPush]::new()
-    
+
 }
 function ConvertTo-PasswordPush {
     <#
     .SYNOPSIS
     Convert API call response to a PasswordPush object
-    
+
     .DESCRIPTION
     Accepts a JSON string returned from the Password Pusher API and converts it to a [PasswordPush] object.
     This allows calculated push retrieval URLs, language enumeration, and a more "PowerShell" experience.
     Generally you won't need to use this directly, it's automatically invoked within Register-Push and Request-Push.
-    
+
     .INPUTS
     [string]
 
@@ -126,7 +128,7 @@ function ConvertTo-PasswordPush {
     LinkDirect          : https://pwpush.com/en/p/rz6nryvl-d4
     LinkRetrievalStep   : https://pwpush.com/en/p/rz6nryvl-d4/r
     Link                : https://pwpush.com/en/p/rz6nryvl-d4
-    Payload             : 
+    Payload             :
     Language            : en
     RetrievalStep       : False
     IsExpired           : False
@@ -147,25 +149,17 @@ function ConvertTo-PasswordPush {
     .NOTES
     Needs a rewrite / cleanup
     #>
-    [CmdletBinding(DefaultParameterSetName='Single')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
+    [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
-        [parameter(Mandatory,ValueFromPipeline,ParameterSetName='Single')]
+        [parameter(Mandatory,ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
-        [string]$JsonResponse,
-
-        [parameter(Mandatory, ValueFromPipeline, ParameterSetName = 'Array')]
-        [ValidateNotNullOrEmpty()]
-        [string]$JsonResponseArray,
-
-        # When sending an array of values (dashboard)
-        [Parameter(ParameterSetName='Array')]
-        [switch]
-        $JsonIsArray
+        [string]$JsonResponse
     )
     process {
         try {
-            $jsonObject = $JsonResponseArray | ConvertFrom-Json
+            $jsonObject = $JsonResponse | ConvertFrom-Json
             foreach ($o in $jsonObject) {
                 [PasswordPush]($o | ConvertTo-Json) # TODO fix this mess
             }
@@ -864,7 +858,7 @@ function Remove-Push {
     <#
     .SYNOPSIS
     Remove a Push
-    
+
     .DESCRIPTION
     Remove (invalidate) an active push. Requires the Push be either set as
     deletable by viewer, or that you are authenticated as the creator of the
@@ -876,7 +870,7 @@ function Remove-Push {
 
     If the Push URL Token is invalid OR you are not authorized to delete the
     Push, the endpoint returns 404 and this function returns $false
-    
+
     .INPUTS
     [string] URL Token
     [PasswordPush] representing the Push to remove
@@ -891,7 +885,7 @@ function Remove-Push {
     Remove-Push -URLToken -Raw
 
     {"expired":true,"deleted":true,"expired_on":"2022-11-21T13:23:45.341Z","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/destroy.en.html
 
@@ -927,7 +921,7 @@ function Remove-Push {
                     Write-Warning -Message 'Unable to remove Push. Push is not marked as deletable by viewer and you are not authenticated.'
                     return $false
                 }
-                if ($PushObject.IsDeletableByViewer) { 
+                if ($PushObject.IsDeletableByViewer) {
                     Write-Verbose "Push is flagged as deletable by viewer, should be deletable."
                 } else { Write-Verbose "In an authenticated API session. Push will be deletable if it was created by authenticated user." }
                 $URLToken = $PushObject.URLToken
@@ -949,13 +943,13 @@ function Remove-Push {
                     Set-Variable -Scope Global -Name PPPLastCall -Value $response
                     Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
                 }
-                if ($Raw) { 
+                if ($Raw) {
                     Write-Debug "Returning raw object: $($response.Content)"
                     return $response.Content
                 }
                 return $response.Content | ConvertTo-PasswordPush
             }
-        } catch { 
+        } catch {
             if ($_.Exception.Response.StatusCode -eq 404) {
             Write-Warning "Failed to delete Push. This can indicate an invalid URL Token, that the password was not marked deletable, or that you are not the owner."
             return $false

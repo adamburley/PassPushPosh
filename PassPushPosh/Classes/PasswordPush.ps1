@@ -1,4 +1,4 @@
-class PasswordPush {
+﻿class PasswordPush {
     [string]$Payload
     [string] hidden $__UrlToken
     [string] hidden $__LinkBase
@@ -28,8 +28,9 @@ class PasswordPush {
     PasswordPush([PSCustomObject]$APIresponseObject) {
         throw NotImplementedException
     }
-    
+
     # Allow casting or explicit import from the raw Content of an API call
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope = 'Function', Justification = 'Global variables are used for module session helpers.')]
     PasswordPush([string]$JsonResponse) {
         Write-Debug 'New PasswordPush object instantiated from JsonResponse string'
         Initialize-PassPushPosh # Initialize the module if not yet done.
@@ -77,23 +78,24 @@ class PasswordPush {
 }
 
 function New-PasswordPush {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
     [CmdletBinding()]
     param (
-        
+
     )
     return [PasswordPush]::new()
-    
+
 }
 function ConvertTo-PasswordPush {
     <#
     .SYNOPSIS
     Convert API call response to a PasswordPush object
-    
+
     .DESCRIPTION
     Accepts a JSON string returned from the Password Pusher API and converts it to a [PasswordPush] object.
     This allows calculated push retrieval URLs, language enumeration, and a more "PowerShell" experience.
     Generally you won't need to use this directly, it's automatically invoked within Register-Push and Request-Push.
-    
+
     .INPUTS
     [string]
 
@@ -126,7 +128,7 @@ function ConvertTo-PasswordPush {
     LinkDirect          : https://pwpush.com/en/p/rz6nryvl-d4
     LinkRetrievalStep   : https://pwpush.com/en/p/rz6nryvl-d4/r
     Link                : https://pwpush.com/en/p/rz6nryvl-d4
-    Payload             : 
+    Payload             :
     Language            : en
     RetrievalStep       : False
     IsExpired           : False
@@ -147,25 +149,17 @@ function ConvertTo-PasswordPush {
     .NOTES
     Needs a rewrite / cleanup
     #>
-    [CmdletBinding(DefaultParameterSetName='Single')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
+    [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
-        [parameter(Mandatory,ValueFromPipeline,ParameterSetName='Single')]
+        [parameter(Mandatory,ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
-        [string]$JsonResponse,
-
-        [parameter(Mandatory, ValueFromPipeline, ParameterSetName = 'Array')]
-        [ValidateNotNullOrEmpty()]
-        [string]$JsonResponseArray,
-
-        # When sending an array of values (dashboard)
-        [Parameter(ParameterSetName='Array')]
-        [switch]
-        $JsonIsArray
+        [string]$JsonResponse
     )
     process {
         try {
-            $jsonObject = $JsonResponseArray | ConvertFrom-Json
+            $jsonObject = $JsonResponse | ConvertFrom-Json
             foreach ($o in $jsonObject) {
                 [PasswordPush]($o | ConvertTo-Json) # TODO fix this mess
             }
