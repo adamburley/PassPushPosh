@@ -163,6 +163,7 @@ function ConvertTo-PasswordPush {
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
+        # The string result of an API call from the Password Pusher application
         [parameter(Mandatory,ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [string]$JsonResponse
