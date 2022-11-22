@@ -8,21 +8,25 @@ schema: 2.0.0
 # Remove-Push
 
 ## SYNOPSIS
+
 Remove a Push
 
 ## SYNTAX
 
 ### Token (Default)
-```
+
+```powershell
 Remove-Push [-URLToken <String>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Object
-```
+
+```powershell
 Remove-Push [-PushObject <PasswordPush>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Remove (invalidate) an active push.
 Requires the Push be either set as
 deletable by viewer, or that you are authenticated as the creator of the
@@ -38,12 +42,14 @@ Push, the endpoint returns 404 and this function returns $false
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 Remove-Push -URLToken bwzehzem_xu-
 ```
 
 ### EXAMPLE 2
-```
+
+```powershell
 Remove-Push -URLToken -Raw
 ```
 
@@ -52,6 +58,7 @@ Remove-Push -URLToken -Raw
 ## PARAMETERS
 
 ### -PushObject
+
 PasswordPush object
 
 ```yaml
@@ -67,6 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -Raw
+
 Return the raw response body from the API call
 
 ```yaml
@@ -82,6 +90,7 @@ Accept wildcard characters: False
 ```
 
 ### -URLToken
+
 URL Token for the secret
 
 ```yaml
@@ -97,6 +106,7 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -112,6 +122,7 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
+
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -128,19 +139,23 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string] URL Token
+
 ### [PasswordPush] representing the Push to remove
+
 ## OUTPUTS
 
 ### [bool] True on success, otherwise False
+
 ## NOTES
+
 TODO testing and debugging
 
 ## RELATED LINKS
 
 [https://pwpush.com/api/1.0/passwords/destroy.en.html](https://pwpush.com/api/1.0/passwords/destroy.en.html)
-

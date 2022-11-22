@@ -121,7 +121,7 @@ function ConvertTo-PasswordPush {
     https://pwpush.com/en/p/rz6nryvl-d4
 
     .EXAMPLE
-    # Example with manually invoking the API
+    # Manually invoking the API
     PS> $rawJson = Invoke-WebRequest  `
                     -Uri https://pwpush.com/en/p.json `
                     -Method Post `
@@ -151,10 +151,6 @@ function ConvertTo-PasswordPush {
     DateCreated         : 11/18/2022 2:16:29 PM
     DateUpdated         : 11/18/2022 2:16:29 PM
     DateExpired         : 1/1/0001 12:00:00 AM
-
-    .EXAMPLE
-    # Invoking for a multi-Push response - only coming from the Dashboard endpoint at this time.
-    PS > $webRequestResponse.Content | ConvertTo-PasswordPush -JsonIsArray
 
     .NOTES
     Needs a rewrite / cleanup

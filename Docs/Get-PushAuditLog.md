@@ -8,15 +8,17 @@ schema: 2.0.0
 # Get-PushAuditLog
 
 ## SYNOPSIS
+
 Get the view log of an authenticated Push
 
 ## SYNTAX
 
-```
+```powershell
 Get-PushAuditLog [[-URLToken] <String>] [-Raw] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Retrieves the view log of a Push created under an authenticated session.
 Returns an array of custom objects with view data.
 If the query is
@@ -27,9 +29,9 @@ See "handling errors" under NOTES
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 Get-PushAuditLog -URLToken 'mytokenfromapush'
-```
 
 ip         : 75.202.43.56,102.70.135.200
 user_agent : Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101;
@@ -39,9 +41,11 @@ successful : True
 created_at : 11/19/2022 6:32:42 PM
 updated_at : 11/19/2022 6:32:42 PM
 kind       : 0
+```
 
 ### EXAMPLE 2
-```
+
+```powershell
 # If there are no views, an empty array is returned
 Get-PushAuditLog -URLToken 'mytokenthatsneverbeenseen'
 ```
@@ -49,6 +53,7 @@ Get-PushAuditLog -URLToken 'mytokenthatsneverbeenseen'
 ## PARAMETERS
 
 ### -Raw
+
 Return content of API call directly
 
 ```yaml
@@ -64,6 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -URLToken
+
 URL Token from a secret
 
 ```yaml
@@ -79,17 +85,23 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string]
+
 ## OUTPUTS
 
-### [PsCustomObject[]] Array of entries.
+### [PsCustomObject[]] Array of entries
+
 ### [PsCustomObject] If there's an error in the call, it will be returned an object with a property
+
 ### named 'error'.  The value of that member will contain more information
+
 ## NOTES
+
 Handling Errors:
 The API returns different HTTP status codes and results depending where the
 call fails.
@@ -106,4 +118,3 @@ Verify your Push URL token is correct.'; 'ErrorCode'= 404 }    | This is differe
 ## RELATED LINKS
 
 [https://pwpush.com/api/1.0/passwords/audit.en.html](https://pwpush.com/api/1.0/passwords/audit.en.html)
-

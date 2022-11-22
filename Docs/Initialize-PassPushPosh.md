@@ -8,23 +8,27 @@ schema: 2.0.0
 # Initialize-PassPushPosh
 
 ## SYNOPSIS
+
 Initialize the PassPushPosh module
 
 ## SYNTAX
 
 ### Anonymous (Default)
-```
+
+```powershell
 Initialize-PassPushPosh [[-BaseUrl] <String>] [-Language <String>] [-UserAgent <String>] [-Force]
  [<CommonParameters>]
 ```
 
 ### Authenticated
-```
+
+```powershell
 Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] <String>] [-Language <String>]
  [-UserAgent <String>] [-Force] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Sets global variables to handle the server URL, headers (authentication), and language.
 Called automatically by module Functions if it is not called explicitly prior, so you don't actually need
 to call it unless you're going to use the authenticated API or alternate server, etc
@@ -33,39 +37,40 @@ is set to.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
-# Initialize with default settings
+### EXAMPLE 1 - Initialize with default settings
+
+```powershell
 PS > Initialize-PassPushPosh
 ```
 
-### EXAMPLE 2
-```
-# Initialize with authentication
+### EXAMPLE 2 - Initialize with authentication
+
+```powershell
 PS > Initialize-PassPushPosh -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
-```
 
 VERBOSE: Initializing PassPushPosh.
-ApiKey: \[x-kdjf\], BaseUrl: https://pwpush.com
-
-### EXAMPLE 3
+ApiKey: [x-kdjf], BaseUrl: https://pwpush.com
 ```
-# Initialize with another server with authentication
+
+### EXAMPLE 3 - Initialize with another server with authentication
+
+```powershell
 PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
-```
 
 VERBOSE: Initializing PassPushPosh.
-ApiKey: \[x-kdjf\], BaseUrl: https://myprivatepwpushinstance.com
-
-### EXAMPLE 4
+ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
 ```
-# Set a custom User Agent
+
+### EXAMPLE 4 - Set a custom User Agent
+
+```powershell
 PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
 ```
 
 ## PARAMETERS
 
 ### -ApiKey
+
 API Key for authenticated calls.
 
 ```yaml
@@ -81,9 +86,10 @@ Accept wildcard characters: False
 ```
 
 ### -BaseUrl
+
 Base URL for API calls.
 Allows use of module with private instances of Password Pusher
-Default: https://pwpush.com
+Default: <https://pwpush.com>
 
 ```yaml
 Type: String
@@ -98,6 +104,7 @@ Accept wildcard characters: False
 ```
 
 ### -EmailAddress
+
 Email address to use for authenticated calls.
 
 ```yaml
@@ -113,6 +120,7 @@ Accept wildcard characters: False
 ```
 
 ### -Force
+
 Force setting new information.
 If module is already initialized you can use this to
 Re-initialize with default settings.
@@ -131,6 +139,7 @@ Accept wildcard characters: False
 ```
 
 ### -Language
+
 Language to render resulting links in.
 Defaults to host OS language, or English if
 host OS language is not available
@@ -148,6 +157,7 @@ Accept wildcard characters: False
 ```
 
 ### -UserAgent
+
 Set a specific user agent.
 Default user agent is a combination of the
 module info, what your OS reports itself as, and a hash based on
@@ -168,6 +178,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
+
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
@@ -175,7 +186,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
+
 All variables set by this function start with PPP.
+
 - PPPHeaders
 - PPPLanguage
 - PPPUserAgent
