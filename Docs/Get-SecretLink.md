@@ -37,6 +37,12 @@ PS > Get-SecretLink -URLToken gzv65wiiuciy -Language fr
 https://pwpush.com/fr/p/gzv65wiiuciy/r
 ```
 
+### EXAMPLE 3
+```
+Get-SecretLink -URLToken gzv65wiiuciy -Raw
+{ "url": "https://pwpush.com/es/p/0fkapnbo_pwp4gi8uy0/r" }
+```
+
 ## PARAMETERS
 
 ### -Language
@@ -50,7 +56,7 @@ Aliases:
 
 Required: False
 Position: 2
-Default value: En
+Default value: $Global:PPPLanguage
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -71,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -URLToken
-Secret URL token of a previously created push.
+URL Token for the secret
 
 ```yaml
 Type: String

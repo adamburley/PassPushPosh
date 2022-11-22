@@ -1,14 +1,14 @@
 ﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/preview.en.html
+online version: https://pwpush.com/api/1.0/passwords/destroy.en.html
 schema: 2.0.0
 ---
 
 # Remove-Push
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Remove a Push
 
 ## SYNTAX
 
@@ -23,21 +23,36 @@ Remove-Push [-PushObject <PasswordPush>] [-Raw] [-WhatIf] [-Confirm] [<CommonPar
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Remove (invalidate) an active push.
+Requires the Push be either set as
+deletable by viewer, or that you are authenticated as the creator of the
+Push.
+
+If you have authorization to delete a push (deletable by viewer TRUE or
+you are the Push owner) the endpoint will always return 200 OK with a Push
+object, regardless if the Push was previously deleted or expired.
+
+If the Push URL Token is invalid OR you are not authorized to delete the
+Push, the endpoint returns 404 and this function returns $false
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-Push -URLToken bwzehzem_xu-
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Remove-Push -URLToken -Raw
+```
+
+{"expired":true,"deleted":true,"expired_on":"2022-11-21T13:23:45.341Z","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
 
 ## PARAMETERS
 
 ### -PushObject
-{{ Fill PushObject Description }}
+PasswordPush object
 
 ```yaml
 Type: PasswordPush
@@ -52,7 +67,7 @@ Accept wildcard characters: False
 ```
 
 ### -Raw
-{{ Fill Raw Description }}
+Return the raw response body from the API call
 
 ```yaml
 Type: SwitchParameter
@@ -61,13 +76,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -URLToken
-{{ Fill URLToken Description }}
+URL Token for the secret
 
 ```yaml
 Type: String
@@ -97,7 +112,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
@@ -122,5 +138,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [bool] True on success, otherwise False
 ## NOTES
+TODO testing and debugging
 
 ## RELATED LINKS
+
+[https://pwpush.com/api/1.0/passwords/destroy.en.html](https://pwpush.com/api/1.0/passwords/destroy.en.html)
+

@@ -17,7 +17,7 @@ The second header should have no spaces.
 ```
 
 # SHORT DESCRIPTION
-{{ PassPushPosh is a module to simplify using the Password Pusher API }}
+{{ Short Description Placeholder }}
 
 ```
 ABOUT TOPIC NOTE:
@@ -27,8 +27,7 @@ The generated about topic will be encoded UTF-8.
 ```
 
 # LONG DESCRIPTION
-{{ PassPushPosh attempts to make calls as simple as possible both for scripts
-and for direct use in the console. }}
+{{ Long Description Placeholder }}
 
 ## Optional Subtopics
 {{ Optional Subtopic Placeholder }}

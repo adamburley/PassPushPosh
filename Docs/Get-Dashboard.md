@@ -1,7 +1,7 @@
 ﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version:
+online version: https://pwpush.com/api/1.0/dashboard.en.html
 schema: 2.0.0
 ---
 
@@ -19,7 +19,7 @@ Get-Dashboard [[-Dashboard] <String>] [-Raw] [<CommonParameters>]
 ## DESCRIPTION
 Retrieves a list of Pushes - active or expired - for an authenticated user.
 Active and Expired are different endpoints, so to get both you'll need to make
-two calls
+two calls.
 
 ## EXAMPLES
 
@@ -35,7 +35,7 @@ Get-Dashboard Active
 
 ### EXAMPLE 3
 ```
-Get-Dashboard -Dashboard 'Expired'
+Get-Dashboard -Dashboard Expired
 ```
 
 ### EXAMPLE 4
@@ -88,6 +88,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### [PasswordPush[]] Array of pushes with data
 ### [string] raw response body from API call
 ## NOTES
-TODO rewrite and error-catching
+TODO update Invoke-Webrequest flow and error-handling to match other functions
 
 ## RELATED LINKS
+
+[https://pwpush.com/api/1.0/dashboard.en.html](https://pwpush.com/api/1.0/dashboard.en.html)
+

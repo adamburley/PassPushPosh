@@ -1,14 +1,14 @@
----
+﻿---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version:
+online version: https://pwpush.com/api/1.0/passwords/preview.en.html
 schema: 2.0.0
 ---
 
 # New-PasswordPush
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Create a new blank Password Push object.
 
 ## SYNTAX
 
@@ -17,16 +17,16 @@ New-PasswordPush [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Creates a blank \[PasswordPush\].
+Generally not needed, use ConvertTo-PasswordPush
+See New-Push if you're trying to create a new secret to send
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+New-PasswordPush
+```
 
 ## PARAMETERS
 
@@ -35,10 +35,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

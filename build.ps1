@@ -18,6 +18,7 @@ foreach($folder in @('PassPushPosh/Classes','PassPushPosh/Private', 'PassPushPos
     }
 }
 
+<#
 Import-Module ./PassPushPosh -Force
 
 $parameters = @{
@@ -31,7 +32,6 @@ $parameters = @{
 }
 Update-MarkdownHelpModule @parameters -Force
 
-<#
 $OutputFolder = './Docs'
 $parameters = @{
     Module = 'PassPushPosh'

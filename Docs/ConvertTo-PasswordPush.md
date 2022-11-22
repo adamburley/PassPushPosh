@@ -12,14 +12,8 @@ Convert API call response to a PasswordPush object
 
 ## SYNTAX
 
-### Single (Default)
 ```
-ConvertTo-PasswordPush -JsonResponse <String> [<CommonParameters>]
-```
-
-### Array
-```
-ConvertTo-PasswordPush -JsonResponseArray <String> [-JsonIsArray] [<CommonParameters>]
+ConvertTo-PasswordPush [-JsonResponse] <String> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -58,7 +52,7 @@ UrlToken            : rz6nryvl-d4
 LinkDirect          : https://pwpush.com/en/p/rz6nryvl-d4
 LinkRetrievalStep   : https://pwpush.com/en/p/rz6nryvl-d4/r
 Link                : https://pwpush.com/en/p/rz6nryvl-d4
-Payload             : 
+Payload             :
 Language            : en
 RetrievalStep       : False
 IsExpired           : False
@@ -72,48 +66,24 @@ DateCreated         : 11/18/2022 2:16:29 PM
 DateUpdated         : 11/18/2022 2:16:29 PM
 DateExpired         : 1/1/0001 12:00:00 AM
 
-## PARAMETERS
-
-### -JsonIsArray
-When sending an array of values (dashboard)
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Array
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
+### EXAMPLE 3
 ```
+# Invoking for a multi-Push response - only coming from the Dashboard endpoint at this time.
+PS > $webRequestResponse.Content | ConvertTo-PasswordPush -JsonIsArray
+```
+
+## PARAMETERS
 
 ### -JsonResponse
 {{ Fill JsonResponse Description }}
 
 ```yaml
 Type: String
-Parameter Sets: Single
+Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -JsonResponseArray
-{{ Fill JsonResponseArray Description }}
-
-```yaml
-Type: String
-Parameter Sets: Array
-Aliases:
-
-Required: True
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
@@ -130,6 +100,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### [PasswordPush] for single object
 ### [PasswordPush[]] for Json array data
 ## NOTES
-General notes
+Needs a rewrite / cleanup
 
 ## RELATED LINKS

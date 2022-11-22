@@ -57,6 +57,12 @@ PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -Email
 VERBOSE: Initializing PassPushPosh.
 ApiKey: \[x-kdjf\], BaseUrl: https://myprivatepwpushinstance.com
 
+### EXAMPLE 4
+```
+# Set a custom User Agent
+PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
+```
+
 ## PARAMETERS
 
 ### -ApiKey
@@ -142,9 +148,11 @@ Accept wildcard characters: False
 ```
 
 ### -UserAgent
-Set a specific user agent. Default user agent is a combination of the
+Set a specific user agent.
+Default user agent is a combination of the
 module info, what your OS reports itself as, and a hash based on
-your username + workstation or domain name. This way the UA can be
+your username + workstation or domain name.
+This way the UA can be
 semi-consistent across sessions but not identifying.
 
 ```yaml
@@ -167,6 +175,16 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
+All variables set by this function start with PPP.
+- PPPHeaders
+- PPPLanguage
+- PPPUserAgent
+- PPPBaseUrl
+
+-WhatIf setting for Set-Variable -Global is disabled, otherwise -WhatIf
+calls for other functions would return incorrect data in the case this
+function has not yet run.
+
 TODO: Review API key pattern for parameter validation
 
 ## RELATED LINKS

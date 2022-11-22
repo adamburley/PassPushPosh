@@ -12,29 +12,29 @@ Locale: en-US
 
 ## PassPushPosh Cmdlets
 ### [ConvertTo-PasswordPush](ConvertTo-PasswordPush.md)
-Convert API call response to a PasswordPush object
+{{ Fill in the Description }}
 
 ### [Get-Dashboard](Get-Dashboard.md)
-Get a list of active or expired Pushes for an authenticated user
+{{ Fill in the Description }}
 
 ### [Get-Push](Get-Push.md)
-Retrieve the secret contents of a Push
+{{ Fill in the Description }}
 
 ### [Get-PushAuditLog](Get-PushAuditLog.md)
-Get the view log of an authenticated Push
+{{ Fill in the Description }}
 
 ### [Get-SecretLink](Get-SecretLink.md)
-Returns a fully qualified secret link to a push of given URL Token
+{{ Fill in the Description }}
 
 ### [Initialize-PassPushPosh](Initialize-PassPushPosh.md)
-Initialize the PassPushPosh module
+{{ Fill in the Description }}
 
 ### [New-PasswordPush](New-PasswordPush.md)
-{{ Fill in the Synopsis }}
+{{ Fill in the Description }}
 
 ### [New-Push](New-Push.md)
-{{ Fill in the Synopsis }}
+{{ Fill in the Description }}
 
 ### [Remove-Push](Remove-Push.md)
-{{ Fill in the Synopsis }}
+{{ Fill in the Description }}
 
