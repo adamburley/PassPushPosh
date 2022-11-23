@@ -1,9 +1,3 @@
----
-external help file: PassPushPosh-help.xml
-Module Name: PassPushPosh
-schema: 2.0.0
----
-
 # Get-PushAuditLog
 
 ## SYNOPSIS
@@ -117,4 +111,4 @@ Verify your Push URL token is correct.'; 'ErrorCode'= 404 }    | This is differe
 
 ## RELATED LINKS
 
-[https://pwpush.com/api/1.0/passwords/audit.en.html](https://pwpush.com/api/1.0/passwords/audit.en.html)
+- [Password Pusher API Documentation](https://pwpush.com/api/1.0/passwords/audit.en.html)

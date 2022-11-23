@@ -1,9 +1,3 @@
----
-external help file: PassPushPosh-help.xml
-Module Name: PassPushPosh
-schema: 2.0.0
----
-
 # New-Push
 
 ## SYNOPSIS
@@ -264,13 +258,9 @@ values for Password Pusher and what's used on the public instance
 If you're using this with a private instance and want to
 override that value you'll need to fork this module.
 
-TODO: Support \[PasswordPush\] input objects
+TODO: Support \[PasswordPush\] input objects, testing
 
 ## RELATED LINKS
 
-[https://pwpush.com/api/1.0/passwords/create.en.html
-Get-Push](https://pwpush.com/api/1.0/passwords/create.en.html
-Get-Push)
-
-[https://pwpush.com/api/1.0/passwords/create.en.html
-Get-Push]()
+- [Password Pusher API Documentation](https://pwpush.com/api/1.0/passwords/create.en.html)
+- [Get-Push](Get-Push.md)

@@ -1,9 +1,3 @@
----
-external help file: PassPushPosh-help.xml
-Module Name: PassPushPosh
-schema: 2.0.0
----
-
 # Initialize-PassPushPosh
 
 ## SYNOPSIS

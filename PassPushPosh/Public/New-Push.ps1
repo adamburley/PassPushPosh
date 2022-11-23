@@ -39,6 +39,8 @@ function New-Push {
 
     .LINK
     https://pwpush.com/api/1.0/passwords/create.en.html
+
+    .LINK
     Get-Push
 
     .NOTES
@@ -47,7 +49,7 @@ function New-Push {
     (pwpush.com). If you're using this with a private instance and want to
     override that value you'll need to fork this module.
 
-    TODO: Support [PasswordPush] input objects
+    TODO: Support [PasswordPush] input objects, testing
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact='Low',DefaultParameterSetName='Anonymous')]

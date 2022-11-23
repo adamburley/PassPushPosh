@@ -1,9 +1,3 @@
----
-external help file: PassPushPosh-help.xml
-Module Name: PassPushPosh
-schema: 2.0.0
----
-
 # Get-Push
 
 ## SYNOPSIS
@@ -89,9 +83,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[https://pwpush.com/api/1.0/passwords/show.en.html
-New-Push](https://pwpush.com/api/1.0/passwords/show.en.html
-New-Push)
-
-[https://pwpush.com/api/1.0/passwords/show.en.html
-New-Push]()
+- [Password Pusher API Documentation](https://pwpush.com/api/1.0/passwords/show.en.html)
+- [New-Push](New-Push.md)

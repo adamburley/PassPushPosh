@@ -1,9 +1,3 @@
----
-external help file: PassPushPosh-help.xml
-Module Name: PassPushPosh
-schema: 2.0.0
----
-
 # Get-Dashboard
 
 ## SYNOPSIS
@@ -104,4 +98,4 @@ TODO update Invoke-Webrequest flow and error-handling to match other functions
 
 ## RELATED LINKS
 
-[https://pwpush.com/api/1.0/dashboard.en.html](https://pwpush.com/api/1.0/dashboard.en.html)
+- [Password Pusher API Documentation](https://pwpush.com/api/1.0/dashboard.en.html)

@@ -24,6 +24,11 @@
 
     .LINK
     https://pwpush.com/api/1.0/passwords/show.en.html
+
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
+
+    .LINK
     New-Push
 
     #>

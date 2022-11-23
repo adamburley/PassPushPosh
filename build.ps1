@@ -45,23 +45,71 @@ if ($New) {
 }
 
 if (-not $NoTweaks) {
+    $tweaksModuleName = 'PassPushPosh'
+    $tweaksModuleClasses = @('PasswordPush')
+    $moduleOnlineDocumentationRoot = 'https://github.com/adamburley/PassPushPosh/blob/main/Docs'
+    $moduleFunctions = Get-Command -Module $tweaksModuleName | select -ExpandProperty Name
+    
     # Fixing some problems with the markdown PlatyPs outputs...
     Write-Host 'Markdown tweaks...' -ForegroundColor Yellow
+
     foreach ($docFile in (Get-ChildItem -Path ./Docs -Recurse)) {
-        Write-Host $docFile.Name
+        Write-Host '--- ' $docFile.Name ' ---'
         $fileContent = Get-Content -Path $docFile.FullName
         $outRows = @()
         for ($i = 0; $i -lt $fileContent.Count; $i++) {
             $row = $fileContent[$i]
-            if ($row -ilike "#*" -and $fileContent[$i+1] -ne '') {
+            if ($row -ilike "#*" -and $fileContent[$i+1] -ne '') { # Blank lines after headings
                 $outRows += $row
                 $outRows += ''
             }
             elseif ($row -eq '```' -and $fileContent[$i+1] -ne '') {
-                $outRows += '```powershell'
+                $outRows += '```powershell' # Language marker for code blocks
             }
             else { $outRows += $row }
         }
-        $outRows[0..($outRows.Count-2)] | Out-File -FilePath $docFile.FullName
+
+        # Fix Links
+        $thisFunctionHelp = Get-Help $docFile.BaseName
+        if ($thisFunctionHelp.relatedLinks) { # Has help links
+            $outRows = $outRows[0..$outRows.IndexOf('## RELATED LINKS')]
+            $outRows += ''
+            for ($ri = 0; $ri -lt $thisFunctionHelp.relatedLinks.navigationLink.Count; $ri++) {
+                $link = $thisFunctionHelp.relatedLinks.navigationLink[$ri]
+                if ($link.uri) { # Link was detected as a web URI
+                    if ($link.uri -ilike "$moduleOnlineDocumentationRoot*") {
+                        Write-Host "Skipping" $link.uri -ForegroundColor Yellow
+                    } else {
+                        Write-Host $link.uri -ForegroundColor DarkCyan
+                        $outRows += "- [Password Pusher API Documentation]($($link.uri))"
+                    }
+                } elseif ($link.linkText) {
+                    $linkString = $link.linkText.Trim()
+                    if ($linkString -iin $moduleFunctions) {
+                        Write-Host "Function: $linkString" -ForegroundColor Magenta
+                        $outRows += "- [$linkString]($linkString.md)"
+                    }
+                } else {
+                    Write-Host "Unknown: " $link -ForegroundColor Red
+                }
+            }
+        }
+        $outRows = ($outRows -join "`n").Trim() -split "`n" # ugly way to remove trailing whitespaces
+        $outRows | Out-File -FilePath $docFile.FullName
     }
+
+    # Add class references
+    $newReadmeBlock = @("## $tweaksModulename Classes","")
+    foreach ($class in $tweaksModuleClasses) {
+        Write-Host "Tweaking $class documentation" -ForegroundColor Gray
+        # Add reference to readme
+        $newReadmeBlock += "### [[$class](Public/Classes/$class.md)"
+        $newReadmeBlock += ""
+        $newReadmeBlock += "Somedescriptiongoeshere"
+        $newReadmeBlock += ""
+    }
+    $readmeContent = Get-Content $parameters.ModulePagePath
+    $cmdLetHeaderIndex = $readmeContent.IndexOf(($readmeContent | where { $_ -ilike "## * Cmdlets"}))
+    $assembledReadme = $readmeContent[0..($cmdLetHeaderIndex-1)] + $newReadmeBlock + $readmeContent[$cmdLetHeaderIndex..($readmeContent.Count-1)]
+    $assembledReadme | Out-File -FilePath $parameters.ModulePagePath
 }

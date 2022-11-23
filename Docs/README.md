@@ -1,8 +1,8 @@
 ---
 Module Name: PassPushPosh
 Module Guid: 5d8a1afd-a912-440f-a9b9-e79f42a05f21
-Download Help Link: {{ N/A }}
-Help Version: {{ 1.0.0.0 }}
+Download Help Link: {{ Update Download Link }}
+Help Version: {{ Please enter version of help manually (X.X.X.X) format }}
 Locale: en-US
 ---
 
@@ -12,40 +12,46 @@ Locale: en-US
 
 {{ Fill in the Description }}
 
+## PassPushPosh Classes
+
+### [[PasswordPush](Public/Classes/PasswordPush.md)
+
+Somedescriptiongoeshere
+
 ## PassPushPosh Cmdlets
 
 ### [ConvertTo-PasswordPush](ConvertTo-PasswordPush.md)
 
-Convert API call response to a PasswordPush object
+{{ Fill in the Description }}
 
 ### [Get-Dashboard](Get-Dashboard.md)
 
-Get a list of active or expired Pushes for an authenticated user
+{{ Fill in the Description }}
 
 ### [Get-Push](Get-Push.md)
 
-Retrieve the secret contents of a Push
+{{ Fill in the Description }}
 
 ### [Get-PushAuditLog](Get-PushAuditLog.md)
 
-Get the view log of an authenticated Push
+{{ Fill in the Description }}
 
 ### [Get-SecretLink](Get-SecretLink.md)
 
-Returns a fully qualified secret link to a push of given URL Token
+{{ Fill in the Description }}
 
 ### [Initialize-PassPushPosh](Initialize-PassPushPosh.md)
 
-Initialize the PassPushPosh module
+{{ Fill in the Description }}
 
 ### [New-PasswordPush](New-PasswordPush.md)
 
-Create a new blank Password Push object.
+{{ Fill in the Description }}
 
 ### [New-Push](New-Push.md)
 
-Create a new Password Push
+{{ Fill in the Description }}
 
 ### [Remove-Push](Remove-Push.md)
 
-Remove a Push
+{{ Fill in the Description }}

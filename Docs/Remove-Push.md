@@ -1,9 +1,3 @@
----
-external help file: PassPushPosh-help.xml
-Module Name: PassPushPosh
-schema: 2.0.0
----
-
 # Remove-Push
 
 ## SYNOPSIS
@@ -157,4 +151,4 @@ TODO testing and debugging
 
 ## RELATED LINKS
 
-[https://pwpush.com/api/1.0/passwords/destroy.en.html](https://pwpush.com/api/1.0/passwords/destroy.en.html)
+- [Password Pusher API Documentation](https://pwpush.com/api/1.0/passwords/destroy.en.html)
