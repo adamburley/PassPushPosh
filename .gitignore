@@ -2,3 +2,4 @@
 .DS_Store
 .TestApiKey.txt
 .LastHelpModuleUpdate.txt
+.NuGetKey.txt
