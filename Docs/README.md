@@ -2,20 +2,20 @@
 
 ## Description
 
-        *PassPushPosh* is a PowerShell Module for interfacing with the Password Pusher website/application API.
-        It supports anonymous and authenticated pushes, provides verbose responses to errors, -Whatif and -Confirm,
-        and in general tries to be as "Powershell-y" as possible.
+*PassPushPosh* is a PowerShell Module for interfacing with the Password Pusher website/application API.
+It supports anonymous and authenticated pushes, provides verbose responses to errors, -Whatif and -Confirm,
+and in general tries to be as "Powershell-y" as possible.
 
-        Using *PassPushPosh* can be as simple as:
+Using *PassPushPosh* can be as simple as:
 
-        ```powershell
-        PS> Import-Module PassPushPosh
-        PS> $myPush = New-Push "Here's my secret!"
-        PS> $myPush.Link
-        https://pwpush.com/en/p/gzv65wiiuciy
-        ```
-        
-        See documentation here or `Get-Help [command]` on any function for more information. Happy sharing!
+```powershell
+PS> Import-Module PassPushPosh
+PS> $myPush = New-Push "Here's my secret!"
+PS> $myPush.Link
+https://pwpush.com/en/p/gzv65wiiuciy
+```
+
+See documentation here or `Get-Help [command]` on any function for more information. Happy sharing!
 
 ## Classes
 
