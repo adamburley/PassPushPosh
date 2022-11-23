@@ -1,7 +1,6 @@
-﻿---
+---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/preview.en.html
 schema: 2.0.0
 ---
 
@@ -37,6 +36,7 @@ https://pwpush.com/en/p/gzv65wiiuciy/r
 
 ```powershell
 # En France
+
 PS > Get-SecretLink -URLToken gzv65wiiuciy -Language fr
 https://pwpush.com/fr/p/gzv65wiiuciy/r
 ```
@@ -49,6 +49,22 @@ Get-SecretLink -URLToken gzv65wiiuciy -Raw
 ```
 
 ## PARAMETERS
+
+### -URLToken
+
+URL Token for the secret
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
 
 ### -Language
 
@@ -83,22 +99,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -URLToken
-
-URL Token for the secret
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -111,13 +111,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ### [string] Fully qualified URL
 
-### [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link
+### [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link.
 
 ## NOTES
 
 Including this endpoint for completeness - however it is generally unnecessary.
 The only thing this endpoint does is return a different value depending if "Use 1-click retrieval step"
-was selected when the Push was created.
+was selected when the Push was created. 
 Since both the 1-click and the direct links are available
 regardless if that option is selected, the links are calculable and both are included by default in a
 \[PasswordPush\] object.

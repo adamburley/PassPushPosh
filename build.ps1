@@ -1,3 +1,4 @@
+param ( [switch]$New, [switch]$NoTweaks )
 Write-Host 'Building Module...' -ForegroundColor Cyan
 $PsmPath = './PassPushPosh/PassPushPosh.psm1'
 if (Test-Path $PsmPath) { Remove-item $PsmPath }
@@ -18,29 +19,49 @@ foreach($folder in @('PassPushPosh/Classes','PassPushPosh/Private', 'PassPushPos
     }
 }
 
-<#
 Import-Module ./PassPushPosh -Force
 
-$parameters = @{
-    Path = './Docs'
-    RefreshModulePage = $true
-    AlphabeticParamsOrder = $true
-    UpdateInputOutput = $true
-    ExcludeDontShow = $true
-    LogPath = './LastHelpModuleUpdate.txt'
-    Encoding = [System.Text.Encoding]::UTF8
-}
-Update-MarkdownHelpModule @parameters -Force
 
-$OutputFolder = './Docs'
+$docPath = 'Docs'
 $parameters = @{
-    Module = 'PassPushPosh'
-    OutputFolder = $OutputFolder
-    AlphabeticParamsOrder = $true
-    WithModulePage = $true
-    ExcludeDontShow = $true
+
+    AlphabeticParamsOrder = $false
     Encoding = [System.Text.Encoding]::UTF8
+    ModulePagePath = 'Docs/README.md'
 }
-New-MarkdownHelp @parameters -force
-New-MarkdownAboutHelp -OutputFolder './Docs' -AboutName "PassPushPosh"
-#>
+if ($New) {
+    $parameters.Module = 'PassPushPosh'
+    $parameters.OutputFolder = $docPath
+    $parameters.WithModulePage = $true
+    $parameters.NoMetadata = $true
+    Write-Host "Generating new markdown help" -ForegroundColor Cyan
+    New-MarkdownHelp @parameters -force
+    #New-MarkdownAboutHelp -OutputFolder './Docs' -AboutName "PassPushPosh"
+} else {
+    $parameters.Path = $docPath
+    $parameters.RefreshModulePage = $true
+    $parameters.LogPath = '.LastHelpModuleUpdate.txt'
+    Update-MarkdownHelpModule @parameters -Force
+}
+
+if (-not $NoTweaks) {
+    # Fixing some problems with the markdown PlatyPs outputs...
+    Write-Host 'Markdown tweaks...' -ForegroundColor Yellow
+    foreach ($docFile in (Get-ChildItem -Path ./Docs -Recurse)) {
+        Write-Host $docFile.Name
+        $fileContent = Get-Content -Path $docFile.FullName
+        $outRows = @()
+        for ($i = 0; $i -lt $fileContent.Count; $i++) {
+            $row = $fileContent[$i]
+            if ($row -ilike "#*" -and $fileContent[$i+1] -ne '') {
+                $outRows += $row
+                $outRows += ''
+            }
+            elseif ($row -eq '```' -and $fileContent[$i+1] -ne '') {
+                $outRows += '```powershell'
+            }
+            else { $outRows += $row }
+        }
+        $outRows[0..($outRows.Count-2)] | Out-File -FilePath $docFile.FullName
+    }
+}

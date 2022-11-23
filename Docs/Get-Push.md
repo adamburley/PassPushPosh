@@ -1,7 +1,6 @@
-﻿---
+---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/show.en.html
 schema: 2.0.0
 ---
 
@@ -36,27 +35,11 @@ Get-Push -URLToken gzv65wiiuciy
 
 ```powershell
 Get-Push -URLToken gzv65wiiuciy -Raw
+```
 
 {"payload":"I am your payload!","expired":false,"deleted":false,"expired_on":"","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
-```
 
 ## PARAMETERS
-
-### -Raw
-
-Return the raw response body from the API call
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -URLToken
 
@@ -71,6 +54,22 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Raw
+
+Return the raw response body from the API call
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -90,4 +89,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[https://pwpush.com/api/1.0/passwords/show.en.html](https://pwpush.com/api/1.0/passwords/show.en.html)
+[https://pwpush.com/api/1.0/passwords/show.en.html
+New-Push](https://pwpush.com/api/1.0/passwords/show.en.html
+New-Push)
+
+[https://pwpush.com/api/1.0/passwords/show.en.html
+New-Push]()

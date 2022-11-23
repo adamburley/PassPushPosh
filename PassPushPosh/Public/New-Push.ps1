@@ -39,6 +39,7 @@ function New-Push {
 
     .LINK
     https://pwpush.com/api/1.0/passwords/create.en.html
+    Get-Push
 
     .NOTES
     Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default

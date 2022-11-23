@@ -1,7 +1,6 @@
-﻿---
+---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/audit.en.html
 schema: 2.0.0
 ---
 
@@ -32,6 +31,7 @@ See "handling errors" under NOTES
 
 ```powershell
 Get-PushAuditLog -URLToken 'mytokenfromapush'
+```
 
 ip         : 75.202.43.56,102.70.135.200
 user_agent : Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101;
@@ -41,32 +41,16 @@ successful : True
 created_at : 11/19/2022 6:32:42 PM
 updated_at : 11/19/2022 6:32:42 PM
 kind       : 0
-```
 
 ### EXAMPLE 2
 
 ```powershell
 # If there are no views, an empty array is returned
+
 Get-PushAuditLog -URLToken 'mytokenthatsneverbeenseen'
 ```
 
 ## PARAMETERS
-
-### -Raw
-
-Return content of API call directly
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -URLToken
 
@@ -84,6 +68,22 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -Raw
+
+Return content of API call directly
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -94,7 +94,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PsCustomObject[]] Array of entries
+### [PsCustomObject[]] Array of entries.
 
 ### [PsCustomObject] If there's an error in the call, it will be returned an object with a property
 

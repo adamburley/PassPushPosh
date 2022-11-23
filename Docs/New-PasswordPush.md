@@ -1,7 +1,6 @@
-﻿---
+---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/preview.en.html
 schema: 2.0.0
 ---
 

@@ -24,6 +24,7 @@
 
     .LINK
     https://pwpush.com/api/1.0/passwords/show.en.html
+    New-Push
 
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]

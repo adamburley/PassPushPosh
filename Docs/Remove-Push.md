@@ -1,7 +1,6 @@
-﻿---
+---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/destroy.en.html
 schema: 2.0.0
 ---
 
@@ -57,6 +56,22 @@ Remove-Push -URLToken -Raw
 
 ## PARAMETERS
 
+### -URLToken
+
+URL Token for the secret
+
+```yaml
+Type: String
+Parameter Sets: Token
+Aliases: Token
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
 ### -PushObject
 
 PasswordPush object
@@ -89,19 +104,20 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -URLToken
+### -WhatIf
 
-URL Token for the secret
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
-Type: String
-Parameter Sets: Token
-Aliases: Token
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
 
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -113,23 +129,6 @@ Prompts you for confirmation before running the cmdlet.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
 
 Required: False
 Position: Named

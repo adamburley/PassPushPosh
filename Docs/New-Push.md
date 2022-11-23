@@ -1,7 +1,6 @@
-﻿---
+---
 external help file: PassPushPosh-help.xml
 Module Name: PassPushPosh
-online version: https://pwpush.com/api/1.0/passwords/create.en.html
 schema: 2.0.0
 ---
 
@@ -43,41 +42,59 @@ are always provided at LinkRetrievalStep and LinkDirect.
 
 ```powershell
 $myPush = New-Push "Here's my secret!"
-PS> $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
+PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
 ```
 
-Link              : <https://pwpush.com/en/p/gzv65wiiuciy>   # Requested style
-LinkRetrievalStep : <https://pwpush.com/en/p/gzv65wiiuciy/r> # 1-step
-LinkDirect        : <https://pwpush.com/en/p/gzv65wiiuciy>   # Direct
+Link              : https://pwpush.com/en/p/gzv65wiiuciy   # Requested style
+LinkRetrievalStep : https://pwpush.com/en/p/gzv65wiiuciy/r # 1-step
+LinkDirect        : https://pwpush.com/en/p/gzv65wiiuciy   # Direct
 
 ### EXAMPLE 2
 
 ```powershell
 "Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
-https://pwpush.com/en/p/gzv65wiiuciy/r
 ```
+
+https://pwpush.com/en/p/gzv65wiiuciy/r
 
 ### EXAMPLE 3
 
 ```powershell
 # "Burn after reading" style Push
+
 PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
 ```
 
 ## PARAMETERS
 
-### -DeletableByViewer
+### -Payload
 
-Allow the recipient of a Push to delete it.
+The password or secret text to share.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
+Aliases: Password
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Note
+
+Label for this Push (requires Authenticated session)
+
+```yaml
+Type: String
+Parameter Sets: RequiresAuthentication
 Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -114,62 +131,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Language
+### -DeletableByViewer
 
-Override Language.
-Useful if sending to someone who speaks a
-different language.
-You can change this after the fact by changing
-the URL by hand or by requesting a link for the given token from the
-preview helper endpoint ( See Request-SecretLink )
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Note
-
-Label for this Push (requires Authenticated session)
-
-```yaml
-Type: String
-Parameter Sets: RequiresAuthentication
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Payload
-
-The password or secret text to share.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: Password
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Raw
-
-Return the raw response body from the API call
+Allow the recipient of a Push to delete it.
 
 ```yaml
 Type: SwitchParameter
@@ -204,18 +168,39 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Confirm
+### -Language
 
-Prompts you for confirmation before running the cmdlet.
+Override Language.
+Useful if sending to someone who speaks a
+different language.
+You can change this after the fact by changing
+the URL by hand or by requesting a link for the given token from the
+preview helper endpoint ( See Request-SecretLink )
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Raw
+
+Return the raw response body from the API call
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -229,6 +214,22 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -267,4 +268,9 @@ TODO: Support \[PasswordPush\] input objects
 
 ## RELATED LINKS
 
-[https://pwpush.com/api/1.0/passwords/create.en.html](https://pwpush.com/api/1.0/passwords/create.en.html)
+[https://pwpush.com/api/1.0/passwords/create.en.html
+Get-Push](https://pwpush.com/api/1.0/passwords/create.en.html
+Get-Push)
+
+[https://pwpush.com/api/1.0/passwords/create.en.html
+Get-Push]()
