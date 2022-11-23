@@ -14,7 +14,7 @@ Locale: en-US
 
 ## PassPushPosh Classes
 
-### [[PasswordPush](Public/Classes/PasswordPush.md)
+### [[PasswordPush](/../Public/Classes/PasswordPush.md)]
 
 Somedescriptiongoeshere
 

@@ -103,7 +103,7 @@ if (-not $NoTweaks) {
     foreach ($class in $tweaksModuleClasses) {
         Write-Host "Tweaking $class documentation" -ForegroundColor Gray
         # Add reference to readme
-        $newReadmeBlock += "### [[$class](Public/Classes/$class.md)"
+        $newReadmeBlock += "### [[$class](../Public/Classes/$class.md)]"
         $newReadmeBlock += ""
         $newReadmeBlock += "Somedescriptiongoeshere"
         $newReadmeBlock += ""
