@@ -32,10 +32,8 @@ function New-Push {
     [string]
 
     .OUTPUTS
-    [PasswordPush] Push object* Note this is defined as [PSCustomObject] in the
-    OutputType function attribute. See Issue [TODO: add issue number]
+    [PasswordPush] Push object
     [string] Raw result of API call
-    [bool] Fail on error
 
     .LINK
     https://pwpush.com/api/1.0/passwords/create.en.html
