@@ -14,9 +14,9 @@ Locale: en-US
 
 ## PassPushPosh Classes
 
-### [[PasswordPush](../Public/Classes/PasswordPush.md)]
+### [[PasswordPush](PasswordPush-Class.md)]
 
-Somedescriptiongoeshere
+Represents a Push with all metadata including Payload (password) value
 
 ## PassPushPosh Cmdlets
 

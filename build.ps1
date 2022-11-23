@@ -102,11 +102,18 @@ if (-not $NoTweaks) {
     $newReadmeBlock = @("## $tweaksModulename Classes","")
     foreach ($class in $tweaksModuleClasses) {
         Write-Host "Tweaking $class documentation" -ForegroundColor Gray
+        # Copy readme to docs
+        Copy-Item "./PassPushPosh/Classes/$class.md" -Destination "./Docs/$class-Class.md"
+
+        # Get summary
+        $classReadme = Get-Content "./PassPushPosh/Classes/$class.md"
+        $cRmStartIndex = $classReadme.IndexOf('## SUMMARY') + 1
+        $cRmStopIndex = $classReadme.IndexOf('## DESCRIPTION') - 1
+        $cSummary = $classReadme[$cRmStartIndex..$cRmStopIndex]
+        Write-host $cSummary -join "`n"
         # Add reference to readme
-        $newReadmeBlock += "### [[$class](../Public/Classes/$class.md)]"
-        $newReadmeBlock += ""
-        $newReadmeBlock += "Somedescriptiongoeshere"
-        $newReadmeBlock += ""
+        $newReadmeBlock += "### [[$class]($class-Class.md)]"
+        $newReadmeBlock += $cSummary
     }
     $readmeContent = Get-Content $parameters.ModulePagePath
     $cmdLetHeaderIndex = $readmeContent.IndexOf(($readmeContent | where { $_ -ilike "## * Cmdlets"}))

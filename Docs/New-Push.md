@@ -242,13 +242,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### [PasswordPush] Push object* Note this is defined as [PSCustomObject] in the
-
-### OutputType function attribute. See Issue [TODO: add issue number]
+### [PasswordPush] Push object
 
 ### [string] Raw result of API call
-
-### [bool] Fail on error
 
 ## NOTES
 

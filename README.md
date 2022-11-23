@@ -39,3 +39,4 @@ PassPushPosh is a PowerShell module for the [Password Pusher](/pglombardo/Passwo
 - [ ] Add UserAgent handling to Initialize-PassPushPosh and all calls
 - [ ] add psversion to ua
 - [ ] add burn option to getpush
+- [ ] fix - PasswordPush language does not reflect language at time of push
