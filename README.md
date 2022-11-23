@@ -26,8 +26,8 @@ See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing
 
 # Notes
 
-- The 'last call' does not return expired true or expired_on with a datetime, but does show views_remaining = 0.
 - For `-Verbose` and `-Debug`, output is sanitized to prevent payloads from being written to screen.
+- `-Raw` is available for cmdlets if you just want the JSON body of the response back.
 
 # Links
 

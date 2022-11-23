@@ -117,22 +117,14 @@ if ($BuildDocs){
         }
 
         # Manually build README.md
-        $readMe = @("# $tweaksModuleName Module", '', '## Description', '')
+        $readMe = @("# $tweaksModuleName Module", '', '## Technical Description', '')
         $readMe += @"
-*PassPushPosh* is a PowerShell Module for interfacing with the Password Pusher website/application API.
-It supports anonymous and authenticated pushes, provides verbose responses to errors, `-Whatif` and `-Confirm`,
-and in general tries to be as "Powershell-y" as possible.
+*PassPushPosh* is a PowerShell Module for interfacing with the Password Pusher website/application API. It utilizes ``Invoke-WebRequest`` for all calls.
+Most functions/cmdlets support reading from / writing to the pipeline and will properly iterate if passed an array of input values.
 
-Using *PassPushPosh* can be as simple as:
+Authentication and setting User-Agent and language are handled by [Initialize-PassPushPosh](Initialize-PassPushPosh.md), however if you do not need to set any of those settings it is automatically invoked the first time a module function is invoked.  See help file or ``Get-Help Initialize-PassPushPosh`` for specifics.
 
-``````powershell
-PS> Import-Module PassPushPosh
-PS> `$myPush = New-Push "Here's my secret!"
-PS> `$myPush.Link
-https://pwpush.com/en/p/gzv65wiiuciy
-``````
-
-See documentation here or ``Get-Help [command]`` on any function for more information. Happy sharing!
+Most functions will bubble up errors from ``Invoke-WebRequest``, however due to the way ``Invoke-WebRequest`` handles valid calls that return HTTP error codes (4xx) in some cases the Error is caught and a value returned instead. The documentation for [Get-PushAuditLog](Get-PushAuditLog.md) has a good rundown as to why.
 
 "@
 
