@@ -77,25 +77,6 @@ class PasswordPush {
     }
 }
 
-function New-PasswordPush {
-    <#
-    .SYNOPSIS
-    Create a new blank Password Push object.
-
-    .DESCRIPTION
-    Creates a blank [PasswordPush].
-    Generally not needed, use ConvertTo-PasswordPush
-    See New-Push if you're trying to create a new secret to send
-
-    .EXAMPLE
-    New-PasswordPush
-
-    #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
-    [CmdletBinding()]
-    param ()
-    return [PasswordPush]::new()
-}
 function ConvertTo-PasswordPush {
     <#
     .SYNOPSIS
@@ -121,7 +102,7 @@ function ConvertTo-PasswordPush {
     https://pwpush.com/en/p/rz6nryvl-d4
 
     .EXAMPLE
-    # Example with manually invoking the API
+    # Manually invoking the API
     PS> $rawJson = Invoke-WebRequest  `
                     -Uri https://pwpush.com/en/p.json `
                     -Method Post `
@@ -152,10 +133,6 @@ function ConvertTo-PasswordPush {
     DateUpdated         : 11/18/2022 2:16:29 PM
     DateExpired         : 1/1/0001 12:00:00 AM
 
-    .EXAMPLE
-    # Invoking for a multi-Push response - only coming from the Dashboard endpoint at this time.
-    PS > $webRequestResponse.Content | ConvertTo-PasswordPush -JsonIsArray
-
     .NOTES
     Needs a rewrite / cleanup
     #>
@@ -163,7 +140,8 @@ function ConvertTo-PasswordPush {
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
-        [parameter(Mandatory,ValueFromPipeline)]
+        # The string result of an API call from the Password Pusher application
+        [parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [string]$JsonResponse
     )
@@ -173,7 +151,8 @@ function ConvertTo-PasswordPush {
             foreach ($o in $jsonObject) {
                 [PasswordPush]($o | ConvertTo-Json) # TODO fix this mess
             }
-        } catch {
+        }
+        catch {
             Write-Debug 'Error in ConvertTo-PasswordPush coercing JSON object to PasswordPush object'
             Write-Debug "JsonResponse parameter value: [[$JsonResponse]]"
             Write-Error $_
@@ -279,6 +258,7 @@ function Get-Push {
 
     .LINK
     https://pwpush.com/api/1.0/passwords/show.en.html
+    New-Push
 
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
@@ -679,6 +659,25 @@ function Initialize-PassPushPosh {
         Set-Variable -WhatIf:$false -Scope Global -Name PPPUserAgent -Value $UserAgent
     }
 }
+function New-PasswordPush {
+    <#
+    .SYNOPSIS
+    Create a new blank Password Push object.
+
+    .DESCRIPTION
+    Creates a blank [PasswordPush].
+    Generally not needed, use ConvertTo-PasswordPush
+    See New-Push if you're trying to create a new secret to send
+
+    .EXAMPLE
+    New-PasswordPush
+
+    #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
+    [CmdletBinding()]
+    param ()
+    return [PasswordPush]::new()
+}
 function New-Push {
     <#
     .SYNOPSIS
@@ -720,6 +719,7 @@ function New-Push {
 
     .LINK
     https://pwpush.com/api/1.0/passwords/create.en.html
+    Get-Push
 
     .NOTES
     Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default
