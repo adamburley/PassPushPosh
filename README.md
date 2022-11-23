@@ -24,6 +24,11 @@ https://pwpush.com/en/p/gzv65wiiuciy
 
 See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing!
 
+# How to Get
+
+- Available on [PowerShell Gallery](https://www.powershellgallery.com/packages/PassPushPosh) - `Install-Module -Name PassPushPosh`
+- Copy `PassPushPosh/PassPushPosh.psm1` and `PassPushPosh/PassPushPosh.psd1` to a folder called PassPushPosh somewhere on your computer and `Import-Module .\PassPushPosh\`
+
 # Notes
 
 - For `-Verbose` and `-Debug`, output is sanitized to prevent payloads from being written to screen.
@@ -36,7 +41,7 @@ See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing
 
 # TODO
 
-- [ ] Publish to PowerShell Gallery
+- [X] Publish to PowerShell Gallery
 - [ ] Support localization (multiple languages)
 - [X] Support localization in secret link and 1-step link
 - [X] Documentation for [PasswordPush] class
