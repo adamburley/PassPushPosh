@@ -20,7 +20,6 @@
 
     .EXAMPLE
     Get-PushAuditLog -URLToken 'mytokenfromapush'
-
     ip         : 75.202.43.56,102.70.135.200
     user_agent : Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101;
     en-US) PowerShell/7.2.7
@@ -35,7 +34,13 @@
     Get-PushAuditLog -URLToken 'mytokenthatsneverbeenseen'
 
     .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-PushAuditLog.md
+
+    .LINK
     https://pwpush.com/api/1.0/passwords/audit.en.html
+
+    .LINK
+    Get-Dashboard
 
     .NOTES
     Handling Errors:

@@ -110,11 +110,8 @@ function ConvertTo-PasswordPush {
                     -ContentType 'application/json' |
                     Select-Object -ExpandProperty Content
     PS> $rawJson
-
     {"expire_after_days":7,"expire_after_views":5,"expired":false,"url_token":"rz6nryvl-d4","created_at":"2022-11-18T14:16:29.821Z","updated_at":"2022-11-18T14:16:29.821Z","deleted":false,"deletable_by_viewer":true,"retrieval_step":false,"expired_on":null,"days_remaining":7,"views_remaining":5}
-
     PS> $rawJson | ConvertTo-PasswordPush
-
     UrlToken            : rz6nryvl-d4
     LinkDirect          : https://pwpush.com/en/p/rz6nryvl-d4
     LinkRetrievalStep   : https://pwpush.com/en/p/rz6nryvl-d4/r
@@ -133,6 +130,9 @@ function ConvertTo-PasswordPush {
     DateUpdated         : 11/18/2022 2:16:29 PM
     DateExpired         : 1/1/0001 12:00:00 AM
 
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/ConvertTo-PasswordPush.md
+    
     .NOTES
     Needs a rewrite / cleanup
     #>
@@ -187,11 +187,16 @@ function Get-Dashboard {
 
     .EXAMPLE
     Get-Dashboard -Raw
-
     [{"expire_after_days":1,"expire_after_views":5,"expired":false,"url_token":"xm3q7czvtdpmyg","created_at":"2022-11-19T18:10:42.055Z","updated_at":"2022-11-19T18:10:42.055Z","deleted":false,"deletable_by_viewer":true,"retrieval_step":false,"expired_on":null,"note":null,"days_remaining":1,"views_remaining":3}]
 
     .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Dashboard.md
+    
+    .LINK
     https://pwpush.com/api/1.0/dashboard.en.html
+
+    .LINK
+    Get-PushAuditLog
 
     .NOTES
     TODO update Invoke-Webrequest flow and error-handling to match other functions
@@ -253,14 +258,13 @@ function Get-Push {
 
     .EXAMPLE
     Get-Push -URLToken gzv65wiiuciy -Raw
-
     {"payload":"I am your payload!","expired":false,"deleted":false,"expired_on":"","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
 
     .LINK
-    https://pwpush.com/api/1.0/passwords/show.en.html
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
 
     .LINK
-    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
+    https://pwpush.com/api/1.0/passwords/show.en.html
 
     .LINK
     New-Push
@@ -334,7 +338,6 @@ function Get-PushAuditLog {
 
     .EXAMPLE
     Get-PushAuditLog -URLToken 'mytokenfromapush'
-
     ip         : 75.202.43.56,102.70.135.200
     user_agent : Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101;
     en-US) PowerShell/7.2.7
@@ -349,7 +352,13 @@ function Get-PushAuditLog {
     Get-PushAuditLog -URLToken 'mytokenthatsneverbeenseen'
 
     .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-PushAuditLog.md
+
+    .LINK
     https://pwpush.com/api/1.0/passwords/audit.en.html
+
+    .LINK
+    Get-Dashboard
 
     .NOTES
     Handling Errors:
@@ -465,6 +474,9 @@ function Get-SecretLink {
     { "url": "https://pwpush.com/es/p/0fkapnbo_pwp4gi8uy0/r" }
 
     .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-SecretLink.md
+    
+    .LINK
     https://pwpush.com/api/1.0/passwords/preview.en.html
 
     .NOTES
@@ -554,6 +566,9 @@ function Initialize-PassPushPosh {
     # Set a custom User Agent
     PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
 
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
+    
     .NOTES
     All variables set by this function start with PPP.
     - PPPHeaders
@@ -674,9 +689,20 @@ function New-PasswordPush {
     Generally not needed, use ConvertTo-PasswordPush
     See New-Push if you're trying to create a new secret to send
 
+    .INPUTS
+    None
+
+    .OUTPUTS
+    [PasswordPush]
+    
     .EXAMPLE
     New-PasswordPush
 
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-PasswordPush.md
+
+    .NOTES
+    TODO Rewrite - make this work including read-only properties
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
     [CmdletBinding()]
@@ -719,6 +745,9 @@ function New-Push {
     .OUTPUTS
     [PasswordPush] Push object
     [string] Raw result of API call
+
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md
 
     .LINK
     https://pwpush.com/api/1.0/passwords/create.en.html
@@ -898,9 +927,11 @@ function Remove-Push {
 
     .EXAMPLE
     Remove-Push -URLToken -Raw
-
     {"expired":true,"deleted":true,"expired_on":"2022-11-21T13:23:45.341Z","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
 
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
+    
     .LINK
     https://pwpush.com/api/1.0/passwords/destroy.en.html
 

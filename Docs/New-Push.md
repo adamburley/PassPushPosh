@@ -37,23 +37,25 @@ are always provided at LinkRetrievalStep and LinkDirect.
 ```powershell
 $myPush = New-Push "Here's my secret!"
 PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
+```
 
 Link              : https://pwpush.com/en/p/gzv65wiiuciy   # Requested style
 LinkRetrievalStep : https://pwpush.com/en/p/gzv65wiiuciy/r # 1-step
 LinkDirect        : https://pwpush.com/en/p/gzv65wiiuciy   # Direct
-```
 
 ### EXAMPLE 2
 
 ```powershell
 "Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
-https://pwpush.com/en/p/gzv65wiiuciy/r
 ```
+
+https://pwpush.com/en/p/gzv65wiiuciy/r
 
 ### EXAMPLE 3
 
 ```powershell
 # "Burn after reading" style Push
+
 PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
 ```
 

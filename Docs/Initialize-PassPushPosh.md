@@ -53,16 +53,18 @@ ApiKey: \[x-kdjf\], BaseUrl: https://pwpush.com
 
 ```powershell
 # Initialize with another server with authentication
+
 PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
+```
 
 VERBOSE: Initializing PassPushPosh.
-ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
-```
+ApiKey: \[x-kdjf\], BaseUrl: https://myprivatepwpushinstance.com
 
 ### EXAMPLE 4
 
 ```powershell
 # Set a custom User Agent
+
 PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
 ```
 

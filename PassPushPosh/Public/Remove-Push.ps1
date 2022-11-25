@@ -27,9 +27,11 @@
 
     .EXAMPLE
     Remove-Push -URLToken -Raw
-
     {"expired":true,"deleted":true,"expired_on":"2022-11-21T13:23:45.341Z","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
 
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
+    
     .LINK
     https://pwpush.com/api/1.0/passwords/destroy.en.html
 

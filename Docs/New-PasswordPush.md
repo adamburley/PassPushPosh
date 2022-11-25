@@ -32,8 +32,14 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None
+
 ## OUTPUTS
 
+### [PasswordPush]
+
 ## NOTES
+
+TODO Rewrite - make this work including read-only properties
 
 ## RELATED LINKS

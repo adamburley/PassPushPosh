@@ -31,11 +31,8 @@ function ConvertTo-PasswordPush {
                     -ContentType 'application/json' |
                     Select-Object -ExpandProperty Content
     PS> $rawJson
-
     {"expire_after_days":7,"expire_after_views":5,"expired":false,"url_token":"rz6nryvl-d4","created_at":"2022-11-18T14:16:29.821Z","updated_at":"2022-11-18T14:16:29.821Z","deleted":false,"deletable_by_viewer":true,"retrieval_step":false,"expired_on":null,"days_remaining":7,"views_remaining":5}
-
     PS> $rawJson | ConvertTo-PasswordPush
-
     UrlToken            : rz6nryvl-d4
     LinkDirect          : https://pwpush.com/en/p/rz6nryvl-d4
     LinkRetrievalStep   : https://pwpush.com/en/p/rz6nryvl-d4/r
@@ -54,6 +51,9 @@ function ConvertTo-PasswordPush {
     DateUpdated         : 11/18/2022 2:16:29 PM
     DateExpired         : 1/1/0001 12:00:00 AM
 
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/ConvertTo-PasswordPush.md
+    
     .NOTES
     Needs a rewrite / cleanup
     #>

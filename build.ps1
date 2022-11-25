@@ -47,7 +47,18 @@ if ($BuildDocs){
         $tweaksModuleName = 'PassPushPosh'
         $tweaksModuleClasses = @('PasswordPush')
         $moduleOnlineDocumentationRoot = 'https://github.com/adamburley/PassPushPosh/blob/main/Docs'
-        $moduleFunctions = Get-Command -Module $tweaksModuleName | select -ExpandProperty Name
+        #$moduleFunctions = Get-Command -Module $tweaksModuleName | select -ExpandProperty Name | Sort-Object
+        $moduleFunctions = @(
+            'Initialize-PassPushPosh'
+            'New-Push'
+            'Get-Push'
+            'Remove-Push'
+            'Get-SecretLink'
+            'Get-Dashboard'
+            'Get-PushAuditLog'
+            'New-PasswordPush'
+            'ConvertTo-PasswordPush'
+        )
         
         # Fixing some problems with the markdown PlatyPs outputs...
         Write-Host 'Markdown tweaks...' -ForegroundColor Yellow
@@ -127,13 +138,34 @@ Authentication and setting User-Agent and language are handled by [Initialize-Pa
 Most functions will bubble up errors from ``Invoke-WebRequest``, however due to the way ``Invoke-WebRequest`` handles valid calls that return HTTP error codes (4xx) in some cases the Error is caught and a value returned instead. The documentation for [Get-PushAuditLog](Get-PushAuditLog.md) has a good rundown as to why.
 
 "@
-
         $readMe += '## Classes'
         $readMe += $classesReadmeBlock
-        $readMe += '## Functions','','| Function | Summary |','|--|--|'
-        foreach ($f in $moduleFunctions) {
-            $s = Get-Help $f | select -ExpandProperty Synopsis
-            $readMe += "| **[$f]($f.md)** | $s |"
+        $readMe += '## Functions',''
+
+        # Calculate the width of the Function column
+        $longestFunctionNameLength = $modulefunctions | Sort-Object -Property Length | Select -expandproperty Length -Last 1 
+        $functionColumnTotalWidth = $longestFunctionNameLength * 2 + 11 # each function is the function name twice plus 11 for other characters
+        $fPaddingLeft, $fPaddingRight = [math]::DivRem($functionColumnTotalWidth - 8, 2) | % { $_.Item1, ($_.Item1 + $_.Item2) } # the function line width is 8 less, need half (plus the remainder)
+        $paddedFunction = (' ' * $fPaddingLeft), 'Function', (' ' * $fPaddingRight) -join ''
+        $fDashes = '-' * $functionColumnTotalWidth
+
+        # Calculate the width of the Summary column
+        $helpData = $moduleFunctions | % { Get-Help $_ | Select Name, Synopsis }
+        $longestHelpDataLength = $helpData | select -ExpandProperty Synopsis | Sort-Object -Property Length |  select -ExpandProperty length -Last 1 
+        $sPaddingLeft, $sPaddingRight = [math]::DivRem($longestHelpDataLength - 7, 2) | % { $_.Item1, ($_.Item1 + $_.Item2) } # the summary line width is 7 less, need half (plus the remainder)
+        $paddedSummary = (' ' * $sPaddingLeft), 'Summary', (' ' * $sPaddingRight) -join ''
+        $pDashes = '-' * $longestHelpDataLength
+
+        # make the table headers
+        $dashesPadding = '-' * $totalWidth
+        $readMe += "| $paddedFunction | $paddedSummary |"
+        $readMe += "| $fDashes | $pDashes |"
+
+        # Make the rows
+        foreach ($hD in $helpData) {
+            $f = $hD.Name
+            $s = $hD.Synopsis
+            $readMe += "| " + "**[$f]($f.md)**".PadRight($functionColumnTotalWidth) + ' | ' + $s.PadRight($longestHelpDataLength) + ' |'
         }
 
         $readMe | Out-File -FilePath 'Docs/README.md'

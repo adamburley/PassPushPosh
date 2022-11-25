@@ -36,6 +36,9 @@ function New-Push {
     [string] Raw result of API call
 
     .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md
+
+    .LINK
     https://pwpush.com/api/1.0/passwords/create.en.html
 
     .LINK

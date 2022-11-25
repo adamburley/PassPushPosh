@@ -30,6 +30,9 @@
     { "url": "https://pwpush.com/es/p/0fkapnbo_pwp4gi8uy0/r" }
 
     .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-SecretLink.md
+    
+    .LINK
     https://pwpush.com/api/1.0/passwords/preview.en.html
 
     .NOTES

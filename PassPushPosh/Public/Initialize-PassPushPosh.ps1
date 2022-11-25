@@ -30,6 +30,9 @@
     # Set a custom User Agent
     PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
 
+    .LINK
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
+    
     .NOTES
     All variables set by this function start with PPP.
     - PPPHeaders

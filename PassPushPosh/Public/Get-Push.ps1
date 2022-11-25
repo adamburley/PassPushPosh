@@ -19,14 +19,13 @@
 
     .EXAMPLE
     Get-Push -URLToken gzv65wiiuciy -Raw
-
     {"payload":"I am your payload!","expired":false,"deleted":false,"expired_on":"","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
 
     .LINK
-    https://pwpush.com/api/1.0/passwords/show.en.html
+    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
 
     .LINK
-    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
+    https://pwpush.com/api/1.0/passwords/show.en.html
 
     .LINK
     New-Push
