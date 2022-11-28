@@ -37,7 +37,6 @@ See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing
 # Links
 
 - [Password Pusher API Documentation](https://pwpush.com/api/1.0.en.html)
-- Read-only class properties: [OCRam85:  PowerShell Read Only Class Properties](https://ocram85.com/posts/pwsh-read-only-class-properties/)
 
 # TODO
 
