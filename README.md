@@ -1,6 +1,6 @@
 # PassPushPosh
 
-*PassPushPosh* is a PowerShell Module for interfacing with the [Password Pusher](/pglombardo/PasswordPusher) secure password / string sharing application, primarily through [pwpush.com](https://pwpush.com). It supports creating, retrieving, and deleting anonymous and authenticated pushes, links in any supported language, and getting Push and Dashboard data for authenticated users.
+*PassPushPosh* is a PowerShell Module for interfacing with the [Password Pusher](https://github.com/pglombardo/PasswordPusher) secure password / string sharing application, primarily through [pwpush.com](https://pwpush.com). It supports creating, retrieving, and deleting anonymous and authenticated pushes, links in any supported language, and getting Push and Dashboard data for authenticated users.
 
 A primary design goal with this module was to provide **simple, beginner-friendly access** to API connections. Cmdlets provide clear responses to errors, support additional messaging via `-Debug` and `-Verbose`, transaction testing via `-Whatif` and `-Confirm`, and in general try to be as "Powershell-y" as possible.
 
