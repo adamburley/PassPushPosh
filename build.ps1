@@ -157,7 +157,6 @@ Most functions will bubble up errors from ``Invoke-WebRequest``, however due to 
         $pDashes = '-' * $longestHelpDataLength
 
         # make the table headers
-        $dashesPadding = '-' * $totalWidth
         $readMe += "| $paddedFunction | $paddedSummary |"
         $readMe += "| $fDashes | $pDashes |"
 
