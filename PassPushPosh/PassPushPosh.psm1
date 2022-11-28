@@ -226,7 +226,7 @@ function Get-Dashboard {
         $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
         if ($Raw) { return $response.Content }
         else {
-            return $response.Content | ConvertTo-PasswordPush -JsonIsArray
+            return $response.Content | ConvertTo-PasswordPush
         }
     } catch {
         Write-Verbose "An exception was caught: $($_.Exception.Message)"
