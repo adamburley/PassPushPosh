@@ -12,7 +12,7 @@
 RootModule = 'PassPushPosh.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.2.1'
+ModuleVersion = '0.2.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -111,7 +111,10 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Module is generally functional but has not been extensively bug-tested. Reccomend not implementing into a production environment at this time.'
+        ReleaseNotes = @"
+0.2.2 - Fixed issue with Get-Dashboard returning error referencing -JsonIsArray parameter
+General - Module is generally functional but has not been extensively bug-tested. Reccomend not implementing into a production environment at this time.
+"@
 
         # Prerelease string of this module
         # Prerelease = ''
