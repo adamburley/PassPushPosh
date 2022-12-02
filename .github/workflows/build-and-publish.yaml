@@ -1,3 +1,4 @@
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-powershell
 name: Build-And-Publish
 
 # Controls when the workflow will run
@@ -19,7 +20,13 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install dependency modules
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer
       
     # Build functions into psm1 file
     # Update psd1 file version and release details values
