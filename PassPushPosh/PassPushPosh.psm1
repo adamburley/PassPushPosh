@@ -48,16 +48,16 @@ class PasswordPush {
         $this.DateUpdated = $_j.updated_at
         $this.DateExpired = if ($_j.expired_on) { $_j.expired_on } else { [DateTime]0 }
 
-        $this.Language = $Global:PPPLanguage
+        $this.Language = $Script:PPPLanguage
 
         $this | Add-Member -Name 'UrlToken' -MemberType ScriptProperty -Value {
                 return $this.__UrlToken
             } -SecondValue {
                 $this.__UrlToken = $_
-                $this.__LinkBase = "$Global:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
+                $this.__LinkBase = "$Script:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
             }
         $this.__UrlToken = $_j.url_token
-        $this.__LinkBase = "$Global:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
+        $this.__LinkBase = "$Script:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
         $this | Add-Member -Name 'LinkDirect' -MemberType ScriptProperty -Value { return $this.__LinkBase } -SecondValue {
             Write-Warning 'LinkDirect is a read-only calculated member.'
             Write-Debug 'Link* members are calculated based on the Global BaseUrl and Language and Push Retrieval Step values'
@@ -132,7 +132,7 @@ function ConvertTo-PasswordPush {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/ConvertTo-PasswordPush.md
-    
+
     .NOTES
     Needs a rewrite / cleanup
     #>
@@ -191,7 +191,7 @@ function Get-Dashboard {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Dashboard.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/dashboard.en.html
 
@@ -201,7 +201,6 @@ function Get-Dashboard {
     .NOTES
     TODO update Invoke-Webrequest flow and error-handling to match other functions
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope = 'Function', Justification = 'Global variables are used for module session helpers.')]
     [CmdletBinding()]
     [OutputType([PasswordPush[]],[string])]
     param(
@@ -217,13 +216,13 @@ function Get-Dashboard {
         [switch]
         $Raw
     )
-    if (-not $Global:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+    if (-not $Script:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     try {
-        $uri = "$Global:PPPBaseUrl/d/"
+        $uri = "$Script:PPPBaseUrl/d/"
         if ($Dashboard -eq 'Active') { $uri += 'active.json' }
         elseif ($Dashboard -eq 'Expired') { $uri += 'expired.json' }
         Write-Debug "Requesting $uri"
-        $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Script:PPPHeaders -ErrorAction Stop
         if ($Raw) { return $response.Content }
         else {
             return $response.Content | ConvertTo-PasswordPush
@@ -231,7 +230,7 @@ function Get-Dashboard {
     } catch {
         Write-Verbose "An exception was caught: $($_.Exception.Message)"
         if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-            Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
+            Set-Variable -Scope Script -Name 'PPPLastError' -Value $_
             Write-Debug -Message 'Response object set to global variable $PPPLastError'
         }
         throw # Re-throw the error
@@ -270,7 +269,6 @@ function Get-Push {
     New-Push
 
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
@@ -292,14 +290,14 @@ function Get-Push {
             $iwrSplat = @{
                 'Method' = 'Get'
                 'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken.json"
-                'UserAgent' = $Global:PPPUserAgent
+                'Uri' = "$Script:PPPBaseUrl/p/$URLToken.json"
+                'UserAgent' = $Script:PPPUserAgent
             }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
             Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             $response = Invoke-WebRequest @iwrSplat -ErrorAction Stop
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name PPPLastCall -Value $response
+                Set-Variable -Scope Script -Name PPPLastCall -Value $response
                 Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
             }
             if ($Raw) {
@@ -310,7 +308,7 @@ function Get-Push {
         } catch {
             Write-Verbose "An exception was caught: $($_.Exception.Message)"
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name PPPLastError -Value $_
+                Set-Variable -Scope Script -Name PPPLastError -Value $_
                 Write-Debug -Message 'Response object set to global variable $PPPLastError'
             }
         }
@@ -372,7 +370,6 @@ function Get-PushAuditLog {
     | 404 NOT FOUND    | Invalid URL token               | None                                         | @{ 'Error'= 'Invalid token. Verify your Push URL token is correct.'; 'ErrorCode'= 404 }    | This is different than the response to a delete Push query - in this case it will only return 404 if the token is invalid. |
 
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope = 'Function', Justification = 'Global variables are used for module session helpers.')]
     [CmdletBinding()]
     [OutputType([PSCustomObject[]],[string])]
     param(
@@ -388,13 +385,13 @@ function Get-PushAuditLog {
         $Raw
     )
     begin {
-        if (-not $Global:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+        if (-not $Script:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     }
     process {
         try {
-            $uri = "$Global:PPPBaseUrl/p/$URLToken/audit.json"
+            $uri = "$Script:PPPBaseUrl/p/$URLToken/audit.json"
             Write-Debug 'Requesting $uri'
-            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
+            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Script:PPPHeaders -ErrorAction Stop
             if ([int]$response.StatusCode -eq 200 -and $response.Content -ieq "{`"error`":`"That push doesn't belong to you.`"}") {
                 $result = [PSCustomObject]@{ 'Error' = "That Push doesn't belong to you"; 'ErrorCode' = 403 }
                 Write-Warning $result.Error
@@ -414,7 +411,7 @@ function Get-PushAuditLog {
                 return $result
             }
             elseif ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
+                Set-Variable -Scope Script -Name 'PPPLastError' -Value $_
                 Write-Debug -Message 'Response object set to global variable $PPPLastError'
                 return [PSCustomObject]@{
                     'Error'        = $_.Exception.Message
@@ -475,7 +472,7 @@ function Get-SecretLink {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-SecretLink.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/preview.en.html
 
@@ -489,7 +486,6 @@ function Get-SecretLink {
     As it returns false if a Push URL token is not valid you can use it to test if a Push exists without
     burning a view.
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding()]
     [Alias('Get-PushPreview')]
     [OutputType('[string]')]
@@ -502,7 +498,7 @@ function Get-SecretLink {
         # Language for returned links. Defaults to system language, can be overridden here.
         [Parameter()]
         [string]
-        $Language = $Global:PPPLanguage,
+        $Language = $Script:PPPLanguage,
 
         # Return the raw response body from the API call
         [Parameter()]
@@ -516,10 +512,10 @@ function Get-SecretLink {
             $iwrSplat = @{
                 'Method' = 'Get'
                 'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken/preview.json"
-                'UserAgent' = $Global:PPPUserAgent
+                'Uri' = "$Script:PPPBaseUrl/p/$URLToken/preview.json"
+                'UserAgent' = $Script:PPPUserAgent
             }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
             Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             $responseContent = Invoke-WebRequest @iwrSplat | Select-Object -ExpandProperty Content
             if ($Raw) { return $responseContent }
@@ -528,7 +524,7 @@ function Get-SecretLink {
         catch {
             Write-Verbose "An exception was caught: $($_.Exception.Message)"
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
+                Set-Variable -Scope Script -Name 'PPPLastError' -Value $_
                 Write-Debug -Message 'Response object set to global variable $PPPLastError'
             }
         }
@@ -568,7 +564,7 @@ function Initialize-PassPushPosh {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
-    
+
     .NOTES
     All variables set by this function start with PPP.
     - PPPHeaders
@@ -576,13 +572,12 @@ function Initialize-PassPushPosh {
     - PPPUserAgent
     - PPPBaseUrl
 
-    -WhatIf setting for Set-Variable -Global is disabled, otherwise -WhatIf
+    -WhatIf setting for Set-Variable is disabled, otherwise -WhatIf
     calls for other functions would return incorrect data in the case this
     function has not yet run.
 
     TODO: Review API key pattern for parameter validation
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(DefaultParameterSetName='Anonymous')]
     param (
         # Email address to use for authenticated calls.
@@ -621,25 +616,25 @@ function Initialize-PassPushPosh {
         # Re-initialize with default settings. Implied if either ApiKey or BaseUrl is provided.
         [Parameter()][switch]$Force
     )
-    if ($Global:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
+    if ($Script:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
     else {
         $defaultBaseUrl = 'https://pwpush.com'
         $apiKeyOutput = if ($ApiKey) { 'x-' + $ApiKey.Substring($ApiKey.Length-4) } else { 'None' }
 
-        if (-not $Global:PPPBaseURL) { # Not initialized
+        if (-not $Script:PPPBaseURL) { # Not initialized
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
             Write-Verbose "Initializing PassPushPosh. ApiKey: [$apiKeyOutput], BaseUrl: $BaseUrl"
         } elseif ($Force -or $ApiKey -or $BaseURL) {
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
-            $oldApiKeyOutput = if ($Global:PPPApiKey) { 'x-' + $Global:PPPApiKey.Substring($Global:PPPApiKey.Length-4) } else { 'None' }
-            Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Global:PPPBaseUrl New BaseUrl: $BaseUrl"
+            $oldApiKeyOutput = if ($Script:PPPApiKey) { 'x-' + $Script:PPPApiKey.Substring($Script:PPPApiKey.Length-4) } else { 'None' }
+            Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
-            Set-Variable -Scope Global -Name PPPHeaders -WhatIf:$false -Value @{
+            Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
-        } elseif ($Global:PPPHeaders) { # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
+        } elseif ($Script:PPPHeaders) { # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
             Remove-Variable -Scope Global -Name PPPHeaders -WhatIf:$false
         }
         $availableLanguages = ('en','ca','cs','da','de','es','fi','fr','hu','it','nl','no','pl','pt-BR','sr','sv')
@@ -674,9 +669,9 @@ function Initialize-PassPushPosh {
             Write-Verbose "Using specified user agent: $UserAgent"
         }
 
-        Set-Variable -WhatIf:$false -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
-        Set-Variable -WhatIf:$false -Scope Global -Name PPPLanguage -Value $Language
-        Set-Variable -WhatIf:$false -Scope Global -Name PPPUserAgent -Value $UserAgent
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPLanguage -Value $Language
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPUserAgent -Value $UserAgent
     }
 }
 function New-PasswordPush {
@@ -694,7 +689,7 @@ function New-PasswordPush {
 
     .OUTPUTS
     [PasswordPush]
-    
+
     .EXAMPLE
     New-PasswordPush
 
@@ -763,7 +758,6 @@ function New-Push {
 
     TODO: Support [PasswordPush] input objects, testing
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact='Low',DefaultParameterSetName='Anonymous')]
     [OutputType([PasswordPush],[string],[bool])] # Returntype should be [PasswordPush] but I've yet to find a way to add class access to a function on a module...
     param(
@@ -823,7 +817,7 @@ function New-Push {
     }
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Global:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
+        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Script:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
 
         $body = @{
             'password' = @{
@@ -857,7 +851,7 @@ function New-Push {
             $shouldString += ', with a direct link'
             $false
         }
-        if (-not $Language) { $Language = $Global:PPPLanguage }
+        if (-not $Language) { $Language = $Script:PPPLanguage }
         $shouldString += ' in language "{0}"' -f $Language
         if ($VerbosePreference -eq [System.Management.Automation.ActionPreference]::Continue) {
             # Sanitize input so we're not logging or outputting the payload
@@ -871,16 +865,16 @@ function New-Push {
             'Method' = 'Post'
             'ContentType' = 'application/json'
             'Body' = ($body | ConvertTo-Json)
-            'Uri' = "$Global:PPPBaseUrl/$Language/p.json"
-            'UserAgent' = $Global:PPPUserAgent
+            'Uri' = "$Script:PPPBaseUrl/$Language/p.json"
+            'UserAgent' = $Script:PPPUserAgent
         }
-        if ($Global:PPPHeaders.'X-User-Token') { $iwrSplat['Headers'] = $Global:PPPHeaders }
+        if ($Script:PPPHeaders.'X-User-Token') { $iwrSplat['Headers'] = $Script:PPPHeaders }
         Write-Verbose "Sending HTTP request (minus body): $($iwrSplat | Select-Object Method,ContentType,Uri,UserAgent,Headers | Out-String)"
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
             try {
-                $response = Invoke-WebRequest -Uri "$Global:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
+                $response = Invoke-WebRequest -Uri "$Script:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastCall -Value $response
+                    Set-Variable -Scope Script -Name PPPLastCall -Value $response
                     Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
                 }
                 if ($Raw) {
@@ -891,7 +885,7 @@ function New-Push {
             } catch {
                 Write-Verbose "An exception was caught: $($_.Exception.Message)"
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastError -Value $_
+                    Set-Variable -Scope Script -Name PPPLastError -Value $_
                     Write-Debug -Message 'Response object set to global variable $PPPLastError'
                 }
             }
@@ -931,14 +925,13 @@ function Remove-Push {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/destroy.en.html
 
     .NOTES
     TODO testing and debugging
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='Token')]
     [OutputType([PasswordPush],[string],[bool])]
     param(
@@ -978,15 +971,15 @@ function Remove-Push {
             $iwrSplat = @{
                 'Method' = 'Delete'
                 'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken.json"
-                'UserAgent' = $Global:PPPUserAgent
+                'Uri' = "$Script:PPPBaseUrl/p/$URLToken.json"
+                'UserAgent' = $Script:PPPUserAgent
             }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
             Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             if ($PSCmdlet.ShouldProcess('Delete',"Push with token [$URLToken]")) {
                 $response = Invoke-WebRequest @iwrSplat
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastCall -Value $response
+                    Set-Variable -Scope Script -Name PPPLastCall -Value $response
                     Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
                 }
                 if ($Raw) {
@@ -1002,7 +995,7 @@ function Remove-Push {
             } else {
                 Write-Verbose "An exception was caught: $($_.Exception.Message)"
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastError -Value $_
+                    Set-Variable -Scope Script -Name PPPLastError -Value $_
                     Write-Debug -Message 'Response object set to global variable $PPPLastError'
                 }
                 $_

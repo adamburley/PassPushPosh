@@ -31,14 +31,13 @@
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/destroy.en.html
 
     .NOTES
     TODO testing and debugging
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(SupportsShouldProcess,DefaultParameterSetName='Token')]
     [OutputType([PasswordPush],[string],[bool])]
     param(
@@ -78,15 +77,15 @@
             $iwrSplat = @{
                 'Method' = 'Delete'
                 'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken.json"
-                'UserAgent' = $Global:PPPUserAgent
+                'Uri' = "$Script:PPPBaseUrl/p/$URLToken.json"
+                'UserAgent' = $Script:PPPUserAgent
             }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
             Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             if ($PSCmdlet.ShouldProcess('Delete',"Push with token [$URLToken]")) {
                 $response = Invoke-WebRequest @iwrSplat
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastCall -Value $response
+                    Set-Variable -Scope Script -Name PPPLastCall -Value $response
                     Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
                 }
                 if ($Raw) {
@@ -102,7 +101,7 @@
             } else {
                 Write-Verbose "An exception was caught: $($_.Exception.Message)"
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastError -Value $_
+                    Set-Variable -Scope Script -Name PPPLastError -Value $_
                     Write-Debug -Message 'Response object set to global variable $PPPLastError'
                 }
                 $_

@@ -48,16 +48,16 @@
         $this.DateUpdated = $_j.updated_at
         $this.DateExpired = if ($_j.expired_on) { $_j.expired_on } else { [DateTime]0 }
 
-        $this.Language = $Global:PPPLanguage
+        $this.Language = $Script:PPPLanguage
 
         $this | Add-Member -Name 'UrlToken' -MemberType ScriptProperty -Value {
                 return $this.__UrlToken
             } -SecondValue {
                 $this.__UrlToken = $_
-                $this.__LinkBase = "$Global:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
+                $this.__LinkBase = "$Script:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
             }
         $this.__UrlToken = $_j.url_token
-        $this.__LinkBase = "$Global:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
+        $this.__LinkBase = "$Script:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
         $this | Add-Member -Name 'LinkDirect' -MemberType ScriptProperty -Value { return $this.__LinkBase } -SecondValue {
             Write-Warning 'LinkDirect is a read-only calculated member.'
             Write-Debug 'Link* members are calculated based on the Global BaseUrl and Language and Push Retrieval Step values'

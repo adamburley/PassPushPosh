@@ -54,7 +54,6 @@
     | 404 NOT FOUND    | Invalid URL token               | None                                         | @{ 'Error'= 'Invalid token. Verify your Push URL token is correct.'; 'ErrorCode'= 404 }    | This is different than the response to a delete Push query - in this case it will only return 404 if the token is invalid. |
 
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope = 'Function', Justification = 'Global variables are used for module session helpers.')]
     [CmdletBinding()]
     [OutputType([PSCustomObject[]],[string])]
     param(
@@ -70,13 +69,13 @@
         $Raw
     )
     begin {
-        if (-not $Global:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+        if (-not $Script:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     }
     process {
         try {
-            $uri = "$Global:PPPBaseUrl/p/$URLToken/audit.json"
+            $uri = "$Script:PPPBaseUrl/p/$URLToken/audit.json"
             Write-Debug 'Requesting $uri'
-            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
+            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Script:PPPHeaders -ErrorAction Stop
             if ([int]$response.StatusCode -eq 200 -and $response.Content -ieq "{`"error`":`"That push doesn't belong to you.`"}") {
                 $result = [PSCustomObject]@{ 'Error' = "That Push doesn't belong to you"; 'ErrorCode' = 403 }
                 Write-Warning $result.Error
@@ -96,7 +95,7 @@
                 return $result
             }
             elseif ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
+                Set-Variable -Scope Script -Name 'PPPLastError' -Value $_
                 Write-Debug -Message 'Response object set to global variable $PPPLastError'
                 return [PSCustomObject]@{
                     'Error'        = $_.Exception.Message

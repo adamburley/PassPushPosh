@@ -1,4 +1,4 @@
-function ConvertTo-PasswordPush {
+﻿function ConvertTo-PasswordPush {
     <#
     .SYNOPSIS
     Convert API call response to a PasswordPush object
@@ -53,7 +53,7 @@ function ConvertTo-PasswordPush {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/ConvertTo-PasswordPush.md
-    
+
     .NOTES
     Needs a rewrite / cleanup
     #>

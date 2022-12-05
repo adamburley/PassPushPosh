@@ -52,7 +52,6 @@ function New-Push {
 
     TODO: Support [PasswordPush] input objects, testing
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact='Low',DefaultParameterSetName='Anonymous')]
     [OutputType([PasswordPush],[string],[bool])] # Returntype should be [PasswordPush] but I've yet to find a way to add class access to a function on a module...
     param(
@@ -112,7 +111,7 @@ function New-Push {
     }
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Global:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
+        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Script:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
 
         $body = @{
             'password' = @{
@@ -146,7 +145,7 @@ function New-Push {
             $shouldString += ', with a direct link'
             $false
         }
-        if (-not $Language) { $Language = $Global:PPPLanguage }
+        if (-not $Language) { $Language = $Script:PPPLanguage }
         $shouldString += ' in language "{0}"' -f $Language
         if ($VerbosePreference -eq [System.Management.Automation.ActionPreference]::Continue) {
             # Sanitize input so we're not logging or outputting the payload
@@ -160,16 +159,16 @@ function New-Push {
             'Method' = 'Post'
             'ContentType' = 'application/json'
             'Body' = ($body | ConvertTo-Json)
-            'Uri' = "$Global:PPPBaseUrl/$Language/p.json"
-            'UserAgent' = $Global:PPPUserAgent
+            'Uri' = "$Script:PPPBaseUrl/$Language/p.json"
+            'UserAgent' = $Script:PPPUserAgent
         }
-        if ($Global:PPPHeaders.'X-User-Token') { $iwrSplat['Headers'] = $Global:PPPHeaders }
+        if ($Script:PPPHeaders.'X-User-Token') { $iwrSplat['Headers'] = $Script:PPPHeaders }
         Write-Verbose "Sending HTTP request (minus body): $($iwrSplat | Select-Object Method,ContentType,Uri,UserAgent,Headers | Out-String)"
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
             try {
-                $response = Invoke-WebRequest -Uri "$Global:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
+                $response = Invoke-WebRequest -Uri "$Script:PPPBaseUrl/$Language/p.json" -Method Post -ContentType 'application/json' -Body ($body | ConvertTo-Json)
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastCall -Value $response
+                    Set-Variable -Scope Script -Name PPPLastCall -Value $response
                     Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
                 }
                 if ($Raw) {
@@ -180,7 +179,7 @@ function New-Push {
             } catch {
                 Write-Verbose "An exception was caught: $($_.Exception.Message)"
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastError -Value $_
+                    Set-Variable -Scope Script -Name PPPLastError -Value $_
                     Write-Debug -Message 'Response object set to global variable $PPPLastError'
                 }
             }

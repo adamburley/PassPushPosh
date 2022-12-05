@@ -31,7 +31,7 @@
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-SecretLink.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/preview.en.html
 
@@ -45,7 +45,6 @@
     As it returns false if a Push URL token is not valid you can use it to test if a Push exists without
     burning a view.
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding()]
     [Alias('Get-PushPreview')]
     [OutputType('[string]')]
@@ -58,7 +57,7 @@
         # Language for returned links. Defaults to system language, can be overridden here.
         [Parameter()]
         [string]
-        $Language = $Global:PPPLanguage,
+        $Language = $Script:PPPLanguage,
 
         # Return the raw response body from the API call
         [Parameter()]
@@ -72,10 +71,10 @@
             $iwrSplat = @{
                 'Method' = 'Get'
                 'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken/preview.json"
-                'UserAgent' = $Global:PPPUserAgent
+                'Uri' = "$Script:PPPBaseUrl/p/$URLToken/preview.json"
+                'UserAgent' = $Script:PPPUserAgent
             }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
             Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             $responseContent = Invoke-WebRequest @iwrSplat | Select-Object -ExpandProperty Content
             if ($Raw) { return $responseContent }
@@ -84,7 +83,7 @@
         catch {
             Write-Verbose "An exception was caught: $($_.Exception.Message)"
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
+                Set-Variable -Scope Script -Name 'PPPLastError' -Value $_
                 Write-Debug -Message 'Response object set to global variable $PPPLastError'
             }
         }
