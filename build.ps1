@@ -2,18 +2,22 @@
 # Documentation still needs manual massaging after build to look right online so keep that in mind
 # Biggest issue is it not detecting the end of codeblocks properly in examplesd
 
-param ( [switch]$BuildDocs, [switch]$NoTweaks )
+param ( [switch]$BuildDocs, [switch]$NoTweaks, [string]$NewVersion, [string[]]$ReleaseNotes )
 Write-Host 'Building Module...' -ForegroundColor Cyan
 $PsmPath = './PassPushPosh/PassPushPosh.psm1'
+$PsdPath = './PassPushPosh/PassPushPosh.psd1'
+
 if (Test-Path $PsmPath) { Remove-item $PsmPath }
 foreach($folder in @('PassPushPosh/Classes','PassPushPosh/Private', 'PassPushPosh/Public'))
 {
-    #$root = Join-Path -Path $PSScriptRoot -ChildPath $folder
-    $root = $folder
-    if(Test-Path -Path $root)
+    if(Test-Path -Path $folder)
     { 
-        Write-Host "Processing folder $root"
-        $files = Get-ChildItem -Path $root -Filter *.ps1 -Recurse
+        Write-Host "Processing folder $folder"
+        Write-Host "Linting"
+        Invoke-ScriptAnalyzer -Path $folder -Recurse -ReportSummary
+        Invoke-ScriptAnalyzer -Path $folder -Recurse -ReportSummary -Fix
+        Write-Host "Building files"
+        $files = Get-ChildItem -Path $folder -Filter *.ps1 -Recurse
 
         $files | where-Object{ $_.name -NotLike '*.Tests.ps1'} | 
             ForEach-Object{
@@ -22,6 +26,21 @@ foreach($folder in @('PassPushPosh/Classes','PassPushPosh/Private', 'PassPushPos
             }
     }
 }
+Write-Host "Updating module manifest"
+$functionList = Get-ChildItem 'PassPushPosh/Public' -Filter *.ps1 | Select -ExpandProperty BaseName
+$currentNotes = Test-ModuleManifest -Path $PsdPath | Select-Object -ExpandProperty ReleaseNotes
+$ReleaseNotes = ($ReleaseNotes | % { "- $_" }) -join "`n"
+$newNotes = @"
+### $NewVersion
+$ReleaseNotes
+
+$currentNotes
+"@
+Update-ModuleManifest -Path $PsdPath -ModuleVersion $NewVersion -FunctionsToExport $functionList -ReleaseNotes $newNotes
+
+Write-Host "Copying files to published directory..."
+Copy-Item $PsdPath -Destination ./published/PassPushPosh/PassPushPosh.psd1
+Copy-Item $PsmPath -Destination ./published/PassPushPosh/PassPushPosh.psm1
 
 if ($BuildDocs){
     Import-Module ./PassPushPosh -Force
