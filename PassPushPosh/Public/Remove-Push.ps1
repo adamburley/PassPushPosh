@@ -63,7 +63,7 @@
         try {
             if ($PSCmdlet.ParameterSetName -eq 'Object') {
                 Write-Debug -Message "Remove-Push was passed a PasswordPush object with URLToken: [$($PushObject.URLToken)]"
-                if (-not $PushObject.IsDeletableByViewer -and -not $Global.PPPHeaders) { #Pre-qualify if this will succeed
+                if (-not $PushObject.IsDeletableByViewer -and -not $Global:PPPHeaders) { #Pre-qualify if this will succeed
                     Write-Warning -Message 'Unable to remove Push. Push is not marked as deletable by viewer and you are not authenticated.'
                     return $false
                 }
