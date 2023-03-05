@@ -132,7 +132,7 @@ function ConvertTo-PasswordPush {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/ConvertTo-PasswordPush.md
-    
+
     .NOTES
     Needs a rewrite / cleanup
     #>
@@ -191,7 +191,7 @@ function Get-Dashboard {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Dashboard.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/dashboard.en.html
 
@@ -475,7 +475,7 @@ function Get-SecretLink {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-SecretLink.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/preview.en.html
 
@@ -568,7 +568,7 @@ function Initialize-PassPushPosh {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
-    
+
     .NOTES
     All variables set by this function start with PPP.
     - PPPHeaders
@@ -694,7 +694,7 @@ function New-PasswordPush {
 
     .OUTPUTS
     [PasswordPush]
-    
+
     .EXAMPLE
     New-PasswordPush
 
@@ -931,7 +931,7 @@ function Remove-Push {
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/destroy.en.html
 

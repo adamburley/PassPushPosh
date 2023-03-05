@@ -31,7 +31,7 @@
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/destroy.en.html
 

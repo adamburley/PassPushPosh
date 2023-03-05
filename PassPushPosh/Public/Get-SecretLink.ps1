@@ -31,7 +31,7 @@
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-SecretLink.md
-    
+
     .LINK
     https://pwpush.com/api/1.0/passwords/preview.en.html
 

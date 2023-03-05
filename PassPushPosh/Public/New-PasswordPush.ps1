@@ -1,4 +1,4 @@
-function New-PasswordPush {
+﻿function New-PasswordPush {
     <#
     .SYNOPSIS
     Create a new blank Password Push object.
@@ -13,7 +13,7 @@ function New-PasswordPush {
 
     .OUTPUTS
     [PasswordPush]
-    
+
     .EXAMPLE
     New-PasswordPush
 

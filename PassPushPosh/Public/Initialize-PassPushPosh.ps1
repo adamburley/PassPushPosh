@@ -32,7 +32,7 @@
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
-    
+
     .NOTES
     All variables set by this function start with PPP.
     - PPPHeaders
