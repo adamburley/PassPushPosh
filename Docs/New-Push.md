@@ -10,14 +10,15 @@ Create a new Password Push
 
 ```powershell
 New-Push [-Payload] <String> [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>] [-DeletableByViewer]
- [-RetrievalStep] [-Language <String>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-RetrievalStep] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### RequiresAuthentication
 
 ```powershell
 New-Push [-Payload] <String> [-Note <String>] [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>]
- [-DeletableByViewer] [-RetrievalStep] [-Language <String>] [-Raw] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-DeletableByViewer] [-RetrievalStep] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -27,7 +28,7 @@ The
 programmatic equivalent of going to pwpush.com and entering info.
 Returns \[PasswordPush\] object.
 Link member is a link created based on
-1-step setting and language specified, however both 1-step and direct links
+1-step setting however both 1-step and direct links
 are always provided at LinkRetrievalStep and LinkDirect.
 
 ## EXAMPLES
@@ -39,9 +40,9 @@ $myPush = New-Push "Here's my secret!"
 PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
 ```
 
-Link              : https://pwpush.com/en/p/gzv65wiiuciy   # Requested style
-LinkRetrievalStep : https://pwpush.com/en/p/gzv65wiiuciy/r # 1-step
-LinkDirect        : https://pwpush.com/en/p/gzv65wiiuciy   # Direct
+Link              : https://pwpush.com/p/gzv65wiiuciy   # Requested style
+LinkRetrievalStep : https://pwpush.com/p/gzv65wiiuciy/r # 1-step
+LinkDirect        : https://pwpush.com/p/gzv65wiiuciy   # Direct
 
 ### EXAMPLE 2
 
@@ -49,7 +50,7 @@ LinkDirect        : https://pwpush.com/en/p/gzv65wiiuciy   # Direct
 "Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
 ```
 
-https://pwpush.com/en/p/gzv65wiiuciy/r
+https://pwpush.com/p/gzv65wiiuciy/r
 
 ### EXAMPLE 3
 
@@ -162,27 +163,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Language
-
-Override Language.
-Useful if sending to someone who speaks a
-different language.
-You can change this after the fact by changing
-the URL by hand or by requesting a link for the given token from the
-preview helper endpoint ( See Request-SecretLink )
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Raw
 
 Return the raw response body from the API call
@@ -224,6 +204,22 @@ Prompts you for confirmation before running the cmdlet.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

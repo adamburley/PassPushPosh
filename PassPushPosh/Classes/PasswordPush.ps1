@@ -2,7 +2,6 @@
     [string]$Payload
     [string] hidden $__UrlToken
     [string] hidden $__LinkBase
-    [string]$Language
     [bool]$RetrievalStep
     [bool]$IsExpired
     [bool]$IsDeleted
@@ -48,23 +47,22 @@
         $this.DateUpdated = $_j.updated_at
         $this.DateExpired = if ($_j.expired_on) { $_j.expired_on } else { [DateTime]0 }
 
-        $this.Language = $Global:PPPLanguage
 
         $this | Add-Member -Name 'UrlToken' -MemberType ScriptProperty -Value {
                 return $this.__UrlToken
             } -SecondValue {
                 $this.__UrlToken = $_
-                $this.__LinkBase = "$Global:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
+                $this.__LinkBase = "$Global:PPPBaseUrl/p/$($this.__UrlToken)"
             }
         $this.__UrlToken = $_j.url_token
-        $this.__LinkBase = "$Global:PPPBaseUrl/$($this.Language)/p/$($this.__UrlToken)"
+        $this.__LinkBase = "$Global:PPPBaseUrl/p/$($this.__UrlToken)"
         $this | Add-Member -Name 'LinkDirect' -MemberType ScriptProperty -Value { return $this.__LinkBase } -SecondValue {
             Write-Warning 'LinkDirect is a read-only calculated member.'
-            Write-Debug 'Link* members are calculated based on the Global BaseUrl and Language and Push Retrieval Step values'
+            Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
         }
         $this | Add-Member -Name 'LinkRetrievalStep' -MemberType ScriptProperty -Value { return "$($this.__LinkBase)/r" } -SecondValue {
             Write-Warning 'LinkRetrievalStep is a read-only calculated member.'
-            Write-Debug 'Link* members are calculated based on the Global BaseUrl and Language and Push Retrieval Step values'
+            Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
         }
         $this | Add-Member -Name 'Link' -MemberType ScriptProperty -Value {
                 $_Link = if ($this.RetrievalStep) { $this.LinkRetrievalStep } else { $this.LinkDirect }
@@ -72,7 +70,7 @@
                 return $_Link
             } -SecondValue {
                 Write-Warning 'Link is a read-only calculated member.'
-                Write-Debug 'Link* members are calculated based on the Global BaseUrl and Language and Push Retrieval Step values'
+                Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
             }
     }
 }

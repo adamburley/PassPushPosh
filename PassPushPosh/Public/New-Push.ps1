@@ -7,21 +7,21 @@ function New-Push {
     Create a new Push on the specified Password Pusher instance. The
     programmatic equivalent of going to pwpush.com and entering info.
     Returns [PasswordPush] object. Link member is a link created based on
-    1-step setting and language specified, however both 1-step and direct links
+    1-step setting however both 1-step and direct links
     are always provided at LinkRetrievalStep and LinkDirect.
 
     .EXAMPLE
     $myPush = New-Push "Here's my secret!"
     PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
 
-    Link              : https://pwpush.com/en/p/gzv65wiiuciy   # Requested style
-    LinkRetrievalStep : https://pwpush.com/en/p/gzv65wiiuciy/r # 1-step
-    LinkDirect        : https://pwpush.com/en/p/gzv65wiiuciy   # Direct
+    Link              : https://pwpush.com/p/gzv65wiiuciy   # Requested style
+    LinkRetrievalStep : https://pwpush.com/p/gzv65wiiuciy/r # 1-step
+    LinkDirect        : https://pwpush.com/p/gzv65wiiuciy   # Direct
 
     .EXAMPLE
     "Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
 
-    https://pwpush.com/en/p/gzv65wiiuciy/r
+    https://pwpush.com/p/gzv65wiiuciy/r
 
 
     .EXAMPLE
@@ -93,14 +93,6 @@ function New-Push {
         [switch]
         $RetrievalStep,
 
-        # Override Language. Useful if sending to someone who speaks a
-        # different language. You can change this after the fact by changing
-        # the URL by hand or by requesting a link for the given token from the
-        # preview helper endpoint ( See Request-SecretLink )
-        [Parameter()]
-        [string]
-        $Language,
-
         # Return the raw response body from the API call
         [Parameter()]
         [switch]
@@ -146,8 +138,6 @@ function New-Push {
             $shouldString += ', with a direct link'
             $false
         }
-        if (-not $Language) { $Language = $Global:PPPLanguage }
-        $shouldString += ' in language "{0}"' -f $Language
         if ($VerbosePreference -eq [System.Management.Automation.ActionPreference]::Continue) {
             # Sanitize input so we're not logging or outputting the payload
             $vBody = $body.Clone()
@@ -160,7 +150,7 @@ function New-Push {
             'Method' = 'Post'
             'ContentType' = 'application/json'
             'Body' = ($body | ConvertTo-Json)
-            'Uri' = "$Global:PPPBaseUrl/$Language/p.json"
+            'Uri' = "$Global:PPPBaseUrl/p.json"
             'UserAgent' = $Global:PPPUserAgent
         }
         if ($Global:PPPHeaders.'X-User-Token') { $iwrSplat['Headers'] = $Global:PPPHeaders }

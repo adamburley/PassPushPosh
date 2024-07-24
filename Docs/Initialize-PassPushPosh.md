@@ -9,24 +9,23 @@ Initialize the PassPushPosh module
 ### Anonymous (Default)
 
 ```powershell
-Initialize-PassPushPosh [[-BaseUrl] <String>] [-Language <String>] [-UserAgent <String>] [-Force]
- [<CommonParameters>]
+Initialize-PassPushPosh [[-BaseUrl] <String>] [-UserAgent <String>] [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Authenticated
 
 ```powershell
-Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] <String>] [-Language <String>]
- [-UserAgent <String>] [-Force] [<CommonParameters>]
+Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] <String>] [-UserAgent <String>]
+ [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-Sets global variables to handle the server URL, headers (authentication), and language.
+Sets global variables to handle the server URL and headers (authentication).
 Called automatically by module Functions if it is not called explicitly prior, so you don't actually need
 to call it unless you're going to use the authenticated API or alternate server, etc
-Default parameters use the pwpush.com domain, anonymous authentication, and whatever language your computer
-is set to.
+Default parameters use the pwpush.com domain and anonymous authentication.
 
 ## EXAMPLES
 
@@ -120,24 +119,6 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Language
-
-Language to render resulting links in.
-Defaults to host OS language, or English if
-host OS language is not available
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -UserAgent
 
 Set a specific user agent.
@@ -178,6 +159,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
@@ -190,7 +187,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 All variables set by this function start with PPP.
 - PPPHeaders
-- PPPLanguage
 - PPPUserAgent
 - PPPBaseUrl
 

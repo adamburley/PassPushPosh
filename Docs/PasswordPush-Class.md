@@ -21,10 +21,9 @@ Represents a Push on the Password Pusher server.  Depending on the source of dat
 |--|--|--|--|
 | string | Payload | The secret string or password to be sent | Will not have a value if the API endpoint does not retrieve it (e.g. Dashboard, Delete) |
 | string | URLToken | The unique part of a secret link | |
-| string | Link | A full URL. e.g `https://pwpush.com/en/p/urltoken` | Read only, calculated value. `Link` will reflect if 1-click retrieval step was selected |
+| string | Link | A full URL. e.g `https://pwpush.com/p/urltoken` | Read only, calculated value. `Link` will reflect if 1-click retrieval step was selected |
 | string | LinkDirect | URL without the retrieval step | Read only, calculated. Will always reflect the "direct" link (no additional click) |
 | string | LinkRetrievalStep | URL with the retrieval step | Read only, calculated. Will always reflect the "additional click needed" link |
-| string | Language | Language indicator matching what Password Pusher utilizes | e.g. `en`, `fr` |
 | bool   | RetrievalStep | Push created with "use 1-click retrieval step" | |
 | bool   | IsExpired | Push is marked as expired | |
 | bool   | IsDeleted | Push is marked as deleted ||

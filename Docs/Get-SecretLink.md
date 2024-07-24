@@ -7,7 +7,7 @@ Returns a fully qualified secret link to a push of given URL Token
 ## SYNTAX
 
 ```powershell
-Get-SecretLink [-URLToken] <String> [[-Language] <String>] [-Raw] [<CommonParameters>]
+Get-SecretLink [-URLToken] <String> [-Raw] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,23 +23,14 @@ but the Push is expired or deleted.
 
 ```powershell
 Get-SecretLink -URLToken gzv65wiiuciy
-https://pwpush.com/en/p/gzv65wiiuciy/r
+https://pwpush.com/p/gzv65wiiuciy/r
 ```
 
 ### EXAMPLE 2
 
 ```powershell
-# En France
-
-PS > Get-SecretLink -URLToken gzv65wiiuciy -Language fr
-https://pwpush.com/fr/p/gzv65wiiuciy/r
-```
-
-### EXAMPLE 3
-
-```powershell
 Get-SecretLink -URLToken gzv65wiiuciy -Raw
-{ "url": "https://pwpush.com/es/p/0fkapnbo_pwp4gi8uy0/r" }
+{ "url": "https://pwpush.com/p/0fkapnbo_pwp4gi8uy0/r" }
 ```
 
 ## PARAMETERS
@@ -60,23 +51,6 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Language
-
-Language for returned links.
-Defaults to system language, can be overridden here.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: $Global:PPPLanguage
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Raw
 
 Return the raw response body from the API call
@@ -89,6 +63,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

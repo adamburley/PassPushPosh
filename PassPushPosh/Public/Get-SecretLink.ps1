@@ -18,16 +18,11 @@
 
     .EXAMPLE
     Get-SecretLink -URLToken gzv65wiiuciy
-    https://pwpush.com/en/p/gzv65wiiuciy/r
-
-    .EXAMPLE
-    # En France
-    PS > Get-SecretLink -URLToken gzv65wiiuciy -Language fr
-    https://pwpush.com/fr/p/gzv65wiiuciy/r
+    https://pwpush.com/p/gzv65wiiuciy/r
 
     .EXAMPLE
     Get-SecretLink -URLToken gzv65wiiuciy -Raw
-    { "url": "https://pwpush.com/es/p/0fkapnbo_pwp4gi8uy0/r" }
+    { "url": "https://pwpush.com/p/0fkapnbo_pwp4gi8uy0/r" }
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-SecretLink.md
@@ -55,11 +50,6 @@
         [ValidateLength(5, 256)]
         [string]$URLToken,
 
-        # Language for returned links. Defaults to system language, can be overridden here.
-        [Parameter()]
-        [string]
-        $Language = $Global:PPPLanguage,
-
         # Return the raw response body from the API call
         [Parameter()]
         [switch]
@@ -68,7 +58,6 @@
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
     process {
         try {
-            if ($Language -ine 'en') { $uri += "?push_locale=$Language" }
             $iwrSplat = @{
                 'Method' = 'Get'
                 'ContentType' = 'application/json'

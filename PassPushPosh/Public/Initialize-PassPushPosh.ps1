@@ -4,11 +4,10 @@
     Initialize the PassPushPosh module
 
     .DESCRIPTION
-    Sets global variables to handle the server URL, headers (authentication), and language.
+    Sets global variables to handle the server URL and headers (authentication).
     Called automatically by module Functions if it is not called explicitly prior, so you don't actually need
     to call it unless you're going to use the authenticated API or alternate server, etc
-    Default parameters use the pwpush.com domain, anonymous authentication, and whatever language your computer
-    is set to.
+    Default parameters use the pwpush.com domain and anonymous authentication.
 
     .EXAMPLE
     # Initialize with default settings
@@ -36,7 +35,6 @@
     .NOTES
     All variables set by this function start with PPP.
     - PPPHeaders
-    - PPPLanguage
     - PPPUserAgent
     - PPPBaseUrl
 
@@ -65,12 +63,6 @@
         [Parameter(Position=2,ParameterSetName='Authenticated')]
         [ValidatePattern('^https?:\/\/[a-zA-Z0-9-_]+.[a-zA-Z0-9]+')]
         [string]$BaseUrl,
-
-        # Language to render resulting links in. Defaults to host OS language, or English if
-        # host OS language is not available
-        [Parameter()]
-        [string]
-        $Language,
 
         # Set a specific user agent. Default user agent is a combination of the
         # module info, what your OS reports itself as, and a hash based on
@@ -106,40 +98,19 @@
         } elseif ($Global:PPPHeaders) { # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
             Remove-Variable -Scope Global -Name PPPHeaders -WhatIf:$false
         }
-        $availableLanguages = ('en','ca','cs','da','de','es','fi','fr','hu','it','nl','no','pl','pt-BR','sr','sv')
-        if (-not $Language) {
-            $Culture = Get-Culture
-            Write-Debug "Detected Culture: $($Culture.DisplayName)"
-            $matchedLanguage = $Culture.TwoLetterISOLanguageName, $Culture.IetfLanguageTag |
-                                Foreach-Object { if ($_ -iin $availableLanguages) { $_ } } |
-                                Select-Object -First 1
-            if ($matchedLanguage) {
-                Write-Debug "Language is supported in Password Pusher."
-                $Language = $matchedLanguage
-            } else { Write-Warning "Detected language $($Culture.DisplayName) is not supported in PasswordPusher. Defaulting to English." }
-        } else {
-            if ($Language -iin $availableLanguages) {
-                Write-Debug "Language [$Language] is available in PasswordPusher."
-            } else
-            {
-                Write-Warning "Language [$Language] is not available in PasswordPusher. Defaulting to english."
-                $Language = 'en'
-            }
-        }
 
         if (-not $UserAgent) {
             $osVersion = [System.Environment]::OSVersion
             $userAtDomain = "{0}@{1}" -f [System.Environment]::UserName, [System.Environment]::UserDomainName
             $uAD64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($userAtDomain))
             Write-Debug "$userAtDomain transformed to $uAD64. First 20 characters $($uAD64.Substring(0,20))"
-            $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $Language $osVersion/$($uAD64.Substring(0,20))"
+            $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $osVersion/$($uAD64.Substring(0,20))"
             Write-Verbose "Generated user agent: $UserAgent"
         } else {
             Write-Verbose "Using specified user agent: $UserAgent"
         }
 
         Set-Variable -WhatIf:$false -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
-        Set-Variable -WhatIf:$false -Scope Global -Name PPPLanguage -Value $Language
         Set-Variable -WhatIf:$false -Scope Global -Name PPPUserAgent -Value $UserAgent
     }
 }

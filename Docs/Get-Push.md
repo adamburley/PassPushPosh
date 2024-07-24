@@ -7,7 +7,7 @@ Retrieve the secret contents of a Push
 ## SYNTAX
 
 ```powershell
-Get-Push [-URLToken] <Object> [-Raw] [<CommonParameters>]
+Get-Push [-URLToken] <Object> [-Raw] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -62,6 +62,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
