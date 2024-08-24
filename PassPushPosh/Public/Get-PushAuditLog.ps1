@@ -70,13 +70,13 @@
         $Raw
     )
     begin {
-        if (-not $Global:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+        if (-not $Script:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     }
     process {
         try {
-            $uri = "$Global:PPPBaseUrl/p/$URLToken/audit.json"
+            $uri = "$Script:PPPBaseUrl/p/$URLToken/audit.json"
             Write-Debug 'Requesting $uri'
-            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
+            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Script:PPPHeaders -ErrorAction Stop
             if ([int]$response.StatusCode -eq 200 -and $response.Content -ieq "{`"error`":`"That push doesn't belong to you.`"}") {
                 $result = [PSCustomObject]@{ 'Error' = "That Push doesn't belong to you"; 'ErrorCode' = 403 }
                 Write-Warning $result.Error

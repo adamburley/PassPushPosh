@@ -56,13 +56,13 @@
         [switch]
         $Raw
     )
-    if (-not $Global:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+    if (-not $Script:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     try {
-        $uri = "$Global:PPPBaseUrl/d/"
+        $uri = "$Script:PPPBaseUrl/d/"
         if ($Dashboard -eq 'Active') { $uri += 'active.json' }
         elseif ($Dashboard -eq 'Expired') { $uri += 'expired.json' }
         Write-Debug "Requesting $uri"
-        $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Script:PPPHeaders -ErrorAction Stop
         if ($Raw) { return $response.Content }
         else {
             return $response.Content | ConvertTo-PasswordPush

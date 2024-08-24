@@ -103,7 +103,7 @@ function New-Push {
     }
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Global:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return }
+        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Script:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return }
 
         $body = @{
             'password' = @{

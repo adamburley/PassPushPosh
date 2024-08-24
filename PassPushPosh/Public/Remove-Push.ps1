@@ -63,7 +63,7 @@
         try {
             if ($PSCmdlet.ParameterSetName -eq 'Object') {
                 Write-Debug -Message "Remove-Push was passed a PasswordPush object with URLToken: [$($PushObject.URLToken)]"
-                if (-not $PushObject.IsDeletableByViewer -and -not $Global:PPPHeaders) { #Pre-qualify if this will succeed
+                if (-not $PushObject.IsDeletableByViewer -and -not $Script:PPPHeaders) { #Pre-qualify if this will succeed
                     Write-Warning -Message 'Unable to remove Push. Push is not marked as deletable by viewer and you are not authenticated.'
                     return $false
                 }
@@ -78,10 +78,10 @@
             $iwrSplat = @{
                 'Method' = 'Delete'
                 'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken.json"
-                'UserAgent' = $Global:PPPUserAgent
+                'Uri' = "$Script:PPPBaseUrl/p/$URLToken.json"
+                'UserAgent' = $Script:PPPUserAgent
             }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
             Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             if ($PSCmdlet.ShouldProcess('Delete',"Push with token [$URLToken]")) {
                 $response = Invoke-WebRequest @iwrSplat

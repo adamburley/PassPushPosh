@@ -52,10 +52,10 @@
                 return $this.__UrlToken
             } -SecondValue {
                 $this.__UrlToken = $_
-                $this.__LinkBase = "$Global:PPPBaseUrl/p/$($this.__UrlToken)"
+                $this.__LinkBase = "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
             }
         $this.__UrlToken = $_j.url_token
-        $this.__LinkBase = "$Global:PPPBaseUrl/p/$($this.__UrlToken)"
+        $this.__LinkBase = "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
         $this | Add-Member -Name 'LinkDirect' -MemberType ScriptProperty -Value { return $this.__LinkBase } -SecondValue {
             Write-Warning 'LinkDirect is a read-only calculated member.'
             Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'

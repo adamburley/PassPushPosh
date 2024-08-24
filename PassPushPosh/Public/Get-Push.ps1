@@ -53,10 +53,10 @@
             $iwrSplat = @{
                 'Method' = 'Get'
                 'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken.json"
-                'UserAgent' = $Global:PPPUserAgent
+                'Uri' = "$Script:PPPBaseUrl/p/$URLToken.json"
+                'UserAgent' = $Script:PPPUserAgent
             }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
+            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
             Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
             $response = Invoke-WebRequest @iwrSplat -ErrorAction Stop
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
