@@ -52,7 +52,6 @@ function New-Push {
 
     TODO: Support [PasswordPush] input objects, testing
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding(SupportsShouldProcess,ConfirmImpact='Low',DefaultParameterSetName='Anonymous')]
     [OutputType([PasswordPush],[string],[bool])] # Returntype should be [PasswordPush] but I've yet to find a way to add class access to a function on a module...
     param(
@@ -104,7 +103,7 @@ function New-Push {
     }
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Global:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return $false }
+        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Global:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return }
 
         $body = @{
             'password' = @{
@@ -146,27 +145,15 @@ function New-Push {
             Write-Verbose "Call Body (sanitized): $vBs"
         }
 
-        $iwrSplat = @{
-            'Method' = 'Post'
-            'ContentType' = 'application/json'
-            'Body' = ($body | ConvertTo-Json)
-            'Uri' = "$Global:PPPBaseUrl/p.json"
-            'UserAgent' = $Global:PPPUserAgent
-        }
-        if ($Global:PPPHeaders.'X-User-Token') { $iwrSplat['Headers'] = $Global:PPPHeaders }
-        Write-Verbose "Sending HTTP request (minus body): $($iwrSplat | Select-Object Method,ContentType,Uri,UserAgent,Headers | Out-String)"
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
             try {
-                $response = Invoke-WebRequest @iwrSplat
-                if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastCall -Value $response
-                    Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
-                }
+                $response = Invoke-PasswordPusherAPI -Endpoint 'p.json' -Method Post -Body $body
                 if ($Raw) {
                     Write-Debug "Returning raw object: $($response.Content)"
                     return $response.Content
+                } else {
+                    return $response.Content | ConvertTo-PasswordPush
                 }
-                return $response.Content | ConvertTo-PasswordPush
             } catch {
                 Write-Verbose "An exception was caught: $($_.Exception.Message)"
                 if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
