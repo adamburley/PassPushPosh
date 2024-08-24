@@ -62,21 +62,16 @@
         [parameter(ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [string]
-        $URLToken,
-
-        # Return content of API call directly
-        [Parameter()]
-        [switch]
-        $Raw
+        $URLToken
     )
     begin {
         if (-not $Script:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     }
     process {
         try {
-            $uri = "$Script:PPPBaseUrl/p/$URLToken/audit.json"
+            $uri = "p/$URLToken/audit.json"
             Write-Debug 'Requesting $uri'
-            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Script:PPPHeaders -ErrorAction Stop
+            $response = Invoke-PasswordPusherAPI -Endpoint $uri
             if ([int]$response.StatusCode -eq 200 -and $response.Content -ieq "{`"error`":`"That push doesn't belong to you.`"}") {
                 $result = [PSCustomObject]@{ 'Error' = "That Push doesn't belong to you"; 'ErrorCode' = 403 }
                 Write-Warning $result.Error

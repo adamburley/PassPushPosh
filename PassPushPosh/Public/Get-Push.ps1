@@ -31,7 +31,6 @@
     New-Push
 
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
@@ -39,35 +38,18 @@
         [parameter(Mandatory,ValueFromPipeline,Position=0)]
         [ValidateNotNullOrEmpty()]
         [Alias('Token')]
-        $URLToken,
-
-        # Return the raw response body from the API call
-        [Parameter()]
-        [switch]
-        $Raw
+        $URLToken
     )
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
 
     process {
         try {
-            $iwrSplat = @{
-                'Method' = 'Get'
-                'ContentType' = 'application/json'
-                'Uri' = "$Script:PPPBaseUrl/p/$URLToken.json"
-                'UserAgent' = $Script:PPPUserAgent
-            }
-            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
-            Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
-            $response = Invoke-WebRequest @iwrSplat -ErrorAction Stop
+            $response = Invoke-PasswordPusherAPI -Endpoint "/p/$URLToken.json"
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
                 Set-Variable -Scope Global -Name PPPLastCall -Value $response
                 Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
             }
-            if ($Raw) {
-                Write-Debug "Returning raw object:`n$($response.Content)"
-                return $response.Content
-            }
-            return $response.Content | ConvertTo-PasswordPush
+            $response.Content | ConvertTo-PasswordPush
         } catch {
             Write-Verbose "An exception was caught: $($_.Exception.Message)"
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {

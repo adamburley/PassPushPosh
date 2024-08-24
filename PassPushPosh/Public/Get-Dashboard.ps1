@@ -13,7 +13,6 @@
 
     .OUTPUTS
     [PasswordPush[]] Array of pushes with data
-    [string] raw response body from API call
 
     .EXAMPLE
     Get-Dashboard
@@ -23,10 +22,6 @@
 
     .EXAMPLE
     Get-Dashboard -Dashboard Expired
-
-    .EXAMPLE
-    Get-Dashboard -Raw
-    [{"expire_after_days":1,"expire_after_views":5,"expired":false,"url_token":"xm3q7czvtdpmyg","created_at":"2022-11-19T18:10:42.055Z","updated_at":"2022-11-19T18:10:42.055Z","deleted":false,"deletable_by_viewer":true,"retrieval_step":false,"expired_on":null,"note":null,"days_remaining":1,"views_remaining":3}]
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Dashboard.md
@@ -40,34 +35,25 @@
     .NOTES
     TODO update Invoke-Webrequest flow and error-handling to match other functions
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope = 'Function', Justification = 'Global variables are used for module session helpers.')]
     [CmdletBinding()]
-    [OutputType([PasswordPush[]],[string])]
+    [OutputType([PasswordPush[]])]
     param(
         # URL Token from a secret
-        [parameter(Position=0)]
-        [ValidateSet('Active','Expired')]
+        [parameter(Position = 0)]
+        [ValidateSet('Active', 'Expired')]
         [ValidateNotNullOrEmpty()]
         [string]
-        $Dashboard = 'Active',
-
-        # Return content of API call directly
-        [Parameter()]
-        [switch]
-        $Raw
+        $Dashboard = 'Active'
     )
     if (-not $Script:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     try {
-        $uri = "$Script:PPPBaseUrl/d/"
+        $uri = "d/"
         if ($Dashboard -eq 'Active') { $uri += 'active.json' }
         elseif ($Dashboard -eq 'Expired') { $uri += 'expired.json' }
         Write-Debug "Requesting $uri"
-        $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Script:PPPHeaders -ErrorAction Stop
-        if ($Raw) { return $response.Content }
-        else {
-            return $response.Content | ConvertTo-PasswordPush
-        }
-    } catch {
+        $response.Content | ConvertTo-PasswordPush
+    }
+    catch {
         Write-Verbose "An exception was caught: $($_.Exception.Message)"
         if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
             Set-Variable -Scope Global -Name 'PPPLastError' -Value $_

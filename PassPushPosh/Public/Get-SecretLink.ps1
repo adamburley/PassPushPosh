@@ -48,27 +48,13 @@
         # URL Token for the secret
         [parameter(Mandatory, ValueFromPipeline)]
         [ValidateLength(5, 256)]
-        [string]$URLToken,
-
-        # Return the raw response body from the API call
-        [Parameter()]
-        [switch]
-        $Raw
+        [string]$URLToken
     )
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
     process {
         try {
-            $iwrSplat = @{
-                'Method' = 'Get'
-                'ContentType' = 'application/json'
-                'Uri' = "$Script:PPPBaseUrl/p/$URLToken/preview.json"
-                'UserAgent' = $Script:PPPUserAgent
-            }
-            if ($Script:PPPHeaders) { $iwrSplat['Headers'] = $Script:PPPHeaders }
-            Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
-            $responseContent = Invoke-WebRequest @iwrSplat | Select-Object -ExpandProperty Content
-            if ($Raw) { return $responseContent }
-            else { return $responseContent | ConvertFrom-Json | Select-Object -ExpandProperty url }
+            $responseContent = Invoke-PasswordPusherAPI -Endpoint "p/$URLToken/preview.json" | Select-Object -ExpandProperty Content
+            $responseContent | ConvertFrom-Json | Select-Object -ExpandProperty url
         }
         catch {
             Write-Verbose "An exception was caught: $($_.Exception.Message)"
