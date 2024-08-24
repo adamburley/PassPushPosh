@@ -44,7 +44,7 @@
 
     process {
         try {
-            $response = Invoke-PasswordPusherAPI -Endpoint "/p/$URLToken.json"
+            $response = Invoke-PasswordPusherAPI -Endpoint "p/$URLToken.json"
             if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
                 Set-Variable -Scope Global -Name PPPLastCall -Value $response
                 Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
