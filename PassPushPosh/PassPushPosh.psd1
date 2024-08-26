@@ -35,7 +35,7 @@ Description = '*PassPushPosh* is a PowerShell Module for interfacing with the Pa
 Cmdlets provide clear responses to errors, support additional messaging via -Debug and -Verbose, transaction testing via -Whatif and -Confirm, and in general try to be as "Powershell-y" as possible.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '5.1'
+PowerShellVersion = '7.0'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -71,18 +71,16 @@ PowerShellVersion = '5.1'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = 'ConvertTo-PasswordPush', 'Get-Dashboard', 'Get-Push',
-               'Get-PushAuditLog', 'Get-SecretLink', 'Initialize-PassPushPosh',
-                'New-Push', 'Remove-Push'
+FunctionsToExport = ''
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
 
 # Variables to export from this module
-VariablesToExport = '*'
+VariablesToExport = ''
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = 'Get-PushPreview'
+AliasesToExport = ''
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
