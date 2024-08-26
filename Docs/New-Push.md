@@ -1,28 +1,24 @@
 # New-Push
 
 ## SYNOPSIS
-
 Create a new Password Push
 
 ## SYNTAX
 
 ### Anonymous (Default)
-
-```powershell
+```
 New-Push [-Payload] <String> [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>] [-DeletableByViewer]
  [-RetrievalStep] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### RequiresAuthentication
-
-```powershell
+```
 New-Push [-Payload] <String> [-Note <String>] [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>]
  [-DeletableByViewer] [-RetrievalStep] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
 Create a new Push on the specified Password Pusher instance.
 The
 programmatic equivalent of going to pwpush.com and entering info.
@@ -34,8 +30,7 @@ are always provided at LinkRetrievalStep and LinkDirect.
 ## EXAMPLES
 
 ### EXAMPLE 1
-
-```powershell
+```
 $myPush = New-Push "Here's my secret!"
 PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
 ```
@@ -45,25 +40,21 @@ LinkRetrievalStep : https://pwpush.com/p/gzv65wiiuciy/r # 1-step
 LinkDirect        : https://pwpush.com/p/gzv65wiiuciy   # Direct
 
 ### EXAMPLE 2
-
-```powershell
+```
 "Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
 ```
 
 https://pwpush.com/p/gzv65wiiuciy/r
 
 ### EXAMPLE 3
-
-```powershell
+```
 # "Burn after reading" style Push
-
 PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
 ```
 
 ## PARAMETERS
 
 ### -Payload
-
 The password or secret text to share.
 
 ```yaml
@@ -79,7 +70,6 @@ Accept wildcard characters: False
 ```
 
 ### -Note
-
 Label for this Push (requires Authenticated session)
 
 ```yaml
@@ -95,7 +85,6 @@ Accept wildcard characters: False
 ```
 
 ### -ExpireAfterDays
-
 Expire secret link and delete after this many days.
 
 ```yaml
@@ -111,7 +100,6 @@ Accept wildcard characters: False
 ```
 
 ### -ExpireAfterViews
-
 Expire secret link after this many views.
 
 ```yaml
@@ -127,7 +115,6 @@ Accept wildcard characters: False
 ```
 
 ### -DeletableByViewer
-
 Allow the recipient of a Push to delete it.
 
 ```yaml
@@ -143,7 +130,6 @@ Accept wildcard characters: False
 ```
 
 ### -RetrievalStep
-
 Require recipient click an extra link to view Push payload.
 Helps to avoid chat systems and URL scanners from eating up views.
 Note that the retrieval step URL is always available for a push.
@@ -164,7 +150,6 @@ Accept wildcard characters: False
 ```
 
 ### -Raw
-
 Return the raw response body from the API call
 
 ```yaml
@@ -180,7 +165,6 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -197,7 +181,6 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
-
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -213,7 +196,6 @@ Accept wildcard characters: False
 ```
 
 ### -ProgressAction
-
 {{ Fill ProgressAction Description }}
 
 ```yaml
@@ -229,21 +211,16 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string]
-
 ## OUTPUTS
 
 ### [PasswordPush] Push object
-
 ### [string] Raw result of API call
-
 ## NOTES
-
 Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default
 values for Password Pusher and what's used on the public instance
 (pwpush.com).
@@ -254,5 +231,9 @@ TODO: Support \[PasswordPush\] input objects, testing
 
 ## RELATED LINKS
 
-- [Password Pusher API Documentation](https://pwpush.com/api/1.0/passwords/create.en.html)
-- [Get-Push](Get-Push.md)
+[https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md)
+
+[https://pwpush.com/api/1.0/passwords/create.en.html](https://pwpush.com/api/1.0/passwords/create.en.html)
+
+[Get-Push]()
+

@@ -1,17 +1,15 @@
 # ConvertTo-PasswordPush
 
 ## SYNOPSIS
-
 Convert API call response to a PasswordPush object
 
 ## SYNTAX
 
-```powershell
+```
 ConvertTo-PasswordPush [-JsonResponse] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
 Accepts a JSON string returned from the Password Pusher API and converts it to a \[PasswordPush\] object.
 This allows calculated push retrieval URLs and a more "PowerShell" experience.
 Generally you won't need to use this directly, it's automatically invoked within Register-Push and Request-Push.
@@ -19,10 +17,8 @@ Generally you won't need to use this directly, it's automatically invoked within
 ## EXAMPLES
 
 ### EXAMPLE 1
-
-```powershell
+```
 # Common usage - from within the Register-Push cmdlet
-
 PS> $myPush = Register-Push -Payload "This is my secret!"
 PS> $myPush.Link  # The link parameter always presents the URL as it would appear with the same settings selected on pwpush.com
 ```
@@ -30,10 +26,8 @@ PS> $myPush.Link  # The link parameter always presents the URL as it would appea
 https://pwpush.com/p/rz6nryvl-d4
 
 ### EXAMPLE 2
-
-```powershell
+```
 # Manually invoking the API
-
 PS> $rawJson = Invoke-WebRequest  `
                 -Uri https://pwpush.com/p.json `
                 -Method Post `
@@ -64,7 +58,6 @@ DateExpired         : 1/1/0001 12:00:00 AM
 ## PARAMETERS
 
 ### -JsonResponse
-
 The string result of an API call from the Password Pusher application
 
 ```yaml
@@ -80,7 +73,6 @@ Accept wildcard characters: False
 ```
 
 ### -ProgressAction
-
 {{ Fill ProgressAction Description }}
 
 ```yaml
@@ -96,21 +88,19 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string]
-
 ## OUTPUTS
 
 ### [PasswordPush] for single object
-
 ### [PasswordPush[]] for Json array data
-
 ## NOTES
-
 Needs a rewrite / cleanup
 
 ## RELATED LINKS
+
+[https://github.com/adamburley/PassPushPosh/blob/main/Docs/ConvertTo-PasswordPush.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/ConvertTo-PasswordPush.md)
+

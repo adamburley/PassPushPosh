@@ -1,27 +1,23 @@
 # Remove-Push
 
 ## SYNOPSIS
-
 Remove a Push
 
 ## SYNTAX
 
 ### Token (Default)
-
-```powershell
+```
 Remove-Push [-URLToken <String>] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### Object
-
-```powershell
+```
 Remove-Push [-PushObject <PasswordPush>] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
 Remove (invalidate) an active push.
 Requires the Push be either set as
 deletable by viewer, or that you are authenticated as the creator of the
@@ -37,14 +33,12 @@ Push, the endpoint returns 404 and this function returns $false
 ## EXAMPLES
 
 ### EXAMPLE 1
-
-```powershell
+```
 Remove-Push -URLToken bwzehzem_xu-
 ```
 
 ### EXAMPLE 2
-
-```powershell
+```
 Remove-Push -URLToken -Raw
 {"expired":true,"deleted":true,"expired_on":"2022-11-21T13:23:45.341Z","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
 ```
@@ -52,7 +46,6 @@ Remove-Push -URLToken -Raw
 ## PARAMETERS
 
 ### -URLToken
-
 URL Token for the secret
 
 ```yaml
@@ -68,7 +61,6 @@ Accept wildcard characters: False
 ```
 
 ### -PushObject
-
 PasswordPush object
 
 ```yaml
@@ -84,7 +76,6 @@ Accept wildcard characters: False
 ```
 
 ### -Raw
-
 Return the raw response body from the API call
 
 ```yaml
@@ -100,7 +91,6 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
 
@@ -117,7 +107,6 @@ Accept wildcard characters: False
 ```
 
 ### -Confirm
-
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
@@ -133,7 +122,6 @@ Accept wildcard characters: False
 ```
 
 ### -ProgressAction
-
 {{ Fill ProgressAction Description }}
 
 ```yaml
@@ -149,23 +137,21 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### [string] URL Token
-
 ### [PasswordPush] representing the Push to remove
-
 ## OUTPUTS
 
 ### [bool] True on success, otherwise False
-
 ## NOTES
-
 TODO testing and debugging
 
 ## RELATED LINKS
 
-- [Password Pusher API Documentation](https://pwpush.com/api/1.0/passwords/destroy.en.html)
+[https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md)
+
+[https://pwpush.com/api/1.0/passwords/destroy.en.html](https://pwpush.com/api/1.0/passwords/destroy.en.html)
+
