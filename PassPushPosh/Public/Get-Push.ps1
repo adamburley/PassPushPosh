@@ -1,5 +1,4 @@
-﻿function Get-Push {
-    <#
+﻿    <#
     .SYNOPSIS
     Retrieve the secret contents of a Push
 
@@ -34,6 +33,7 @@
     New-Push
 
     #>
+function Get-Push {
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
