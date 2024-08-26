@@ -10,6 +10,34 @@ function New-Push {
     1-step setting however both 1-step and direct links
     are always provided at LinkRetrievalStep and LinkDirect.
 
+    .PARAMETER Payload
+    The password or secret text to share.
+
+    .PARAMETER Note
+    Label for this Push (requires Authenticated session)
+
+    .PARAMETER ExpireAfterDays
+    Expire secret link and delete after this many days.
+
+    .PARAMETER ExpireAfterViews
+    Expire secret link after this many views.
+
+    .PARAMETER DeletableByViewer
+    Allow the recipient of a Push to delete it.
+
+    .PARAMETER RetrievalStep
+    Require recipient click an extra link to view Push payload.
+    Helps to avoid chat systems and URL scanners from eating up views.
+    Note that the retrieval step URL is always available for a push. This
+    parameter changes if the 1-click link is used in the Link parameter
+    and returned from the secret link helper (Get-SecretLink)
+
+    .INPUTS
+    [string]
+
+    .OUTPUTS
+    [PasswordPush] Representation of the submitted push
+
     .EXAMPLE
     $myPush = New-Push "Here's my secret!"
     PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
@@ -28,13 +56,6 @@ function New-Push {
     # "Burn after reading" style Push
     PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
 
-    .INPUTS
-    [string]
-
-    .OUTPUTS
-    [PasswordPush] Push object
-    [string] Raw result of API call
-
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md
 
@@ -49,62 +70,43 @@ function New-Push {
     values for Password Pusher and what's used on the public instance
     (pwpush.com). If you're using this with a private instance and want to
     override that value you'll need to fork this module.
-
-    TODO: Support [PasswordPush] input objects, testing
     #>
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='Low',DefaultParameterSetName='Anonymous')]
-    [OutputType([PasswordPush],[string],[bool])] # Returntype should be [PasswordPush] but I've yet to find a way to add class access to a function on a module...
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low', DefaultParameterSetName = 'Anonymous')]
+    [OutputType([PasswordPush])]
     param(
-        # The password or secret text to share.
-        [Parameter(Mandatory=$true,ValueFromPipeline,Position=0)]
+        [Parameter(Mandatory = $true, ValueFromPipeline, Position = 0)]
         [Alias('Password')]
         [ValidateNotNullOrEmpty()]
         [string]$Payload,
 
-        # Label for this Push (requires Authenticated session)
-        [Parameter(ParameterSetName='RequiresAuthentication')]
+        [Parameter(ParameterSetName = 'Authenticated')]
+        [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' }, ErrorMessage = 'Adding a note requires authentication.')]
         [ValidateNotNullOrEmpty()]
         [string]$Note,
 
-        # Expire secret link and delete after this many days.
         [Parameter()]
-        [ValidateRange(1,90)]
+        [ValidateRange(1, 90)]
         [int]
         $ExpireAfterDays,
 
-        # Expire secret link after this many views.
         [Parameter()]
-        [ValidateRange(1,100)]
+        [ValidateRange(1, 100)]
         [int]
         $ExpireAfterViews,
 
-        # Allow the recipient of a Push to delete it.
         [Parameter()]
         [switch]
         $DeletableByViewer,
 
-        # Require recipient click an extra link to view Push payload.
-        # Helps to avoid chat systems and URL scanners from eating up views.
-        # Note that the retrieval step URL is always available for a push. This
-        # parameter changes if the 1-click link is used in the Link parameter
-        # and returned from the secret link helper (Get-SecretLink)
         [Parameter()]
         [switch]
-        $RetrievalStep,
-
-        # Return the raw response body from the API call
-        [Parameter()]
-        [switch]
-        $Raw
+        $RetrievalStep
     )
 
     begin {
         Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference
     }
-
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'RequiresAuthentication' -and -not $Script:PPPHeaders.'X-User-Token') { Write-Error -Message 'Setting a note requires an authenticated call.'; return }
-
         $body = @{
             'password' = @{
                 'payload' = $Payload
@@ -126,41 +128,22 @@ function New-Push {
         $body.password.deletable_by_viewer = if ($DeletableByViewer) {
             $shouldString += ', deletable by viewer'
             $true
-        } else {
+        }
+        else {
             $shouldString += ', NOT deletable by viewer'
             $false
         }
         $body.password.retrieval_step = if ($RetrievalStep) {
             $shouldString += ', with a 1-click retrieval step'
             $true
-        } else {
+        }
+        else {
             $shouldString += ', with a direct link'
             $false
         }
-        if ($VerbosePreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-            # Sanitize input so we're not logging or outputting the payload
-            $vBody = $body.Clone()
-            $vBody.password.payload = "A payload of length $($body.password.payload.Length.ToString())"
-            $vBs = $vBody | ConvertTo-Json | Out-String
-            Write-Verbose "Call Body (sanitized): $vBs"
-        }
-
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
-            try {
-                $response = Invoke-PasswordPusherAPI -Endpoint 'p.json' -Method Post -Body $body
-                if ($Raw) {
-                    Write-Debug "Returning raw object: $($response.Content)"
-                    return $response.Content
-                } else {
-                    return $response.Content | ConvertTo-PasswordPush
-                }
-            } catch {
-                Write-Verbose "An exception was caught: $($_.Exception.Message)"
-                if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                    Set-Variable -Scope Global -Name PPPLastError -Value $_
-                    Write-Debug -Message 'Response object set to global variable $PPPLastError'
-                }
-            }
+            $response = Invoke-PasswordPusherAPI -Endpoint 'p.json' -Method Post -Body $body
+            $response.Content | ConvertTo-PasswordPush
         }
     }
 }
