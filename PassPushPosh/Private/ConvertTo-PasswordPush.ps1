@@ -1,5 +1,4 @@
-﻿function ConvertTo-PasswordPush {
-    <#
+﻿    <#
     .SYNOPSIS
     Convert API call response to a PasswordPush object
 
@@ -7,6 +6,9 @@
     Accepts a JSON string returned from the Password Pusher API and converts it to a [PasswordPush] object.
     This allows calculated push retrieval URLs and a more "PowerShell" experience.
     Generally you won't need to use this directly, it's automatically invoked within Register-Push and Request-Push.
+
+    .PARAMETER JsonResponse
+    The string result of an API call from the Password Pusher application
 
     .INPUTS
     [string]
@@ -56,11 +58,11 @@
     .NOTES
     Needs a rewrite / cleanup
     #>
+function ConvertTo-PasswordPush {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope = 'Function', Justification = 'Creates a new object, no risk of overwriting data.')]
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
-        # The string result of an API call from the Password Pusher application
         [parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [string]$JsonResponse
