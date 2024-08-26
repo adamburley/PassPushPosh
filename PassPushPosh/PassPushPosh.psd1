@@ -73,7 +73,7 @@ PowerShellVersion = '5.1'
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = 'ConvertTo-PasswordPush', 'Get-Dashboard', 'Get-Push', 
                'Get-PushAuditLog', 'Get-SecretLink', 'Initialize-PassPushPosh', 
-               'New-PasswordPush', 'New-Push', 'Remove-Push'
+                'New-Push', 'Remove-Push'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()

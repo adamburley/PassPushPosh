@@ -44,7 +44,6 @@
 
     TODO: Review API key pattern for parameter validation
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidScriptVars','',Scope='Function',Justification='Script variables are used for module session helpers.')]
     [CmdletBinding(DefaultParameterSetName='Anonymous')]
     param (
         # Email address to use for authenticated calls.
