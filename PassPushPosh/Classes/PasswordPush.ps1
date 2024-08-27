@@ -46,6 +46,7 @@
         $this.DateCreated = $_j.created_at
         $this.DateUpdated = $_j.updated_at
         $this.DateExpired = if ($_j.expired_on) { $_j.expired_on } else { [DateTime]0 }
+        $this.RetrievalStep = $_j.retrieval_step
 
 
         $this | Add-Member -Name 'UrlToken' -MemberType ScriptProperty -Value {
@@ -67,7 +68,7 @@
         $this | Add-Member -Name 'Link' -MemberType ScriptProperty -Value {
                 $_Link = if ($this.RetrievalStep) { $this.LinkRetrievalStep } else { $this.LinkDirect }
                 Write-Debug "Presented Link: $_link"
-                return $_Link
+                $_Link
             } -SecondValue {
                 Write-Warning 'Link is a read-only calculated member.'
                 Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
