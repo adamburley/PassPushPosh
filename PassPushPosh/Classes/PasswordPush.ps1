@@ -1,4 +1,5 @@
 ﻿class PasswordPush {
+    [string]$Note
     [string]$Payload
     [string] hidden $__UrlToken
     [string] hidden $__LinkBase
@@ -35,6 +36,7 @@
         Initialize-PassPushPosh # Initialize the module if not yet done.
 
         $_j = $JsonResponse | ConvertFrom-Json
+        $this.Note = $_j.note
         $this.Payload = $_j.payload
         $this.IsExpired = $_j.expired
         $this.IsDeleted = $_j.deleted
