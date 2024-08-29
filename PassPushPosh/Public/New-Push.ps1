@@ -1,26 +1,28 @@
-function New-Push {
-    <#
+<#
     .SYNOPSIS
-    Create a new Password Push
+    Create a new Push
 
     .DESCRIPTION
     Create a new Push on the specified Password Pusher instance. The
     programmatic equivalent of going to pwpush.com and entering info.
     Returns [PasswordPush] object. Link member is a link created based on
     1-step setting however both 1-step and direct links
-    are always provided at LinkRetrievalStep and LinkDirect.
+    are always provided at LinkRetrievalStep and LinkDirect properties.
 
     .PARAMETER Payload
-    The password or secret text to share.
+    The URL password or secret text to share.
+
+    .PARAMETER Passphrase
+    Require recipients to enter this passphrase to view the created push.
 
     .PARAMETER Note
-    Label for this Push (requires Authenticated session)
+    The note for this push.  Visible only to the push creator. Requires authentication.
 
     .PARAMETER ExpireAfterDays
     Expire secret link and delete after this many days.
 
     .PARAMETER ExpireAfterViews
-    Expire secret link after this many views.
+    Expire secret link and delete after this many views.
 
     .PARAMETER DeletableByViewer
     Allow the recipient of a Push to delete it.
@@ -63,6 +65,9 @@ function New-Push {
     https://pwpush.com/api/1.0/passwords/create.en.html
 
     .LINK
+    https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L120
+
+    .LINK
     Get-Push
 
     .NOTES
@@ -71,6 +76,8 @@ function New-Push {
     (pwpush.com). If you're using this with a private instance and want to
     override that value you'll need to fork this module.
     #>
+function New-Push {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "Passphrase", Justification = "DE0001: SecureString shouldn't be used")]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low', DefaultParameterSetName = 'Anonymous')]
     [OutputType([PasswordPush])]
     param(
@@ -78,6 +85,9 @@ function New-Push {
         [Alias('Password')]
         [ValidateNotNullOrEmpty()]
         [string]$Payload,
+
+        [Parameter()]
+        [string]$Passphrase,
 
         [Parameter(ParameterSetName = 'Authenticated')]
         [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' }, ErrorMessage = 'Adding a note requires authentication.')]
@@ -113,9 +123,13 @@ function New-Push {
             }
         }
         $shouldString = 'Submit {0} push with Payload of length {1}' -f $PSCmdlet.ParameterSetName, $Payload.Length
+        if ($Passphrase) {
+            $body.password.passphrase = $Passphrase
+            $shouldString += ", with passphrase of length $($Passphrase.Length)"
+        }
         if ($Note) {
             $body.password.note = $note
-            $shouldString += " with note $note"
+            $shouldString += ", with note $note"
         }
         if ($ExpireAfterDays) {
             $body.password.expire_after_days = $ExpireAfterDays
@@ -143,7 +157,7 @@ function New-Push {
         }
         if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
             $response = Invoke-PasswordPusherAPI -Endpoint 'p.json' -Method Post -Body $body
-            $response.Content | ConvertTo-PasswordPush
+            $response | ConvertTo-PasswordPush
         }
     }
 }

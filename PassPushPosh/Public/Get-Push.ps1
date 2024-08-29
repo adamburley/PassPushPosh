@@ -1,4 +1,4 @@
-﻿    <#
+﻿<#
     .SYNOPSIS
     Retrieve the secret contents of a Push
 
@@ -10,6 +10,9 @@
     .PARAMETER URLToken
     URL Token for the secret
 
+    .PARAMETER Passhrase
+    An additional phrase required to view the secret. Required if the Push was created with a Passphrase.
+
     .INPUTS
     [string]
 
@@ -20,30 +23,42 @@
     Get-Push -URLToken gzv65wiiuciy
 
     .EXAMPLE
-    Get-Push -URLToken gzv65wiiuciy -Raw
-    {"payload":"I am your payload!","expired":false,"deleted":false,"expired_on":"","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
+    Get-Push -URLToken gzv65wiiuciy -Passphrase "My Passphrase"
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
 
     .LINK
-    https://pwpush.com/api/1.0/passwords/show.en.html
+    https://pwpush.com/api/1.0/passwords.en.html
+
+    .LINK
+    https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L89
 
     .LINK
     New-Push
 
     #>
 function Get-Push {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "Passphrase", Justification = "DE0001: SecureString shouldn't be used")]
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
-        [parameter(Mandatory, ValueFromPipeline, Position = 0)]
+        [Parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [Alias('Token')]
-        $URLToken
+        $URLToken,
+
+        [Parameter()]
+        [String]$Passphrase
     )
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
     process {
-        Invoke-PasswordPusherAPI -Endpoint "p/$URLToken.json" | Select-Object -ExpandProperty Content | ConvertTo-PasswordPush
+        $endpoint = $Passphrase ? "p/$URLToken.json?passphrase=$Passphrase" : "p/$URLToken.json"
+        $result = Invoke-PasswordPusherAPI -Endpoint $endpoint -ReturnErrors
+        switch ($result.error){
+            'not-found' { Write-Error -Message "Push not found. Check the token you provided. Tokens are case-sensitive." }
+            'This push has a passphrase that was incorrect or not provided.' { if ($Passphrase) { Write-Error -Message "Incorrect passphrase provided." } else { Write-Error -Message "Passphrase required. Specify with the -Passphrase parameter." } }
+            default { $result }
+        }
     }
 }
