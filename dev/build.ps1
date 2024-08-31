@@ -1,5 +1,5 @@
 # Execute from the repo root
-# Usage: .\buildtools\build.ps1 -Version 1.0.0
+# Usage: .\dev\build.ps1 -Version 1.0.0
 
 param (
     [string]$Version
@@ -19,6 +19,9 @@ if ($Version) {
 Write-Host "`nRebuilding Module..." -ForegroundColor Yellow
 
 Build-Module -Version $Version -SourcePath '.\PassPushPosh\PassPushPosh.psd1' -OutputDirectory '..\Output' -UnversionedOutputDirectory
+
+# Custom build modifications for this module
+(Get-Content -Path '.\Output\PassPushPosh\PassPushPosh.psm1').Replace('{{semversion}}',$version) | Set-Content -Path '.\Output\PassPushPosh\PassPushPosh.psm1'
 
 Write-Host "`nTesting Module..." -ForegroundColor Yellow
 $pesterResults = & .\dev\test.ps1
