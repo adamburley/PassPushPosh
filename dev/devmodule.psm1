@@ -15,7 +15,8 @@ Function Initialize-DevEnvironment {
     
     Write-Host "`nRebuilding $ModuleName..." -ForegroundColor Yellow
     Build-Module -SourcePath ".\$ModuleName\$ModuleName.psd1" -OutputDirectory '..\Output' -UnversionedOutputDirectory
-    
+    (Get-Content -Path '.\Output\PassPushPosh\PassPushPosh.psm1').Replace('{{semversion}}','0.3.0') | Set-Content -Path '.\Output\PassPushPosh\PassPushPosh.psm1'
+
     Write-Host "Importing module..." -ForegroundColor Yellow
     Import-Module -Name ".\Output\$ModuleName" -Force -Global
     

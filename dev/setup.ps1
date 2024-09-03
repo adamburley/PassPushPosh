@@ -11,7 +11,7 @@ $requiredModules = @(
     @{ Name = 'platyPS'; MinimumVersion = '0.14.0' }
 )
 $moduleName = 'PassPushPosh'
-$initializeCommand = { Initialize-AxcientAPI -ApiKey ${env:AxcientApiKey-Prod} -ReturnErrors }
+$initializeCommand = { Initialize-PassPushPosh -EmailAddress $env:pwpEmail -ApiKey $env:pwpKey }
 $rootPath = $PSScriptRoot | Split-Path -Parent
 
 If ($PSVersionTable.PSVersion -lt $minimumVersion) {
