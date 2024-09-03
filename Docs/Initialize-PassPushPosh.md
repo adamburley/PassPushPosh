@@ -18,10 +18,13 @@ Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] 
 ```
 
 ## DESCRIPTION
-Sets global variables to handle the server URL and headers (authentication).
-Called automatically by module Functions if it is not called explicitly prior, so you don't actually need
-to call it unless you're going to use the authenticated API or alternate server, etc
-Default parameters use the pwpush.com domain and anonymous authentication.
+Initialize-PassPushPosh sets variables for the module's use during the remainder of the session.
+Server URL and User Agent values are set by default but may be overridden.
+If invoked with email address and API key, calls are sent as authenticated.
+Otherwise they default to
+anonymous.
+
+This function is called automatically if needed, defaulting to the public pwpush.com service.
 
 ## EXAMPLES
 
@@ -58,7 +61,7 @@ PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
 ## PARAMETERS
 
 ### -EmailAddress
-Email address to use for authenticated calls.
+Email address for authenticated calls.
 
 ```yaml
 Type: String
@@ -73,7 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -ApiKey
-API Key for authenticated calls.
+API key for authenticated calls.
 
 ```yaml
 Type: String
@@ -165,16 +168,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-All variables set by this function start with PPP.
-- PPPHeaders
-- PPPUserAgent
-- PPPBaseUrl
-
--WhatIf setting for Set-Variable -Global is disabled, otherwise -WhatIf
+-WhatIf setting for Set-Variable -Script is disabled, otherwise -WhatIf
 calls for other functions would return incorrect data in the case this
 function has not yet run.
-
-TODO: Review API key pattern for parameter validation
 
 ## RELATED LINKS
 

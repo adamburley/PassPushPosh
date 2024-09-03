@@ -6,7 +6,7 @@ Get the view log of an authenticated Push
 ## SYNTAX
 
 ```
-Get-PushAuditLog [[-URLToken] <String>] [-Raw] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-PushAuditLog [-URLToken] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -46,27 +46,12 @@ URL Token from a secret
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Token
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Raw
-Return content of API call directly
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

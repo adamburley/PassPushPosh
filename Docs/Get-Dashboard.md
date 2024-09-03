@@ -6,7 +6,7 @@ Get a list of active or expired Pushes for an authenticated user
 ## SYNTAX
 
 ```
-Get-Dashboard [[-Dashboard] <String>] [-Raw] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-Dashboard [[-Dashboard] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,21 +26,11 @@ Get-Dashboard
 Get-Dashboard Active
 ```
 
-### EXAMPLE 3
-```
-Get-Dashboard -Dashboard Expired
-```
-
-### EXAMPLE 4
-```
-Get-Dashboard -Raw
-[{"expire_after_days":1,"expire_after_views":5,"expired":false,"url_token":"xm3q7czvtdpmyg","created_at":"2022-11-19T18:10:42.055Z","updated_at":"2022-11-19T18:10:42.055Z","deleted":false,"deletable_by_viewer":true,"retrieval_step":false,"expired_on":null,"note":null,"days_remaining":1,"views_remaining":3}]
-```
-
 ## PARAMETERS
 
 ### -Dashboard
-URL Token from a secret
+The type of dashboard to retrieve.
+Active or Expired.
 
 ```yaml
 Type: String
@@ -50,21 +40,6 @@ Aliases:
 Required: False
 Position: 1
 Default value: Active
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Raw
-Return content of API call directly
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -93,15 +68,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### [PasswordPush[]] Array of pushes with data
-### [string] raw response body from API call
 ## NOTES
-TODO update Invoke-Webrequest flow and error-handling to match other functions
 
 ## RELATED LINKS
 
 [https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Dashboard.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Dashboard.md)
 
-[https://pwpush.com/api/1.0/dashboard.en.html](https://pwpush.com/api/1.0/dashboard.en.html)
+[https://pwpush.com/api/1.0/passwords/active.en.html](https://pwpush.com/api/1.0/passwords/active.en.html)
 
 [Get-PushAuditLog]()
 

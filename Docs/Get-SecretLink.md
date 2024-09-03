@@ -6,7 +6,7 @@ Returns a fully qualified secret link to a push of given URL Token
 ## SYNTAX
 
 ```
-Get-SecretLink [-URLToken] <String> [-Raw] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-SecretLink [-URLToken] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,27 +37,12 @@ URL Token for the secret
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
+Aliases: Token
 
 Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Raw
-Return the raw response body from the API call
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -85,7 +70,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ### [string] Fully qualified URL
-### [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link.
 ## NOTES
 Including this endpoint for completeness - however it is generally unnecessary.
 The only thing this endpoint does is return a different value depending if "Use 1-click retrieval step"

@@ -7,13 +7,12 @@ Remove a Push
 
 ### Token (Default)
 ```
-Remove-Push [-URLToken <String>] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Remove-Push [-URLToken <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Object
 ```
-Remove-Push [-PushObject <PasswordPush>] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+Remove-Push [-PushObject <PasswordPush>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -39,8 +38,7 @@ Remove-Push -URLToken bwzehzem_xu-
 
 ### EXAMPLE 2
 ```
-Remove-Push -URLToken -Raw
-{"expired":true,"deleted":true,"expired_on":"2022-11-21T13:23:45.341Z","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
+Remove-Push -URLToken
 ```
 
 ## PARAMETERS
@@ -72,21 +70,6 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Raw
-Return the raw response body from the API call
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

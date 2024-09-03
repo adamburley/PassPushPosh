@@ -1,21 +1,22 @@
 # New-Push
 
 ## SYNOPSIS
-Create a new Password Push
+Create a new Push
 
 ## SYNTAX
 
 ### Anonymous (Default)
 ```
-New-Push [-Payload] <String> [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>] [-DeletableByViewer]
- [-RetrievalStep] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-Push [-Payload] <String> [-Passphrase <String>] [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>]
+ [-DeletableByViewer] [-RetrievalStep] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
-### RequiresAuthentication
+### Authenticated
 ```
-New-Push [-Payload] <String> [-Note <String>] [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>]
- [-DeletableByViewer] [-RetrievalStep] [-Raw] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-Push [-Payload] <String> [-Passphrase <String>] [-Note <String>] [-ExpireAfterDays <Int32>]
+ [-ExpireAfterViews <Int32>] [-DeletableByViewer] [-RetrievalStep] [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -25,7 +26,7 @@ programmatic equivalent of going to pwpush.com and entering info.
 Returns \[PasswordPush\] object.
 Link member is a link created based on
 1-step setting however both 1-step and direct links
-are always provided at LinkRetrievalStep and LinkDirect.
+are always provided at LinkRetrievalStep and LinkDirect properties.
 
 ## EXAMPLES
 
@@ -55,7 +56,7 @@ PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
 ## PARAMETERS
 
 ### -Payload
-The password or secret text to share.
+The URL password or secret text to share.
 
 ```yaml
 Type: String
@@ -69,12 +70,29 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Note
-Label for this Push (requires Authenticated session)
+### -Passphrase
+Require recipients to enter this passphrase to view the created push.
 
 ```yaml
 Type: String
-Parameter Sets: RequiresAuthentication
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Note
+The note for this push. 
+Visible only to the push creator.
+Requires authentication.
+
+```yaml
+Type: String
+Parameter Sets: Authenticated
 Aliases:
 
 Required: False
@@ -100,7 +118,7 @@ Accept wildcard characters: False
 ```
 
 ### -ExpireAfterViews
-Expire secret link after this many views.
+Expire secret link and delete after this many views.
 
 ```yaml
 Type: Int32
@@ -136,21 +154,6 @@ Note that the retrieval step URL is always available for a push.
 This
 parameter changes if the 1-click link is used in the Link parameter
 and returned from the secret link helper (Get-SecretLink)
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Raw
-Return the raw response body from the API call
 
 ```yaml
 Type: SwitchParameter
@@ -218,8 +221,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### [string]
 ## OUTPUTS
 
-### [PasswordPush] Push object
-### [string] Raw result of API call
+### [PasswordPush] Representation of the submitted push
 ## NOTES
 Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default
 values for Password Pusher and what's used on the public instance
@@ -227,13 +229,13 @@ values for Password Pusher and what's used on the public instance
 If you're using this with a private instance and want to
 override that value you'll need to fork this module.
 
-TODO: Support \[PasswordPush\] input objects, testing
-
 ## RELATED LINKS
 
 [https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md)
 
 [https://pwpush.com/api/1.0/passwords/create.en.html](https://pwpush.com/api/1.0/passwords/create.en.html)
+
+[https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L120](https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L120)
 
 [Get-Push]()
 
