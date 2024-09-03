@@ -30,8 +30,8 @@ foreach ($Type in $ExportableTypes) {
     $TypeAcceleratorsClass::Add($Type.FullName, $Type)
 }
 # Remove type accelerators when the module is removed.
-$MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
+($MyInvocation.MyCommand.ScriptBlock.Module.OnRemove = {
     foreach($Type in $ExportableTypes) {
         $TypeAcceleratorsClass::Remove($Type.FullName)
     }
-}.GetNewClosure()
+}.GetNewClosure()) | Out-Null
