@@ -15,7 +15,7 @@ RootModule = 'PassPushPosh.psm1'
 ModuleVersion = '1.0.0'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @('Core')
 
 # ID used to uniquely identify this module
 GUID = '5d8a1afd-a912-440f-a9b9-e79f42a05f21'
@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'PSEdition_Desktop','PSEdition_Core','Windows','Linux','MacOS','Password'
+        Tags = 'PSEdition_Core','Windows','Linux','MacOS','Password'
 
         # A URL to the license for this module.
         LicenseUri = 'https://www.gnu.org/licenses/gpl-3.0.en.html'

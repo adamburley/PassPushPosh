@@ -1,8 +1,17 @@
+![Password Pusher Logo](pwpsm.png) ![](plussm.png) ![PowerShell Logo](pslogosm.png)
 # PassPushPosh
+![PowerShell Gallery Platform Support](https://img.shields.io/powershellgallery/p/passpushposh)
+![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/passpushposh)
+![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/passpushposh)
+![GitHub License](https://img.shields.io/github/license/adamburley/PassPushPosh)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/adamburley/PassPushPosh)
 ![Code Coverage](https://img.shields.io/badge/coverage-76%25-yellow.svg?maxAge=60)
 
 
-*PassPushPosh* is a PowerShell Module for interfacing with the [Password Pusher](https://github.com/pglombardo/PasswordPusher) secure password / string sharing application, primarily through [pwpush.com](https://pwpush.com). It supports creating, retrieving, and deleting anonymous and authenticated pushes, links in any supported language, and getting Push and Dashboard data for authenticated users.
+*PassPushPosh* is a PowerShell Module for the [Password Pusher](https://github.com/pglombardo/PasswordPusher) secure sharing application API. The public site for this service is [pwpush.com](https://pwpush.com).
+
+This module supports all available endpoints exposed for *Password* pushes. As of v1.0.0 *File* and *Url* pushes are not yet implemented, but are planned.
 
 A primary design goal with this module was to provide **simple, beginner-friendly access** to API connections. Cmdlets provide clear responses to errors, support additional messaging via `-Debug` and `-Verbose`, transaction testing via `-Whatif` and `-Confirm`, and in general try to be as "Powershell-y" as possible.
 
@@ -33,11 +42,11 @@ See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing
 
 # Notes
 
-- For `-Verbose` and `-Debug`, output is sanitized to prevent payloads from being written to screen.
+- For `-Verbose` and `-Debug`, output is sanitized to prevent payloads from being written to screen / log.
 
 # Links
 
-- [Password Pusher API Documentation](https://pwpush.com/api/1.0.en.html)
+- [Password Pusher API Documentation](https://pwpush.com/api/)
 
 # TODO
 
