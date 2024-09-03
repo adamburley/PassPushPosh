@@ -42,7 +42,9 @@ function Get-Dashboard {
         [string]
         $Dashboard = 'Active'
     )
-    if (-not $Script:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
-    $uri = "p/" + $Dashboard -eq 'Active' ? 'active.json' : 'expired.json'
-    Invoke-PasswordPusherAPI -Endpoint $uri -Method Get | ConvertTo-PasswordPush
+    process {
+        if (-not $Script:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+        $uri = "p/$($Dashboard -eq 'Active' ? 'active.json' : 'expired.json')"
+        Invoke-PasswordPusherAPI -Endpoint $uri -Method Get | ConvertTo-PasswordPush
+    }
 }

@@ -60,9 +60,8 @@ function Get-PushAuditLog {
     [CmdletBinding()]
     [OutputType([PSCustomObject[]])]
     param(
-        [parameter(ValueFromPipeline)]
+        [parameter(Mandatory, ValueFromPipeline)]
         [Alias('Token')]
-        [ValidateNotNullOrEmpty()]
         [string]
         $URLToken
     )
@@ -70,14 +69,11 @@ function Get-PushAuditLog {
         if (-not $Script:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     }
     process {
-        $uri = "p/$URLToken/audit.json"
-        Write-Debug 'Requesting $uri'
-        $response = Invoke-PasswordPusherAPI -Endpoint $uri
-        if ([int]$response.StatusCode -eq 200 -and $response.Content -ieq "{`"error`":`"That push doesn't belong to you.`"}") {
-            $result = [PSCustomObject]@{ 'Error' = "That Push doesn't belong to you"; 'ErrorCode' = 403 }
-            Write-Warning $result.Error
-            return $result
+        $response = Invoke-PasswordPusherAPI -Endpoint "p/$URLToken/audit.json" -ReturnErrors
+        switch ($response.error) {
+            'not-found' { Write-Error -Message "Push not found. Check the token you provided. Tokens are case-sensitive." }
+            { $null -ne $_ -and $_ -ne 'not-found' } { Write-Error -Message $_ }
+            default { $response | Select-Object -ExpandProperty views }
         }
-        $response.Content | ConvertFrom-Json
     }
 }

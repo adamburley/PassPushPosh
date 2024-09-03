@@ -62,7 +62,7 @@ function Initialize-PassPushPosh {
     [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
         [Parameter(Mandatory, Position = 0, ParameterSetName = 'Authenticated')]
-        [ValidatePattern('.+\@.+\..+')]
+        [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
         [string]$EmailAddress,
 
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'Authenticated')]

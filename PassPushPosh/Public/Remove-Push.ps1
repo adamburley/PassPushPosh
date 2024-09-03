@@ -1,47 +1,47 @@
 ﻿<#
-    .SYNOPSIS
-    Remove a Push
+.SYNOPSIS
+Remove a Push
 
-    .DESCRIPTION
-    Remove (invalidate) an active push. Requires the Push be either set as
-    deletable by viewer, or that you are authenticated as the creator of the
-    Push.
+.DESCRIPTION
+Remove (invalidate) an active push. Requires the Push be either set as
+deletable by viewer, or that you are authenticated as the creator of the
+Push.
 
-    If you have authorization to delete a push (deletable by viewer TRUE or
-    you are the Push owner) the endpoint will always return 200 OK with a Push
-    object, regardless if the Push was previously deleted or expired.
+If you have authorization to delete a push (deletable by viewer TRUE or
+you are the Push owner) the endpoint will always return 200 OK with a Push
+object, regardless if the Push was previously deleted or expired.
 
-    If the Push URL Token is invalid OR you are not authorized to delete the
-    Push, the endpoint returns 404 and this function returns $false
+If the Push URL Token is invalid OR you are not authorized to delete the
+Push, the endpoint returns 404 and this function returns $false
 
-    .PARAMETER URLToken
-    URL Token for the secret
+.PARAMETER URLToken
+URL Token for the secret
 
-    .PARAMETER PushObject
-    PasswordPush object
+.PARAMETER PushObject
+PasswordPush object
 
-    .INPUTS
-    [string] URL Token
-    [PasswordPush] representing the Push to remove
+.INPUTS
+[string] URL Token
+[PasswordPush] representing the Push to remove
 
-    .OUTPUTS
-    [bool] True on success, otherwise False
+.OUTPUTS
+[bool] True on success, otherwise False
 
-    .EXAMPLE
-    Remove-Push -URLToken bwzehzem_xu-
+.EXAMPLE
+Remove-Push -URLToken bwzehzem_xu-
 
-    .EXAMPLE
-    Remove-Push -URLToken
+.EXAMPLE
+Remove-Push -URLToken
 
-    .LINK
-    https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
+.LINK
+https://github.com/adamburley/PassPushPosh/blob/main/Docs/Remove-Push.md
 
-    .LINK
-    https://pwpush.com/api/1.0/passwords/destroy.en.html
+.LINK
+https://pwpush.com/api/1.0/passwords/destroy.en.html
 
-    .NOTES
-    TODO testing and debugging
-    #>
+.NOTES
+TODO testing and debugging
+#>
 function Remove-Push {
     [CmdletBinding(SupportsShouldProcess, DefaultParameterSetName = 'Token')]
     [OutputType([PasswordPush], [bool])]
@@ -75,7 +75,13 @@ function Remove-Push {
         }
         Write-Verbose -Message "Push with URL Token [$URLToken] will be deleted if 'Deletable by viewer' was enabled or you are the creator of the push and are authenticated."
         if ($PSCmdlet.ShouldProcess('Delete', "Push with token [$URLToken]")) {
-            Invoke-PasswordPusherAPI -Endpoint "p/$URLToken.json" -Method 'Delete' | ConvertTo-PasswordPush
+            $result = Invoke-PasswordPusherAPI -Endpoint "p/$URLToken.json" -Method 'Delete' -ReturnErrors
+            if ($result.error) {
+                Write-Error -Message "Unable to remove Push with token [$URLToken]. Error: $($result.error)"
+            }
+            else {
+                $result | ConvertTo-PasswordPush
+            }
         }
     }
 }

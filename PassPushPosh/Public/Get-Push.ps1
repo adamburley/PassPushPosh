@@ -58,7 +58,7 @@ function Get-Push {
         switch ($result.error){
             'not-found' { Write-Error -Message "Push not found. Check the token you provided. Tokens are case-sensitive." }
             'This push has a passphrase that was incorrect or not provided.' { if ($Passphrase) { Write-Error -Message "Incorrect passphrase provided." } else { Write-Error -Message "Passphrase required. Specify with the -Passphrase parameter." } }
-            default { $result }
+            default { $result | ConvertTo-PasswordPush }
         }
     }
 }

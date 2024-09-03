@@ -16,7 +16,6 @@
 
     .OUTPUTS
     [string] Fully qualified URL
-    [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link.
 
     .EXAMPLE
     Get-SecretLink -URLToken gzv65wiiuciy
@@ -54,7 +53,6 @@ function Get-SecretLink {
     )
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
     process {
-        $responseContent = Invoke-PasswordPusherAPI -Endpoint "p/$URLToken/preview.json" | Select-Object -ExpandProperty Content
-        $responseContent | ConvertFrom-Json | Select-Object -ExpandProperty url
+        Invoke-PasswordPusherAPI -Endpoint "p/$URLToken/preview.json" | Select-Object -ExpandProperty url
     }
 }
