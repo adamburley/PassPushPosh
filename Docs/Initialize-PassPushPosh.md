@@ -6,13 +6,13 @@ Initialize the PassPushPosh module
 ## SYNTAX
 
 ### Anonymous (Default)
-```
+```powershell
 Initialize-PassPushPosh [[-BaseUrl] <String>] [-UserAgent <String>] [-Force]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Authenticated
-```
+```powershell
 Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] <String>] [-UserAgent <String>]
  [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
@@ -28,35 +28,37 @@ This function is called automatically if needed, defaulting to the public pwpush
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
-# Initialize with default settings
+### EXAMPLE: Default settings
+```powershell
 PS > Initialize-PassPushPosh
 ```
 
-### EXAMPLE 2
-```
-# Initialize with authentication
+Initializes with default settings - anonymous pushes and pwpush.com for the server.
+
+### EXAMPLE: Authentication
+```powershell
 PS > Initialize-PassPushPosh -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
-```
 
 VERBOSE: Initializing PassPushPosh.
 ApiKey: \[x-kdjf\], BaseUrl: https://pwpush.com
+```
 
-### EXAMPLE 3
-```
-# Initialize with another server with authentication
+### EXAMPLE: Private Server
+```powershell
 PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
-```
 
 VERBOSE: Initializing PassPushPosh.
 ApiKey: \[x-kdjf\], BaseUrl: https://myprivatepwpushinstance.com
+```
 
-### EXAMPLE 4
+Initialize with another server with authentication
+
+### EXAMPLE: Custom User-Agent
 ```
-# Set a custom User Agent
-PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
+PS > InitializePassPushPosh -UserAgent "My-CoolUserAgent/1.12.1"
 ```
+
+User agent must meet [RFC9110](https://www.rfc-editor.org/rfc/rfc9110#name-user-agent) specifications or the Password Pusher API will reject the call.
 
 ## PARAMETERS
 
@@ -145,27 +147,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
+- This function does not accept any input from the pipeline
+
 ## OUTPUTS
+
+- This function does not return anything to the pipeline
 
 ## NOTES
 -WhatIf setting for Set-Variable -Script is disabled, otherwise -WhatIf
@@ -175,4 +166,3 @@ function has not yet run.
 ## RELATED LINKS
 
 [https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md)
-

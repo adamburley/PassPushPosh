@@ -5,7 +5,7 @@ Retrieve the secret contents of a Push
 
 ## SYNTAX
 
-```
+```powershell
 Get-Push [-URLToken] <Object> [[-Passphrase] <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
@@ -18,13 +18,13 @@ Push (datestamps, etc) even if it does not return the Push contents.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-```
+### EXAMPLE: Basic use
+```powershell
 Get-Push -URLToken gzv65wiiuciy
 ```
 
-### EXAMPLE 2
-```
+### EXAMPLE: Passphrase-protected Push
+```powershell
 Get-Push -URLToken gzv65wiiuciy -Passphrase "My Passphrase"
 ```
 
@@ -46,7 +46,8 @@ Accept wildcard characters: False
 ```
 
 ### -Passphrase
-{{ Fill Passphrase Description }}
+Passphrase required to view the secret. Required only if set for the original
+Push.
 
 ```yaml
 Type: String
@@ -60,30 +61,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [string]
+- [string]
+
 ## OUTPUTS
 
-### [PasswordPush]
+- [PasswordPush]
+
 ## NOTES
 
 ## RELATED LINKS
@@ -93,6 +81,3 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 [https://pwpush.com/api/1.0/passwords.en.html](https://pwpush.com/api/1.0/passwords.en.html)
 
 [https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L89](https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L89)
-
-[New-Push]()
-

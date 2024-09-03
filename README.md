@@ -44,3 +44,4 @@ See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing
 - [ ] Support localization (multiple languages)
 - [ ] Implement automatic builds / deploys
 - [ ] Add 'burn after reading' option to `Get-Push` and `New-Push` *Under consideration*
+

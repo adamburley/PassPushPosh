@@ -6,12 +6,12 @@ Remove a Push
 ## SYNTAX
 
 ### Token (Default)
-```
+```powershell
 Remove-Push [-URLToken <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Object
-```
+```powershell
 Remove-Push [-PushObject <PasswordPush>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
@@ -32,12 +32,12 @@ Push, the endpoint returns 404 and this function returns $false
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+```powershell
 Remove-Push -URLToken bwzehzem_xu-
 ```
 
 ### EXAMPLE 2
-```
+```powershell
 Remove-Push -URLToken
 ```
 
@@ -103,34 +103,19 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [string] URL Token
-### [PasswordPush] representing the Push to remove
+- [string] URL Token
+- [PasswordPush] representing the Push to remove. **Note** this is not functional as of 1.0.0
+
 ## OUTPUTS
 
-### [bool] True on success, otherwise False
+- [PasswordPush] The removed push
+
 ## NOTES
-TODO testing and debugging
 
 ## RELATED LINKS
 

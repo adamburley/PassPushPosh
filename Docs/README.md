@@ -10,5 +10,3 @@
 | [New-Push](./docs/New-Push.md) | Create a new Push |
 | [Remove-Push](./docs/Remove-Push.md) | Remove a Push |
 | [Get-PushPreview](./docs/Get-PushPreview.md) | Returns a fully qualified secret link to a push of given URL Token |
-
-#
