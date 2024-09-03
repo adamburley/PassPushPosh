@@ -65,11 +65,11 @@ function ConvertTo-PasswordPush {
     param(
         [parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
-        [string]$JsonResponse
+        $JsonResponse
     )
     process {
         try {
-            $jsonObject = $JsonResponse | ConvertFrom-Json
+            $jsonObject = if ($JsonResponse -is [string]) { $JsonResponse | ConvertFrom-Json } else { $JsonResponse }
             foreach ($o in $jsonObject) {
                 [PasswordPush]($o | ConvertTo-Json) # TODO fix this mess
             }

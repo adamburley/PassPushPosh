@@ -30,7 +30,7 @@ function Invoke-PasswordPusherAPI {
         Write-Debug "Response: $($call.StatusCode) $($call.Content)"
         if (Test-Json -Json $call.Content) {
             $result = $call.Content | ConvertFrom-Json
-            if ($ReturnErrors -or $null -eq $result.error) {
+            if ($ReturnErrors -or $call.StatusCode -eq 200 -or $null -eq $result.error) {
                 $result
             }
             else {
