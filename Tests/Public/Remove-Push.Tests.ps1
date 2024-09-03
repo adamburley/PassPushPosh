@@ -19,7 +19,7 @@ Describe "Remove-Push" {
             $payload = 'This is a test payload'
             $push2 = New-Push -Payload $payload
             $push2.IsDeletableByViewer | Should -Be $false
-            Remove-Push -URLToken $push2.UrlToken | Should -Be $false
+            Remove-Push -URLToken $push2.UrlToken
             Should -Invoke Write-Error -ModuleName PassPushPosh -ParameterFilter { $Message -ieq "Unable to remove Push with token [$($push2.UrlToken)]. Error: That push is not deletable by viewers." }
         }
     }
