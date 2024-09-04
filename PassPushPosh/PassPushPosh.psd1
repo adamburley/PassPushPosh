@@ -104,7 +104,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/adamburley/PassPushPosh'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        # IconUri = 'https://github.com/adamburley/PassPushPosh/blob/main/pwplogo85x85.png?raw=true'
 
         # ReleaseNotes of this module
         ReleaseNotes = '
