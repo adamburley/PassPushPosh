@@ -1,13 +1,34 @@
-﻿function Initialize-PassPushPosh {
-    <#
+﻿<#
     .SYNOPSIS
     Initialize the PassPushPosh module
 
     .DESCRIPTION
-    Sets global variables to handle the server URL and headers (authentication).
-    Called automatically by module Functions if it is not called explicitly prior, so you don't actually need
-    to call it unless you're going to use the authenticated API or alternate server, etc
-    Default parameters use the pwpush.com domain and anonymous authentication.
+    Initialize-PassPushPosh sets variables for the module's use during the remainder of the session.
+    Server URL and User Agent values are set by default but may be overridden.
+    If invoked with email address and API key, calls are sent as authenticated. Otherwise they default to
+    anonymous.
+
+    This function is called automatically if needed, defaulting to the public pwpush.com service.
+
+    .PARAMETER EmailAddress
+    Email address for authenticated calls.
+
+    .PARAMETER ApiKey
+    API key for authenticated calls.
+
+    .PARAMETER BaseUrl
+    Base URL for API calls. Allows use of module with private instances of Password Pusher
+    Default: https://pwpush.com
+
+    .PARAMETER UserAgent
+    Set a specific user agent. Default user agent is a combination of the
+    module info, what your OS reports itself as, and a hash based on
+    your username + workstation or domain name. This way the UA can be
+    semi-consistent across sessions but not identifying.
+
+    .PARAMETER Force
+    Force setting new information. If module is already initialized you can use this to
+    Re-initialize with default settings. Implied if either ApiKey or BaseUrl is provided.
 
     .EXAMPLE
     # Initialize with default settings
@@ -33,70 +54,57 @@
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
 
     .NOTES
-    All variables set by this function start with PPP.
-    - PPPHeaders
-    - PPPUserAgent
-    - PPPBaseUrl
-
-    -WhatIf setting for Set-Variable -Global is disabled, otherwise -WhatIf
+    -WhatIf setting for Set-Variable -Script is disabled, otherwise -WhatIf
     calls for other functions would return incorrect data in the case this
     function has not yet run.
-
-    TODO: Review API key pattern for parameter validation
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
-    [CmdletBinding(DefaultParameterSetName='Anonymous')]
+function Initialize-PassPushPosh {
+    [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
-        # Email address to use for authenticated calls.
-        [Parameter(Mandatory,Position=0,ParameterSetName='Authenticated')]
-        [ValidatePattern('.+\@.+\..+')]
+        [Parameter(Mandatory, Position = 0, ParameterSetName = 'Authenticated')]
+        [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
         [string]$EmailAddress,
 
-        # API Key for authenticated calls.
-        [Parameter(Mandatory,Position=1,ParameterSetName='Authenticated')]
-        [ValidateLength(5,256)]
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'Authenticated')]
+        [ValidateLength(5, 256)]
         [string]$ApiKey,
 
-        # Base URL for API calls. Allows use of module with private instances of Password Pusher
-        # Default: https://pwpush.com
-        [Parameter(Position=0,ParameterSetName='Anonymous')]
-        [Parameter(Position=2,ParameterSetName='Authenticated')]
+        [Parameter(Position = 0, ParameterSetName = 'Anonymous')]
+        [Parameter(Position = 2, ParameterSetName = 'Authenticated')]
         [ValidatePattern('^https?:\/\/[a-zA-Z0-9-_]+.[a-zA-Z0-9]+')]
         [string]$BaseUrl,
 
-        # Set a specific user agent. Default user agent is a combination of the
-        # module info, what your OS reports itself as, and a hash based on
-        # your username + workstation or domain name. This way the UA can be
-        # semi-consistent across sessions but not identifying.
         [Parameter()]
         [ValidateNotNullOrEmpty()]
         [string]
         $UserAgent,
 
-        # Force setting new information. If module is already initialized you can use this to
-        # Re-initialize with default settings. Implied if either ApiKey or BaseUrl is provided.
         [Parameter()][switch]$Force
     )
-    if ($Global:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
+    if ($Script:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
     else {
         $defaultBaseUrl = 'https://pwpush.com'
-        $apiKeyOutput = if ($ApiKey) { 'x-' + $ApiKey.Substring($ApiKey.Length-4) } else { 'None' }
+        $apiKeyOutput = $ApiKey ? (Format-PasswordPusherSecret -Secret $ApiKey -ShowSample) : 'None'
 
-        if (-not $Global:PPPBaseURL) { # Not initialized
+        if (-not $Script:PPPBaseURL) {
+            # Not initialized
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
             Write-Verbose "Initializing PassPushPosh. ApiKey: [$apiKeyOutput], BaseUrl: $BaseUrl"
-        } elseif ($Force -or $ApiKey -or $BaseURL) {
+        }
+        elseif ($Force -or $ApiKey -or $BaseURL) {
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
-            $oldApiKeyOutput = if ($Global:PPPApiKey) { 'x-' + $Global:PPPApiKey.Substring($Global:PPPApiKey.Length-4) } else { 'None' }
-            Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Global:PPPBaseUrl New BaseUrl: $BaseUrl"
+            $oldApiKeyOutput = if ($Script:PPPApiKey) { Format-PasswordPusherSecret -Secret $Script:PPPApiKey -ShowSample } else { 'None' }
+            Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
-            Set-Variable -Scope Global -Name PPPHeaders -WhatIf:$false -Value @{
+            Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
-        } elseif ($Global:PPPHeaders) { # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
-            Remove-Variable -Scope Global -Name PPPHeaders -WhatIf:$false
+        }
+        elseif ($Script:PPPHeaders) {
+            # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
+            Remove-Variable -Scope Script -Name PPPHeaders -WhatIf:$false
         }
 
         if (-not $UserAgent) {
@@ -104,13 +112,16 @@
             $userAtDomain = "{0}@{1}" -f [System.Environment]::UserName, [System.Environment]::UserDomainName
             $uAD64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($userAtDomain))
             Write-Debug "$userAtDomain transformed to $uAD64. First 20 characters $($uAD64.Substring(0,20))"
-            $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $osVersion/$($uAD64.Substring(0,20))"
+            # Version tag is replaced by the semantic version number at build time. See PassPushPosh/issues/11 for context
+            $UserAgent = "PassPushPosh/{{semversion}} $osVersion/$($uAD64.Substring(0,20))"
+            # $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $osVersion/$($uAD64.Substring(0,20))"
             Write-Verbose "Generated user agent: $UserAgent"
-        } else {
+        }
+        else {
             Write-Verbose "Using specified user agent: $UserAgent"
         }
 
-        Set-Variable -WhatIf:$false -Scope Global -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
-        Set-Variable -WhatIf:$false -Scope Global -Name PPPUserAgent -Value $UserAgent
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPUserAgent -Value $UserAgent
     }
 }

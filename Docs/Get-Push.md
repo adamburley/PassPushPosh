@@ -1,41 +1,36 @@
 # Get-Push
 
 ## SYNOPSIS
-
 Retrieve the secret contents of a Push
 
 ## SYNTAX
 
 ```powershell
-Get-Push [-URLToken] <Object> [-Raw] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-Push [-URLToken] <Object> [[-Passphrase] <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-
-Accepts a URL Token string, returns the contents of a Push along with
+Get-Push accepts a URL Token string and returns the contents of a Push along with
 metadata regarding that Push.
-Note, Get-Push will return data on an expired
+Note: Get-Push will return data on an expired
 Push (datestamps, etc) even if it does not return the Push contents.
 
 ## EXAMPLES
 
-### EXAMPLE 1
-
+### EXAMPLE: Basic use
 ```powershell
 Get-Push -URLToken gzv65wiiuciy
 ```
 
-### EXAMPLE 2
-
+### EXAMPLE: Passphrase-protected Push
 ```powershell
-Get-Push -URLToken gzv65wiiuciy -Raw
-{"payload":"I am your payload!","expired":false,"deleted":false,"expired_on":"","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
+Get-Push -URLToken gzv65wiiuciy -Passphrase "My Passphrase"
 ```
 
 ## PARAMETERS
 
 ### -URLToken
-
 URL Token for the secret
 
 ```yaml
@@ -50,53 +45,39 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Raw
-
-Return the raw response body from the API call
+### -Passphrase
+Passphrase required to view the secret. Required only if set for the original
+Push.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### CommonParameters
-
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### [string]
+- [string]
 
 ## OUTPUTS
 
-### [PasswordPush] or [string]
+- [PasswordPush]
 
 ## NOTES
 
 ## RELATED LINKS
 
-- [Password Pusher API Documentation](https://pwpush.com/api/1.0/passwords/show.en.html)
-- [New-Push](New-Push.md)
+[https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md)
+
+[https://pwpush.com/api/1.0/passwords.en.html](https://pwpush.com/api/1.0/passwords.en.html)
+
+[https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L89](https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L89)

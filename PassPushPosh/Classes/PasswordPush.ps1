@@ -1,4 +1,5 @@
 ﻿class PasswordPush {
+    [string]$Note
     [string]$Payload
     [string] hidden $__UrlToken
     [string] hidden $__LinkBase
@@ -35,6 +36,7 @@
         Initialize-PassPushPosh # Initialize the module if not yet done.
 
         $_j = $JsonResponse | ConvertFrom-Json
+        $this.Note = $_j.note
         $this.Payload = $_j.payload
         $this.IsExpired = $_j.expired
         $this.IsDeleted = $_j.deleted
@@ -46,16 +48,17 @@
         $this.DateCreated = $_j.created_at
         $this.DateUpdated = $_j.updated_at
         $this.DateExpired = if ($_j.expired_on) { $_j.expired_on } else { [DateTime]0 }
+        $this.RetrievalStep = $_j.retrieval_step
 
 
         $this | Add-Member -Name 'UrlToken' -MemberType ScriptProperty -Value {
                 return $this.__UrlToken
             } -SecondValue {
                 $this.__UrlToken = $_
-                $this.__LinkBase = "$Global:PPPBaseUrl/p/$($this.__UrlToken)"
+                $this.__LinkBase = "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
             }
         $this.__UrlToken = $_j.url_token
-        $this.__LinkBase = "$Global:PPPBaseUrl/p/$($this.__UrlToken)"
+        $this.__LinkBase = "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
         $this | Add-Member -Name 'LinkDirect' -MemberType ScriptProperty -Value { return $this.__LinkBase } -SecondValue {
             Write-Warning 'LinkDirect is a read-only calculated member.'
             Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
@@ -67,7 +70,7 @@
         $this | Add-Member -Name 'Link' -MemberType ScriptProperty -Value {
                 $_Link = if ($this.RetrievalStep) { $this.LinkRetrievalStep } else { $this.LinkDirect }
                 Write-Debug "Presented Link: $_link"
-                return $_Link
+                $_Link
             } -SecondValue {
                 Write-Warning 'Link is a read-only calculated member.'
                 Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'

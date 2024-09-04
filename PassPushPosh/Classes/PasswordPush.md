@@ -12,7 +12,7 @@ Represents a Push on the Password Pusher server.  Depending on the source of dat
 
 ## RELATED FUNCTIONS
 
-- [New-PasswordPush](New-PasswordPush.md)
+
 - [ConvertTo-PasswordPush](ConvertTo-PasswordPush.md)
 
 ## Properties

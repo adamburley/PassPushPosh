@@ -1,79 +1,64 @@
-﻿function Get-Push {
-    <#
+﻿<#
     .SYNOPSIS
     Retrieve the secret contents of a Push
 
     .DESCRIPTION
-    Accepts a URL Token string, returns the contents of a Push along with
-    metadata regarding that Push. Note, Get-Push will return data on an expired
+    Get-Push accepts a URL Token string and returns the contents of a Push along with
+    metadata regarding that Push. Note: Get-Push will return data on an expired
     Push (datestamps, etc) even if it does not return the Push contents.
+
+    .PARAMETER URLToken
+    URL Token for the secret
+
+    .PARAMETER Passhrase
+    An additional phrase required to view the secret. Required if the Push was created with a Passphrase.
 
     .INPUTS
     [string]
 
     .OUTPUTS
-    [PasswordPush] or [string]
+    [PasswordPush]
 
     .EXAMPLE
     Get-Push -URLToken gzv65wiiuciy
 
     .EXAMPLE
-    Get-Push -URLToken gzv65wiiuciy -Raw
-    {"payload":"I am your payload!","expired":false,"deleted":false,"expired_on":"","expire_after_days":1,"expire_after_views":4,"url_token":"bwzehzem_xu-","created_at":"2022-11-21T13:20:08.635Z","updated_at":"2022-11-21T13:23:45.342Z","deletable_by_viewer":true,"retrieval_step":false,"days_remaining":1,"views_remaining":4}
+    Get-Push -URLToken gzv65wiiuciy -Passphrase "My Passphrase"
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
 
     .LINK
-    https://pwpush.com/api/1.0/passwords/show.en.html
+    https://pwpush.com/api/1.0/passwords.en.html
+
+    .LINK
+    https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L89
 
     .LINK
     New-Push
 
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
+function Get-Push {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "Passphrase", Justification = "DE0001: SecureString shouldn't be used")]
     [CmdletBinding()]
     [OutputType([PasswordPush])]
     param(
-        # URL Token for the secret
-        [parameter(Mandatory,ValueFromPipeline,Position=0)]
+        [Parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
         [Alias('Token')]
         $URLToken,
 
-        # Return the raw response body from the API call
         [Parameter()]
-        [switch]
-        $Raw
+        [String]$Passphrase
     )
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
-
     process {
-        try {
-            $iwrSplat = @{
-                'Method' = 'Get'
-                'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken.json"
-                'UserAgent' = $Global:PPPUserAgent
-            }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
-            Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
-            $response = Invoke-WebRequest @iwrSplat -ErrorAction Stop
-            if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name PPPLastCall -Value $response
-                Write-Debug 'Response to Invoke-WebRequest set to PPPLastCall Global variable'
-            }
-            if ($Raw) {
-                Write-Debug "Returning raw object:`n$($response.Content)"
-                return $response.Content
-            }
-            return $response.Content | ConvertTo-PasswordPush
-        } catch {
-            Write-Verbose "An exception was caught: $($_.Exception.Message)"
-            if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name PPPLastError -Value $_
-                Write-Debug -Message 'Response object set to global variable $PPPLastError'
-            }
+        $endpoint = $Passphrase ? "p/$URLToken.json?passphrase=$Passphrase" : "p/$URLToken.json"
+        $result = Invoke-PasswordPusherAPI -Endpoint $endpoint -ReturnErrors
+        switch ($result.error){
+            'not-found' { Write-Error -Message "Push not found. Check the token you provided. Tokens are case-sensitive." }
+            'This push has a passphrase that was incorrect or not provided.' { if ($Passphrase) { Write-Error -Message "Incorrect passphrase provided." } else { Write-Error -Message "Passphrase required. Specify with the -Passphrase parameter." } }
+            default { $result | ConvertTo-PasswordPush }
         }
     }
 }

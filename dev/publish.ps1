@@ -1,0 +1,1 @@
+Publish-PSResource -Path .\Output\AxcientAPI -ApiKey $env:PSGalleryApiKey -Repository PSGallery

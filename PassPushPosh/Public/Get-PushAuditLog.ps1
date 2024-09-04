@@ -1,5 +1,4 @@
-﻿function Get-PushAuditLog {
-    <#
+﻿<#
     .SYNOPSIS
     Get the view log of an authenticated Push
 
@@ -9,6 +8,9 @@
     successful but there are no results, it returns an empty array.
     If there's an error, a single object is returned with information.
     See "handling errors" under NOTES
+
+    .PARAMETER URLToken
+    URL Token from a secret
 
     .INPUTS
     [string]
@@ -54,73 +56,24 @@
     | 404 NOT FOUND    | Invalid URL token               | None                                         | @{ 'Error'= 'Invalid token. Verify your Push URL token is correct.'; 'ErrorCode'= 404 }    | This is different than the response to a delete Push query - in this case it will only return 404 if the token is invalid. |
 
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope = 'Function', Justification = 'Global variables are used for module session helpers.')]
+function Get-PushAuditLog {
     [CmdletBinding()]
-    [OutputType([PSCustomObject[]],[string])]
+    [OutputType([PSCustomObject[]])]
     param(
-        # URL Token from a secret
-        [parameter(ValueFromPipeline)]
-        [ValidateNotNullOrEmpty()]
+        [parameter(Mandatory, ValueFromPipeline)]
+        [Alias('Token')]
         [string]
-        $URLToken,
-
-        # Return content of API call directly
-        [Parameter()]
-        [switch]
-        $Raw
+        $URLToken
     )
     begin {
-        if (-not $Global:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
+        if (-not $Script:PPPHeaders) { Write-Error 'Retrieving audit logs requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
     }
     process {
-        try {
-            $uri = "$Global:PPPBaseUrl/p/$URLToken/audit.json"
-            Write-Debug 'Requesting $uri'
-            $response = Invoke-WebRequest -Uri $uri -Method Get -Headers $Global:PPPHeaders -ErrorAction Stop
-            if ([int]$response.StatusCode -eq 200 -and $response.Content -ieq "{`"error`":`"That push doesn't belong to you.`"}") {
-                $result = [PSCustomObject]@{ 'Error' = "That Push doesn't belong to you"; 'ErrorCode' = 403 }
-                Write-Warning $result.Error
-                return $result
-            }
-            if ($Raw) { return $response.Content } else { return $response.Content | ConvertFrom-Json }
-        }
-        catch {
-            Write-Verbose "An exception was caught: $($_.Exception.Message)"
-            if ([int]$_.Exception.Response.StatusCode -eq 401) { # Could be optimized
-                $result = [PSCustomObject]@{ 'Error' = 'Authentication error. Verify email address and API key.'; 'ErrorCode' = 401 }
-                Write-Warning $result.Error
-                return $result
-            } elseif ([int]$_.Exception.Response.StatusCode -eq 404) {
-                $result = [PSCustomObject]@{ 'Error' = 'Invalid token. Verify your Push URL token is correct.'; 'ErrorCode' = 404 }
-                Write-Warning $result.Error
-                return $result
-            }
-            elseif ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
-                Write-Debug -Message 'Response object set to global variable $PPPLastError'
-                return [PSCustomObject]@{
-                    'Error'        = $_.Exception.Message
-                    'ErrorCode'    = [int]$_.Exception.Response.StatusCode
-                    'ErrorMessage' = $_.Exception.Response.ReasonPhrase
-                }
-            }
+        $response = Invoke-PasswordPusherAPI -Endpoint "p/$URLToken/audit.json" -ReturnErrors
+        switch ($response.error) {
+            'not-found' { Write-Error -Message "Push not found. Check the token you provided. Tokens are case-sensitive." }
+            { $null -ne $_ -and $_ -ne 'not-found' } { Write-Error -Message $_ }
+            default { $response | Select-Object -ExpandProperty views }
         }
     }
 }
-
-# Invalid API key / email - 401
-# Invalid URL Token - 404
-# Valid token but not mine - 200, content =  {"error":"That push doesn't belong to you."}
-# Success but no views - 200, content = : {"views":[]}
-# Success with view history {"views":[{"ip":"75.118.137.58,172.70.135.200","user_agent":"Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101; en-US) PowerShell/7.2.7","referrer":"","successful":true,"created_at":"2022-11-19T18:32:42.277Z","updated_at":"2022-11-19T18:32:42.277Z","kind":0}]}
-# Content.Views
-<#
-ip         : 75.118.137.58,172.70.135.200
-user_agent : Mozilla/5.0 (Macintosh; Darwin 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:20:05 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T8101;
-en-US) PowerShell/7.2.7
-referrer   :
-successful : True
-created_at : 11/19/2022 6:32:42 PM
-updated_at : 11/19/2022 6:32:42 PM
-kind       : 0
-#>

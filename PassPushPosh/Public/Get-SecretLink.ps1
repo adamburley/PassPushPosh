@@ -1,5 +1,4 @@
-﻿function Get-SecretLink {
-    <#
+﻿<#
     .SYNOPSIS
     Returns a fully qualified secret link to a push of given URL Token
 
@@ -9,12 +8,14 @@
     Returns false if URL Token is invalid, however it will return a URL if the token is valid
     but the Push is expired or deleted.
 
+    .PARAMETER URLToken
+    URL Token for the secret
+
     .INPUTS
     [string] URL Token value
 
     .OUTPUTS
     [string] Fully qualified URL
-    [bool] $False if Push URL Token is invalid. Note: Expired or deleted Pushes will still return a link.
 
     .EXAMPLE
     Get-SecretLink -URLToken gzv65wiiuciy
@@ -40,42 +41,18 @@
     As it returns false if a Push URL token is not valid you can use it to test if a Push exists without
     burning a view.
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars','',Scope='Function',Justification='Global variables are used for module session helpers.')]
+function Get-SecretLink {
     [CmdletBinding()]
     [Alias('Get-PushPreview')]
     [OutputType('[string]')]
     param(
-        # URL Token for the secret
         [parameter(Mandatory, ValueFromPipeline)]
+        [Alias('Token')]
         [ValidateLength(5, 256)]
-        [string]$URLToken,
-
-        # Return the raw response body from the API call
-        [Parameter()]
-        [switch]
-        $Raw
+        [string]$URLToken
     )
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
     process {
-        try {
-            $iwrSplat = @{
-                'Method' = 'Get'
-                'ContentType' = 'application/json'
-                'Uri' = "$Global:PPPBaseUrl/p/$URLToken/preview.json"
-                'UserAgent' = $Global:PPPUserAgent
-            }
-            if ($Global:PPPHeaders) { $iwrSplat['Headers'] = $Global:PPPHeaders }
-            Write-Verbose "Sending HTTP request: $($iwrSplat | Out-String)"
-            $responseContent = Invoke-WebRequest @iwrSplat | Select-Object -ExpandProperty Content
-            if ($Raw) { return $responseContent }
-            else { return $responseContent | ConvertFrom-Json | Select-Object -ExpandProperty url }
-        }
-        catch {
-            Write-Verbose "An exception was caught: $($_.Exception.Message)"
-            if ($DebugPreference -eq [System.Management.Automation.ActionPreference]::Continue) {
-                Set-Variable -Scope Global -Name 'PPPLastError' -Value $_
-                Write-Debug -Message 'Response object set to global variable $PPPLastError'
-            }
-        }
+        Invoke-PasswordPusherAPI -Endpoint "p/$URLToken/preview.json" | Select-Object -ExpandProperty url
     }
 }
