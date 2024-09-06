@@ -1,1 +1,1 @@
-Publish-PSResource -Path .\Output\AxcientAPI -ApiKey $env:PSGalleryApiKey -Repository PSGallery
+Publish-PSResource -Path .\Output\PassPushPosh -ApiKey $env:PSGalleryApiKey -Repository PSGallery
