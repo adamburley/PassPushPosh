@@ -62,7 +62,7 @@ function Initialize-PassPushPosh {
     [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
         [Parameter(Mandatory, Position = 0, ParameterSetName = 'Authenticated')]
-        [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
+        [ValidatePattern('.+\@.+\..+')]
         [string]$EmailAddress,
 
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'Authenticated')]
@@ -84,7 +84,7 @@ function Initialize-PassPushPosh {
     if ($Script:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
     else {
         $defaultBaseUrl = 'https://pwpush.com'
-        $apiKeyOutput = $ApiKey ? (Format-PasswordPusherSecret -Secret $ApiKey -ShowSample) : 'None'
+        $apiKeyOutput = if ($ApiKey) { (Format-PasswordPusherSecret -Secret $ApiKey -ShowSample) } else { 'None' }
 
         if (-not $Script:PPPBaseURL) {
             # Not initialized

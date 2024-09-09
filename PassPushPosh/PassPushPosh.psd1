@@ -12,10 +12,10 @@
 RootModule = 'PassPushPosh.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0'
+ModuleVersion = '1.1.0'
 
 # Supported PSEditions
-CompatiblePSEditions = @('Core')
+CompatiblePSEditions = @('Core','Desktop')
 
 # ID used to uniquely identify this module
 GUID = '5d8a1afd-a912-440f-a9b9-e79f42a05f21'
@@ -33,7 +33,7 @@ Copyright = 'Adam Burley, 2022'
 Description = 'PassPushPosh is a PowerShell Module for accessing the Password Pusher application via API. It supports creating, retrieving, and deleting anonymous and authenticated pushes and getting Push and Dashboard data for authenticated users.'
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.0'
+PowerShellVersion = '5.1'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = 'PSEdition_Core','Windows','Linux','MacOS','Password'
+        Tags = 'PSEdition_Core','PSEdition_Desktop','Windows','Linux','MacOS','Password'
 
         # A URL to the license for this module.
         LicenseUri = 'https://www.gnu.org/licenses/gpl-3.0.en.html'

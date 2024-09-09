@@ -44,7 +44,7 @@ function Get-Dashboard {
     )
     process {
         if (-not $Script:PPPHeaders) { Write-Error 'Dashboard access requires authentication. Run Initialize-PassPushPosh and pass your email address and API key before retrying.' -ErrorAction Stop -Category AuthenticationError }
-        $uri = "p/$($Dashboard -eq 'Active' ? 'active.json' : 'expired.json')"
+        $uri = "p/$(if ($Dashboard -eq 'Active') { 'active.json' } else { 'expired.json' })"
         Invoke-PasswordPusherAPI -Endpoint $uri -Method Get | ConvertTo-PasswordPush
     }
 }

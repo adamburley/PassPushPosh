@@ -90,7 +90,7 @@ function New-Push {
         [string]$Passphrase,
 
         [Parameter(ParameterSetName = 'Authenticated')]
-        [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' }, ErrorMessage = 'Adding a note requires authentication.')]
+        [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' })]
         [ValidateNotNullOrEmpty()]
         [string]$Note,
 

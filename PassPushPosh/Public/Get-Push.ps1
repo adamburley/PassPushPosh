@@ -53,7 +53,7 @@ function Get-Push {
     )
     begin { Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference }
     process {
-        $endpoint = $Passphrase ? "p/$URLToken.json?passphrase=$Passphrase" : "p/$URLToken.json"
+        $endpoint =if ($Passphrase) { "p/$URLToken.json?passphrase=$Passphrase" } else { "p/$URLToken.json" }
         $result = Invoke-PasswordPusherAPI -Endpoint $endpoint -ReturnErrors
         switch ($result.error){
             'not-found' { Write-Error -Message "Push not found. Check the token you provided. Tokens are case-sensitive." }
