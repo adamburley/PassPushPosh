@@ -1,12 +1,12 @@
 ![Password Pusher Logo](pwpsm.png) ![](plussm.png) ![PowerShell Logo](pslogosm.png)
 # PassPushPosh
-![PowerShell Gallery Platform Support](https://img.shields.io/powershellgallery/p/passpushposh)
-![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/passpushposh)
-![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/passpushposh)
+[![PowerShell Gallery Platform Support](https://img.shields.io/powershellgallery/p/passpushposh)](https://www.powershellgallery.com/packages/PassPushPosh/)
+[![PowerShell Gallery Downloads](https://img.shields.io/powershellgallery/dt/passpushposh)](https://www.powershellgallery.com/packages/PassPushPosh/)
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/passpushposh)](https://www.powershellgallery.com/packages/PassPushPosh/)
 ![GitHub License](https://img.shields.io/github/license/adamburley/PassPushPosh)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/adamburley/PassPushPosh)
-![Code Coverage](https://img.shields.io/badge/coverage-76%25-yellow.svg?maxAge=60)
+![Code Coverage](https://img.shields.io/badge/coverage-80%25-yellow.svg?maxAge=60)
 
 
 *PassPushPosh* is a PowerShell 7 Module for [Password Pusher](https://pwpush.com), a secure sharing web service.
@@ -72,3 +72,4 @@ See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing
 ## Other
 
 - Used in the popular Microsoft 365 Partner management portal [CIPP](https://cipp.app/)!
+

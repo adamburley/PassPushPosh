@@ -1,7 +1,7 @@
 # This script sets up the dev environment for this module.
 # run .\dev\setup.ps1 with the prompt at the root of your repo
 
-$minimumVersion = 7.0
+$minimumVersion = 5.1
 $requiredModules = @(
     @{ Name = 'ModuleBuilder'; MinimumVersion = '3.1.0'}
     @{ Name = 'Pester'; MinimumVersion = '5.6.0' }

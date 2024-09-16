@@ -1,5 +1,6 @@
 function Format-PasswordPusherSecret {
     [CmdletBinding()]
+    [OutputType([string])]
     param(
         [Parameter(Mandatory)]
         [AllowEmptyString()]

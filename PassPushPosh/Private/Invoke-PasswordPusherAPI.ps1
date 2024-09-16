@@ -38,7 +38,7 @@ function Invoke-PasswordPusherAPI {
             $responseCode = [int]($_.Exception.Response.StatusCode)
             Write-Debug "Response: $responseCode $_errorBody"
         }
-        if ($result = try { $rawContent | ConvertFrom-Json -ErrorAction SilentlyContinue } catch {}) {
+        if ($result = try { $rawContent | ConvertFrom-Json -ErrorAction SilentlyContinue } catch { $null }) {
             if ($ReturnErrors -or $call.StatusCode -eq 200 -or $null -eq $result.error) {
                 $result
             }
