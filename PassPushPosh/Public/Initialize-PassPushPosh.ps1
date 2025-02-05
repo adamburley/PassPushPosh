@@ -10,6 +10,9 @@
 
     This function is called automatically if needed, defaulting to the public pwpush.com service.
 
+    .PARAMETER PWPushPro
+    Use the Pro version of Password Pusher.
+
     .PARAMETER EmailAddress
     Email address for authenticated calls.
 
@@ -61,10 +64,14 @@
 function Initialize-PassPushPosh {
     [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
+        [Parameter(ParameterSetName = 'Pro')]
+        [switch]$PWPushPro,
+
         [Parameter(Mandatory, Position = 0, ParameterSetName = 'Authenticated')]
         [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
         [string]$EmailAddress,
 
+        [Parameter(Mandatory, Position = 0, ParameterSetName = 'Pro')]
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'Authenticated')]
         [ValidateLength(5, 256)]
         [string]$ApiKey,
@@ -90,8 +97,7 @@ function Initialize-PassPushPosh {
             # Not initialized
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
             Write-Verbose "Initializing PassPushPosh. ApiKey: [$apiKeyOutput], BaseUrl: $BaseUrl"
-        }
-        elseif ($Force -or $ApiKey -or $BaseURL) {
+        } elseif ($Force -or $ApiKey -or $BaseURL) {
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
             $oldApiKeyOutput = if ($Script:PPPApiKey) { Format-PasswordPusherSecret -Secret $Script:PPPApiKey -ShowSample } else { 'None' }
             Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
@@ -101,23 +107,25 @@ function Initialize-PassPushPosh {
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
-        }
-        elseif ($Script:PPPHeaders) {
+        } elseif ($PSCmdlet.ParameterSetName -eq 'Pro') {
+            Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
+                'Authorization' = "Bearer $ApiKey"
+            }
+        } elseif ($Script:PPPHeaders) {
             # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
             Remove-Variable -Scope Script -Name PPPHeaders -WhatIf:$false
         }
 
         if (-not $UserAgent) {
             $osVersion = [System.Environment]::OSVersion
-            $userAtDomain = "{0}@{1}" -f [System.Environment]::UserName, [System.Environment]::UserDomainName
+            $userAtDomain = '{0}@{1}' -f [System.Environment]::UserName, [System.Environment]::UserDomainName
             $uAD64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($userAtDomain))
             Write-Debug "$userAtDomain transformed to $uAD64. First 20 characters $($uAD64.Substring(0,20))"
             # Version tag is replaced by the semantic version number at build time. See PassPushPosh/issues/11 for context
             $UserAgent = "PassPushPosh/{{semversion}} $osVersion/$($uAD64.Substring(0,20))"
             # $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $osVersion/$($uAD64.Substring(0,20))"
             Write-Verbose "Generated user agent: $UserAgent"
-        }
-        else {
+        } else {
             Write-Verbose "Using specified user agent: $UserAgent"
         }
 

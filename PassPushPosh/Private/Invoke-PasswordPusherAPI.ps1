@@ -21,7 +21,11 @@ function Invoke-PasswordPusherAPI {
         }
         if ($Script:PPPHeaders.'X-User-Token') {
             $iwrSplat['Headers'] = $Script:PPPHeaders
-            Write-Debug "Authentciated with API token $(Format-PasswordPusherSecret -Secret $Script:PPPHeaders.'X-User-Token' -ShowSample)"
+            Write-Debug "Authenticated with API token $(Format-PasswordPusherSecret -Secret $Script:PPPHeaders.'X-User-Token' -ShowSample)"
+        }
+        if ($Script:PPPHeaders.'Authorization') {
+            $iwrSplat['Headers'] = $Script:PPPHeaders
+            Write-Debug "Authenticated with API token $(Format-PasswordPusherSecret -Secret $Script:PPPHeaders.'Authorization' -ShowSample)"
         }
         $callInfo = "$Method $_uri"
         Write-Verbose "Sending HTTP request: $callInfo"
@@ -32,12 +36,10 @@ function Invoke-PasswordPusherAPI {
             $result = $call.Content | ConvertFrom-Json
             if ($ReturnErrors -or $call.StatusCode -eq 200 -or $null -eq $result.error) {
                 $result
-            }
-            else {
+            } else {
                 Write-Error -Message "$callInfo : $($call.StatusCode) $($result.error)"
             }
-        }
-        else {
+        } else {
             Write-Error -Message "Parseable JSON not returned by API. $callInfo : $($call.StatusCode) $($call.Content)"
         }
     }
