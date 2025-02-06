@@ -3,7 +3,7 @@ BeforeAll {
 }
 
 Describe "New-Push" {
-  <#  Context "Anonymous pushes" {
+    Context "Anonymous pushes" {
         BeforeAll {
             Initialize-PassPushPosh -Force
         }
@@ -36,7 +36,7 @@ Describe "New-Push" {
             $payload = 'This is a test payload'
             { New-Push -Payload $payload -Note 'This is a note' } | Should -Throw -ExpectedMessage "Cannot validate argument on parameter 'Note'. Adding a note requires authentication."
         }
-    } #>
+    }
     Context "Authenticated pushes" {
         BeforeAll {
             Initialize-PassPushPosh -EmailAddress $env:pwpEmail -ApiKey $env:pwpKey -Force

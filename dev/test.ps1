@@ -13,5 +13,14 @@ $config.Output.Verbosity = 'Detailed'
 
 $config.Run.PassThru = $true
 
+# Import environment variables
+if (Test-Path '.\local.settings.json') {
+    $environmentVariables = Get-Content -Path '.\local.settings.json' | ConvertFrom-Json -depth 10 | Select-Object -expandproperty Values
+    $environmentVariables | Get-Member -MemberType NoteProperty | Foreach-Object {
+        $name = $_.Name
+        New-Item -Path "Env:\$name" -Value $environmentVariables.$name -Force
+    }
+}
+
 # Run Pester tests using the configuration you've created
 Invoke-Pester -Configuration $config
