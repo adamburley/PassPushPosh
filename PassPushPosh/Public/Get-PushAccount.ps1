@@ -9,7 +9,7 @@
     Get-PushAuditLog
 
     #>
-function Get-Accounts {
+function Get-PushAccount {
     [CmdletBinding()]
     [OutputType([PasswordPush[]])]
     param()

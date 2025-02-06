@@ -10,8 +10,8 @@
 
     This function is called automatically if needed, defaulting to the public pwpush.com service.
 
-    .PARAMETER PWPushPro
-    Use the Pro version of Password Pusher.
+    .PARAMETER AccountType
+    For paid users, specify the account type as Premium or Pro. Not required for free accounts and self-hosted.
 
     .PARAMETER EmailAddress
     Email address for authenticated calls.
@@ -28,6 +28,8 @@
     module info, what your OS reports itself as, and a hash based on
     your username + workstation or domain name. This way the UA can be
     semi-consistent across sessions but not identifying.
+
+    Note: User agent must meet [RFC9110](https://www.rfc-editor.org/rfc/rfc9110#name-user-agent) specifications or the Password Pusher API will reject the call.
 
     .PARAMETER Force
     Force setting new information. If module is already initialized you can use this to
@@ -51,7 +53,7 @@
 
     .EXAMPLE
     # Set a custom User Agent
-    PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
+    PS > InitializePassPushPosh -UserAgent "My-CoolUserAgent/1.12.1"
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
@@ -65,13 +67,14 @@ function Initialize-PassPushPosh {
     [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
         [Parameter(ParameterSetName = 'Pro')]
-        [switch]$PWPushPro,
+        [ValidateSet('Premium', 'Pro')]
+        [string]$AccountType = 'Pro',
 
         [Parameter(Mandatory, Position = 0, ParameterSetName = 'Authenticated')]
         [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
         [string]$EmailAddress,
 
-        [Parameter(Mandatory, Position = 0, ParameterSetName = 'Pro')]
+        [Parameter(Mandatory, ParameterSetName = 'Pro')]
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'Authenticated')]
         [ValidateLength(5, 256)]
         [string]$ApiKey,
@@ -97,21 +100,26 @@ function Initialize-PassPushPosh {
             # Not initialized
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
             Write-Verbose "Initializing PassPushPosh. ApiKey: [$apiKeyOutput], BaseUrl: $BaseUrl"
-        } elseif ($Force -or $ApiKey -or $BaseURL) {
+        }
+        elseif ($Force -or $ApiKey -or $BaseURL) {
             if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
             $oldApiKeyOutput = if ($Script:PPPApiKey) { Format-PasswordPusherSecret -Secret $Script:PPPApiKey -ShowSample } else { 'None' }
             Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
+
             Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
             }
-        } elseif ($PSCmdlet.ParameterSetName -eq 'Pro') {
+        }
+        elseif ($PSCmdlet.ParameterSetName -eq 'Pro') {
+            Write-Debug "Initializing for paid tier $($AccountType)"
             Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
                 'Authorization' = "Bearer $ApiKey"
             }
-        } elseif ($Script:PPPHeaders) {
+        }
+        elseif ($Script:PPPHeaders) {
             # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
             Remove-Variable -Scope Script -Name PPPHeaders -WhatIf:$false
         }
@@ -125,7 +133,8 @@ function Initialize-PassPushPosh {
             $UserAgent = "PassPushPosh/{{semversion}} $osVersion/$($uAD64.Substring(0,20))"
             # $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $osVersion/$($uAD64.Substring(0,20))"
             Write-Verbose "Generated user agent: $UserAgent"
-        } else {
+        }
+        else {
             Write-Verbose "Using specified user agent: $UserAgent"
         }
 
