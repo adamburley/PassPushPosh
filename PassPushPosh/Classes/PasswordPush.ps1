@@ -52,13 +52,13 @@
 
 
         $this | Add-Member -Name 'UrlToken' -MemberType ScriptProperty -Value {
-                return $this.__UrlToken
-            } -SecondValue {
-                $this.__UrlToken = $_
-                $this.__LinkBase = "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
-            }
+            return $this.__UrlToken
+        } -SecondValue {
+            $this.__UrlToken = $_
+            $this.__LinkBase = $_j.html_url ?? "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
+        }
         $this.__UrlToken = $_j.url_token
-        $this.__LinkBase = "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
+        $this.__LinkBase = $_j.html_url ?? "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
         $this | Add-Member -Name 'LinkDirect' -MemberType ScriptProperty -Value { return $this.__LinkBase } -SecondValue {
             Write-Warning 'LinkDirect is a read-only calculated member.'
             Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
@@ -68,12 +68,12 @@
             Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
         }
         $this | Add-Member -Name 'Link' -MemberType ScriptProperty -Value {
-                $_Link = if ($this.RetrievalStep) { $this.LinkRetrievalStep } else { $this.LinkDirect }
-                Write-Debug "Presented Link: $_link"
-                $_Link
-            } -SecondValue {
-                Write-Warning 'Link is a read-only calculated member.'
-                Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
-            }
+            $_Link = if ($this.RetrievalStep) { $this.LinkRetrievalStep } else { $this.LinkDirect }
+            Write-Debug "Presented Link: $_link"
+            $_Link
+        } -SecondValue {
+            Write-Warning 'Link is a read-only calculated member.'
+            Write-Debug 'Link* members are calculated based on the Global BaseUrl and Push Retrieval Step values'
+        }
     }
 }

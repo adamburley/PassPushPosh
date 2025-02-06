@@ -6,15 +6,21 @@ Initialize the PassPushPosh module
 ## SYNTAX
 
 ### Anonymous (Default)
-```powershell
+```PowerShell
 Initialize-PassPushPosh [[-BaseUrl] <String>] [-UserAgent <String>] [-Force]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Authenticated
-```powershell
-Initialize-PassPushPosh [-EmailAddress] <String> [-ApiKey] <String> [[-BaseUrl] <String>] [-UserAgent <String>]
+```PowerShell
+Initialize-PassPushPosh [-EmailAddress] <String> -ApiKey <String> [[-BaseUrl] <String>] [-UserAgent <String>]
  [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### Pro
+```PowerShell
+Initialize-PassPushPosh [-AccountType <String>] -ApiKey <String> [-UserAgent <String>] [-Force]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -28,23 +34,23 @@ This function is called automatically if needed, defaulting to the public pwpush
 
 ## EXAMPLES
 
-### EXAMPLE: Default settings
-```powershell
+### Default Settings
+```PowerShell
 PS > Initialize-PassPushPosh
 ```
-
 Initializes with default settings - anonymous pushes and pwpush.com for the server.
 
-### EXAMPLE: Authentication
-```powershell
+### Authenticated
+```PowerShell
 PS > Initialize-PassPushPosh -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
 
 VERBOSE: Initializing PassPushPosh.
 ApiKey: \[x-kdjf\], BaseUrl: https://pwpush.com
 ```
+Initialize with authentication - free account or self-hosted instance.
 
-### EXAMPLE: Private Server
-```powershell
+### Private Server
+```PowerShell
 PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
 
 VERBOSE: Initializing PassPushPosh.
@@ -53,14 +59,28 @@ ApiKey: \[x-kdjf\], BaseUrl: https://myprivatepwpushinstance.com
 
 Initialize with another server with authentication
 
-### EXAMPLE: Custom User-Agent
-```
+### Custom User-Agent
+```PowerShell
 PS > InitializePassPushPosh -UserAgent "My-CoolUserAgent/1.12.1"
 ```
 
-User agent must meet [RFC9110](https://www.rfc-editor.org/rfc/rfc9110#name-user-agent) specifications or the Password Pusher API will reject the call.
-
 ## PARAMETERS
+
+### -AccountType
+For paid users, specify the account type as Premium or Pro.
+Not required for free accounts and self-hosted.
+
+```yaml
+Type: String
+Parameter Sets: Pro
+Aliases:
+
+Required: False
+Position: Named
+Default value: Pro
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -EmailAddress
 Email address for authenticated calls.
@@ -82,11 +102,11 @@ API key for authenticated calls.
 
 ```yaml
 Type: String
-Parameter Sets: Authenticated
+Parameter Sets: Pro, Authenticated
 Aliases:
 
 Required: True
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -99,7 +119,7 @@ Default: https://pwpush.com
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Anonymous, Authenticated
 Aliases:
 
 Required: False
@@ -166,3 +186,4 @@ function has not yet run.
 ## RELATED LINKS
 
 [https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md)
+

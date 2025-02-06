@@ -34,6 +34,9 @@
     parameter changes if the 1-click link is used in the Link parameter
     and returned from the secret link helper (Get-SecretLink)
 
+    .PARAMETER AccountId
+    Account ID to associate with this push. Requires authentication.
+
     .INPUTS
     [string]
 
@@ -77,7 +80,7 @@
     override that value you'll need to fork this module.
     #>
 function New-Push {
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "Passphrase", Justification = "DE0001: SecureString shouldn't be used")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', 'Passphrase', Justification = "DE0001: SecureString shouldn't be used")]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low', DefaultParameterSetName = 'Anonymous')]
     [OutputType([PasswordPush])]
     param(
@@ -90,7 +93,7 @@ function New-Push {
         [string]$Passphrase,
 
         [Parameter(ParameterSetName = 'Authenticated')]
-        [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' }, ErrorMessage = 'Adding a note requires authentication.')]
+        [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' -or $null -ne $Script:PPPHeaders.Authorization }, ErrorMessage = 'Adding a note requires authentication.')]
         [ValidateNotNullOrEmpty()]
         [string]$Note,
 
@@ -110,7 +113,11 @@ function New-Push {
 
         [Parameter()]
         [switch]
-        $RetrievalStep
+        $RetrievalStep,
+
+        [Parameter()]
+        [ValidateScript({ $null -ne $Script:PPPHeaders.Authorization }, ErrorMessage = 'Adding an account id requires authentication.')]
+        $AccountId
     )
 
     begin {
@@ -139,19 +146,21 @@ function New-Push {
             $body.password.expire_after_views = $ExpireAfterViews
             $shouldString += ', expire after {0} views' -f $ExpireAfterViews
         }
+        if ($AccountId) {
+            $body.account_id = $AccountId
+            $shouldString += ', with account ID {0}' -f $AccountId
+        }
         $body.password.deletable_by_viewer = if ($DeletableByViewer) {
             $shouldString += ', deletable by viewer'
             $true
-        }
-        else {
+        } else {
             $shouldString += ', NOT deletable by viewer'
             $false
         }
         $body.password.retrieval_step = if ($RetrievalStep) {
             $shouldString += ', with a 1-click retrieval step'
             $true
-        }
-        else {
+        } else {
             $shouldString += ', with a direct link'
             $false
         }

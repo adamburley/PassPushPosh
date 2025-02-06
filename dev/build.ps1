@@ -1,9 +1,12 @@
 # Execute from the repo root
 # Usage: .\dev\build.ps1 -Version 1.0.0
 
-param (
+param(
     [string]$Version
 )
+
+Import-Module PSScriptAnalyzer
+
 
 # Sanity checks
 Invoke-ScriptAnalyzer -Path '.\PassPushPosh' -Recurse -ReportSummary

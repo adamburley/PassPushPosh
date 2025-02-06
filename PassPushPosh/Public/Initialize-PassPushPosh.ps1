@@ -10,6 +10,9 @@
 
     This function is called automatically if needed, defaulting to the public pwpush.com service.
 
+    .PARAMETER AccountType
+    For paid users, specify the account type as Premium or Pro. Not required for free accounts and self-hosted.
+
     .PARAMETER EmailAddress
     Email address for authenticated calls.
 
@@ -25,6 +28,8 @@
     module info, what your OS reports itself as, and a hash based on
     your username + workstation or domain name. This way the UA can be
     semi-consistent across sessions but not identifying.
+
+    Note: User agent must meet [RFC9110](https://www.rfc-editor.org/rfc/rfc9110#name-user-agent) specifications or the Password Pusher API will reject the call.
 
     .PARAMETER Force
     Force setting new information. If module is already initialized you can use this to
@@ -48,7 +53,7 @@
 
     .EXAMPLE
     # Set a custom User Agent
-    PS > InitializePassPushPosh -UserAgent "I'm a cool dude with a cool script."
+    PS > InitializePassPushPosh -UserAgent "My-CoolUserAgent/1.12.1"
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
@@ -61,10 +66,15 @@
 function Initialize-PassPushPosh {
     [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
+        [Parameter(ParameterSetName = 'Pro')]
+        [ValidateSet('Premium', 'Pro')]
+        [string]$AccountType = 'Pro',
+
         [Parameter(Mandatory, Position = 0, ParameterSetName = 'Authenticated')]
         [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
         [string]$EmailAddress,
 
+        [Parameter(Mandatory, ParameterSetName = 'Pro')]
         [Parameter(Mandatory, Position = 1, ParameterSetName = 'Authenticated')]
         [ValidateLength(5, 256)]
         [string]$ApiKey,
@@ -97,9 +107,16 @@ function Initialize-PassPushPosh {
             Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
         }
         if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
+
             Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
                 'X-User-Email' = $EmailAddress
                 'X-User-Token' = $ApiKey
+            }
+        }
+        elseif ($PSCmdlet.ParameterSetName -eq 'Pro') {
+            Write-Debug "Initializing for paid tier $($AccountType)"
+            Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
+                'Authorization' = "Bearer $ApiKey"
             }
         }
         elseif ($Script:PPPHeaders) {
@@ -109,7 +126,7 @@ function Initialize-PassPushPosh {
 
         if (-not $UserAgent) {
             $osVersion = [System.Environment]::OSVersion
-            $userAtDomain = "{0}@{1}" -f [System.Environment]::UserName, [System.Environment]::UserDomainName
+            $userAtDomain = '{0}@{1}' -f [System.Environment]::UserName, [System.Environment]::UserDomainName
             $uAD64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($userAtDomain))
             Write-Debug "$userAtDomain transformed to $uAD64. First 20 characters $($uAD64.Substring(0,20))"
             # Version tag is replaced by the semantic version number at build time. See PassPushPosh/issues/11 for context

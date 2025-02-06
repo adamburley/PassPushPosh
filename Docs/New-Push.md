@@ -6,17 +6,17 @@ Create a new Push
 ## SYNTAX
 
 ### Anonymous (Default)
-```powershell
+```PowerShell
 New-Push [-Payload] <String> [-Passphrase <String>] [-ExpireAfterDays <Int32>] [-ExpireAfterViews <Int32>]
- [-DeletableByViewer] [-RetrievalStep] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+ [-DeletableByViewer] [-RetrievalStep] [-AccountId <Object>] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Authenticated
-```powershell
+```PowerShell
 New-Push [-Payload] <String> [-Passphrase <String>] [-Note <String>] [-ExpireAfterDays <Int32>]
- [-ExpireAfterViews <Int32>] [-DeletableByViewer] [-RetrievalStep] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-ExpireAfterViews <Int32>] [-DeletableByViewer] [-RetrievalStep] [-AccountId <Object>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,8 +30,8 @@ are always provided at LinkRetrievalStep and LinkDirect properties.
 
 ## EXAMPLES
 
-### EXAMPLE: Basic use
-```powershell
+### Basic Usage
+```PowerShell
 $myPush = New-Push "Here's my secret!"
 PS > $myPush | Select-Object Link, LinkRetrievalStep, LinkDirect
 
@@ -40,15 +40,15 @@ LinkRetrievalStep : https://pwpush.com/p/gzv65wiiuciy/r # 1-step
 LinkDirect        : https://pwpush.com/p/gzv65wiiuciy   # Direct
 ```
 
-### EXAMPLE: Pipeline
-```powershell
-"Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
+### PipeLine
+```PowerShell
+PS > "Super secret secret" | New-Push -RetrievalStep | Select-Object -ExpandProperty Link
 
 https://pwpush.com/p/gzv65wiiuciy/r
 ```
 
-### EXAMPLE: Burn after reading-style
-```powershell
+### "Burn after reading" style
+```PowerShell
 PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
 ```
 
@@ -166,6 +166,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -AccountId
+Account ID to associate with this push.
+Requires a Pro subscription.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WhatIf
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
@@ -203,11 +219,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 - [string] A password to send
-- 
+
 ## OUTPUTS
 
 - [PasswordPush] Representation of the submitted push
-- 
+
 ## NOTES
 Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default
 values for Password Pusher and what's used on the public instance
@@ -217,8 +233,7 @@ override that value you'll need to fork this module.
 
 ## RELATED LINKS
 
-[https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md](https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md)
+[New-Push](https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md)
 
-[https://pwpush.com/api/1.0/passwords/create.en.html](https://pwpush.com/api/1.0/passwords/create.en.html)
+[Get-Push](https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md)
 
-[https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L120](https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L120)
