@@ -81,6 +81,7 @@ function Initialize-PassPushPosh {
 
         [Parameter(Position = 0, ParameterSetName = 'Anonymous')]
         [Parameter(Position = 2, ParameterSetName = 'Authenticated')]
+        [Parameter(ParameterSetName = 'Pro')]
         [ValidatePattern('^https?:\/\/[a-zA-Z0-9-_]+.[a-zA-Z0-9]+')]
         [string]$BaseUrl,
 
