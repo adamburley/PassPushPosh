@@ -14,24 +14,3 @@ Represents a Push on the Password Pusher server.  Depending on the source of dat
 
 
 - [ConvertTo-PasswordPush](ConvertTo-PasswordPush.md)
-
-## Properties
-
-| Type | Property | Value | Notes |
-|--|--|--|--|
-| string | Payload | The secret string or password to be sent | Will not have a value if the API endpoint does not retrieve it (e.g. Dashboard, Delete) |
-| string | URLToken | The unique part of a secret link | |
-| string | Link | A full URL. e.g `https://pwpush.com/p/urltoken` | Read only, calculated value. `Link` will reflect if 1-click retrieval step was selected |
-| string | LinkDirect | URL without the retrieval step | Read only, calculated. Will always reflect the "direct" link (no additional click) |
-| string | LinkRetrievalStep | URL with the retrieval step | Read only, calculated. Will always reflect the "additional click needed" link |
-| bool   | RetrievalStep | Push created with "use 1-click retrieval step" | |
-| bool   | IsExpired | Push is marked as expired | |
-| bool   | IsDeleted | Push is marked as deleted ||
-| bool   | IsDeletableByViewer | Push was created with "Allow immediate deletion" / "Allow viewer to delete" set ||
-| int    | ExpireAfterDays | Lifetime of the Push ||
-| int    | DaysRemaining | Days remaining for the Push ||
-| int    | ExpireAfterViews | Number of times the Push may be viewed ||
-| int    | ViewsRemaining | Number of times remaining to view the Push | For `Get-Push` this will *not* reflect the current request. |
-| DateTime | DateCreated | Date the push was created | |
-| DateTime | DateUpdated | Date the push was updated | |
-| DateTime | DateExpired | Date the push expired | May be '0' if Push is active |

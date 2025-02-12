@@ -65,13 +65,12 @@ function ConvertTo-PasswordPush {
     param(
         [parameter(Mandatory, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()]
-        $JsonResponse
+        [PSCustomObject]$JsonResponse
     )
     process {
         try {
-            $jsonObject = if ($JsonResponse -is [string]) { $JsonResponse | ConvertFrom-Json } else { $JsonResponse }
-            foreach ($o in $jsonObject) {
-                [PasswordPush]($o | ConvertTo-Json) # TODO fix this mess
+            foreach ($o in $JsonResponse) {
+                [PasswordPush]::New($o)
             }
         }
         catch {
