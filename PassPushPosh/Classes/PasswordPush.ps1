@@ -17,6 +17,7 @@
     [string]$Link
     [string]$LinkDirect
     [string]$LinkRetrievalStep
+    #[PSCustomObject[]]$Files # Added if present
 
     PasswordPush() {
         # Blank constructor
@@ -46,6 +47,10 @@
         $this.LinkDirect = $_j.json_url ? $_j.json_url.Replace('.json','') : "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
         $this.LinkRetrievalStep = $this.LinkDirect, '/r' -join ''
         $this.Link = $_.html_url
+
+        if ($_j.Files) {
+            $this | Add-Member -MemberType NoteProperty -Name Files -Value $_j.files
+        }
     }
 
     # Allow casting or explicit import from the raw Content of an API call
@@ -72,5 +77,9 @@
         $this.LinkDirect = $_j.json_url ? $_j.json_url.Replace('.json','') : "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
         $this.LinkRetrievalStep = $this.LinkDirect, '/r' -join ''
         $this.Link = $_.html_url
+
+        if ($_j.Files) {
+            $this | Add-Member -MemberType NoteProperty -Name Files -Value $_j.files
+        }
     }
 }
