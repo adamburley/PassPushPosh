@@ -10,13 +10,27 @@
     are always provided at LinkRetrievalStep and LinkDirect properties.
 
     .PARAMETER Payload
-    The URL password or secret text to share.
+    Generic text value to share. Use with -Kind to create arbitrary push types.
+    Payload is required for all types except File. For QR and URL pushes you
+    may directly specify those types by using the -QR and -URL parameters.
+
+    .PARAMETER QR
+    Create a QR-type secret with this text value. May be a link or other text.
+
+    .PARAMETER URL
+    Create a URL-type secret redirecting to this link. A fully-qualified URL is
+    required
+
+    .PARAMETER File
+    Attach files to a push. Up to 10 files in all referenced folders and paths
+    may be specified by passing a file or folder path or array of paths or a
+    DirectoryInfo or FileInfo object.
 
     .PARAMETER Passphrase
     Require recipients to enter this passphrase to view the created push.
 
     .PARAMETER Note
-    The note for this push.  Visible only to the push creator. Requires authentication.
+    The note for this push. Visible only to the push creator. Requires authentication.
 
     .PARAMETER ExpireAfterDays
     Expire secret link and delete after this many days.
@@ -36,6 +50,15 @@
 
     .PARAMETER AccountId
     Account ID to associate with this push. Requires authentication.
+    If you have multiple accounts and you do not specify an account ID
+    Password Pusher will use the first account available, UNLESS you have a custom domain.
+    In that case it will default to the custom domain account IF you're connecting
+    to the custom domain for the API session. If you're connecting to pwpush.com,
+    it will use the unbranded / non-domain account.
+
+    .PARAMETER Kind
+    The kind of Push to send. Defaults to text. If using -QR, -URL, or -File parameters
+    the correct kind is automatically selected and this parameter is ignored.
 
     .INPUTS
     [string]
@@ -61,14 +84,22 @@
     # "Burn after reading" style Push
     PS > New-Push -Payload "Still secret text!" -ExpireAfterViews 1 -RetrievalStep
 
+    .EXAMPLE
+    Create a URL push
+    PS > New-Push -URL 'https://example.com/coolplacetoforwardmyrecipientto'
+
+    .EXAMPLE
+    Create a file push
+    PS > New-Push -File 'C:\mytwofiles\mycoolfile.txt', 'C:\mytwofiles\mycoolfile2.txt'
+    or
+    PS > New-Push -File 'C:\mytwofiles'
+    or
+    PS > $myFolder = Get-ChildItem C:\mytwofiles
+    PS > New-Push -File $myFolder
+
+
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/New-Push.md
-
-    .LINK
-    https://pwpush.com/api/1.0/passwords/create.en.html
-
-    .LINK
-    https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L120
 
     .LINK
     Get-Push
@@ -76,15 +107,14 @@
     .NOTES
     Maximum for -ExpireAfterDays and -ExpireAfterViews is based on the default
     values for Password Pusher and what's used on the public instance
-    (pwpush.com). If you're using this with a private instance and want to
-    override that value you'll need to fork this module.
+    (pwpush.com).
     #>
 function New-Push {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', 'Passphrase', Justification = "DE0001: SecureString shouldn't be used")]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low', DefaultParameterSetName = 'Text')]
     [OutputType([PasswordPush])]
     param(
-        [Parameter(ParameterSetName = 'Text', ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'Text', ValueFromPipeline, Position = 0)]
         [Alias('Password')]
         [ValidateNotNullOrEmpty()]
         [string]$Payload,
@@ -92,7 +122,7 @@ function New-Push {
         [Parameter(ParameterSetName = 'QR', Mandatory)]
         [string]$QR,
 
-        [Parameter(ParameterSetName = 'URL')]
+        [Parameter(ParameterSetName = 'URL', Mandatory)]
         [ValidatePattern('^https?:\/\/[a-zA-Z0-9-_]+.[a-zA-Z0-9]+')]
         [string]$URL,
 
