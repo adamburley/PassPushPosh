@@ -81,18 +81,31 @@
     #>
 function New-Push {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', 'Passphrase', Justification = "DE0001: SecureString shouldn't be used")]
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low', DefaultParameterSetName = 'Anonymous')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low', DefaultParameterSetName = 'Text')]
     [OutputType([PasswordPush])]
     param(
-        [Parameter(Mandatory = $true, ValueFromPipeline, Position = 0)]
+        [Parameter(ParameterSetName = 'Text', ValueFromPipeline)]
         [Alias('Password')]
         [ValidateNotNullOrEmpty()]
         [string]$Payload,
 
+        [Parameter(ParameterSetName = 'QR', Mandatory)]
+        [string]$QR,
+
+        [Parameter(ParameterSetName = 'URL')]
+        [ValidatePattern('^https?:\/\/[a-zA-Z0-9-_]+.[a-zA-Z0-9]+')]
+        [string]$URL,
+
+        [Parameter(ParameterSetName = 'Text')]
+        [Parameter(ParameterSetName = 'QR')]
+        [ValidateCount(1, 10)]
+        [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' -or $null -ne $Script:PPPHeaders.Authorization }, ErrorMessage = 'Adding files requires authentication.')]
+        [object[]]$File,
+
         [Parameter()]
         [string]$Passphrase,
 
-        [Parameter(ParameterSetName = 'Authenticated')]
+        [Parameter()]
         [ValidateScript({ $null -ne $Script:PPPHeaders.'X-User-Token' -or $null -ne $Script:PPPHeaders.Authorization }, ErrorMessage = 'Adding a note requires authentication.')]
         [ValidateNotNullOrEmpty()]
         [string]$Note,
@@ -117,55 +130,95 @@ function New-Push {
 
         [Parameter()]
         [ValidateScript({ $null -ne $Script:PPPHeaders.Authorization }, ErrorMessage = 'Adding an account id requires authentication.')]
-        $AccountId
+        $AccountId,
+
+        [Parameter(ParameterSetName = 'Text')]
+        [ValidateSet('Text', 'File', 'QR', 'URL')]
+        [string]$Kind = 'Text'
     )
 
     begin {
         Initialize-PassPushPosh -Verbose:$VerbosePreference -Debug:$DebugPreference
     }
     process {
-        $body = @{
-            'password' = @{
-                'payload' = $Payload
+        $_Kind = switch ($PSCmdlet.ParameterSetName) {
+            'QR' { 'qr' }
+            'URL' { 'url' }
+            default {
+                $File ? 'file' : $Kind.ToLower()
             }
         }
-        $shouldString = 'Submit {0} push with Payload of length {1}' -f $PSCmdlet.ParameterSetName, $Payload.Length
+        Write-Debug "Parameter Set: $($PSCmdlet.ParameterSetName)"
+        Write-Debug "Kind: $_Kind"
+
+        $passVals = @{ 'kind' = $_Kind }
+        $shouldString = "Submit $_Kind push"
+
+        if ($_Payload = $Payload ? $Payload : $QR ? $QR : $URL ? $URL : $Null) {
+            $shouldString += ", with payload of length $($_Payload.Length)"
+            $passVals.payload = $_Payload
+        }
+        elseif ($_Kind -ine 'File') {
+            Write-Error "A payload is required for all Push types except File." -ErrorAction Stop
+        }
         if ($Passphrase) {
-            $body.password.passphrase = $Passphrase
+            $passVals.passphrase = $Passphrase
             $shouldString += ", with passphrase of length $($Passphrase.Length)"
         }
         if ($Note) {
-            $body.password.note = $note
+            $passVals.note = $note
             $shouldString += ", with note $note"
         }
         if ($ExpireAfterDays) {
-            $body.password.expire_after_days = $ExpireAfterDays
-            $shouldString += ', expire after {0} days' -f $ExpireAfterDays
+            $passVals.expire_after_days = $ExpireAfterDays
+            $shouldString += ", expire after $ExpireAfterDays days"
         }
         if ($ExpireAfterViews) {
-            $body.password.expire_after_views = $ExpireAfterViews
-            $shouldString += ', expire after {0} views' -f $ExpireAfterViews
+            $passVals.expire_after_views = $ExpireAfterViews
+            $shouldString += ", expire after $ExpireAfterViews views"
         }
-        if ($AccountId) {
-            $body.account_id = $AccountId
-            $shouldString += ', with account ID {0}' -f $AccountId
+        if ($PSBoundParameters.ContainsKey('DeletableByViewer')) {
+            $passVals.deletable_by_viewer = $DeletableByViewer
+            $shouldString += $DeletableByViewer ? ', deletable by viewer' : ', not deletable by viewer'
         }
-        $body.password.deletable_by_viewer = if ($DeletableByViewer) {
-            $shouldString += ', deletable by viewer'
-            $true
+        if ($PSBoundParameters.ContainsKey('RetrievalStep')) {
+            $passVals.retrieval_step = $RetrievalStep
+            $shouldString += $RetrievalStep ? ', with a 1-click retrieval step' : ', without a retrieval step'
+        }
+     
+        if ($File) {
+            $_Files = Get-ChildItem -Path $File
+            Write-Debug "Attaching $($_Files.Name -join '; ')"
+            if ($_Files.Count -gt 10) {
+                Write-Error "The total number of files is greater than allowed. Only 10 files may be attached to each Push." -ErrorAction Stop
+            }
+            else {
+                $shouldString += ", attaching $($_Files.count) files"
+            }
+            $Form = @{ }
+            $passVals.GetEnumerator() | ForEach-Object { $Form.Add("password[$($_.Name)]", $_.Value) }
+            $Form.'password[files][]' = $_Files
+            if ($AccountId) {
+                $Form.account_id = $AccountId
+                $shouldString += ', with account ID {0}' -f $AccountId
+            }
+            Write-Debug "Form looks like $($Form | Out-String)"
+            $invokeSplat = @{
+                Form = $Form
+            }
         } else {
-            $shouldString += ', NOT deletable by viewer'
-            $false
+            $Body = @{ 'password' = $passVals }
+            if ($AccountId) {
+                $Body.account_id = $AccountId
+                $shouldString += ', with account ID {0}' -f $AccountId
+            }
+            Write-Debug "Body looks like $($Body | ConvertTo-Json -Depth 5)"
+            $invokeSplat = @{
+                Body = $Body
+            }
         }
-        $body.password.retrieval_step = if ($RetrievalStep) {
-            $shouldString += ', with a 1-click retrieval step'
-            $true
-        } else {
-            $shouldString += ', with a direct link'
-            $false
-        }
-        if ($PSCmdlet.ShouldProcess($shouldString, $iwrSplat.Uri, 'Submit new Push')) {
-            $response = Invoke-PasswordPusherAPI -Endpoint 'p.json' -Method Post -Body $body
+        if ($PSCmdlet.ShouldProcess($shouldString, $Script:PPPBaseUrl, 'Submit new Push')) {
+            $response = Invoke-PasswordPusherAPI -Endpoint 'p.json' -Method Post @invokeSplat
             $response | ConvertTo-PasswordPush
         }
     }
