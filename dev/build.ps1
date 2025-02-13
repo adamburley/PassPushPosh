@@ -26,6 +26,8 @@ Build-Module -Version $Version -SourcePath '.\PassPushPosh\PassPushPosh.psd1' -O
 # Custom build modifications for this module
 (Get-Content -Path '.\Output\PassPushPosh\PassPushPosh.psm1').Replace('{{semversion}}',$version) | Set-Content -Path '.\Output\PassPushPosh\PassPushPosh.psm1'
 
+Remove-Module -Name PassPushPosh -Force
+
 Write-Host "`nTesting Module..." -ForegroundColor Yellow
 $pesterResults = & .\dev\test.ps1
 

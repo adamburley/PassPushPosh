@@ -114,7 +114,7 @@ function Initialize-PassPushPosh {
         $_AuthType = $PSCmdlet.ParameterSetName -iin 'Anonymous','Authenticated' ? $PSCmdlet.ParameterSetName : $UseLegacyAuthentication ? 'Legacy' : 'Automatic'
 
         switch ($_AuthType){
-            'Anonymous' { 
+            'Anonymous' {
                 # module is reinitialized from an authenticated to an anonymous session
                 Remove-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -ErrorAction SilentlyContinue
             }
@@ -154,7 +154,7 @@ function Initialize-PassPushPosh {
         }
 
         Set-Variable -WhatIf:$false -Scope Script -Name PPPUserAgent -Value ($PSBoundParameters.ContainsKey('UserAgent') ? $UserAgent : (New-PasswordPusherUserAgent))
-        Set-Variable -WhatIf:$false -Scope Script -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPBaseURL -Value $_baseUrl.TrimEnd('/')
 
         Write-Verbose -Message "PassPushPosh Initialized with these settings: Account type: [$_AuthType] API Key: $apiKeySample Base URL: [$_baseUrl]"
         Write-Verbose -Message "User Agent: $Script:PPPUserAgent"
