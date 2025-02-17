@@ -220,11 +220,11 @@ function New-Push {
             $shouldString += ", expire after $ExpireAfterViews views"
         }
         if ($PSBoundParameters.ContainsKey('DeletableByViewer')) {
-            $passVals.deletable_by_viewer = $DeletableByViewer
+            $passVals.deletable_by_viewer = [bool]$DeletableByViewer
             $shouldString += $DeletableByViewer ? ', deletable by viewer' : ', not deletable by viewer'
         }
         if ($PSBoundParameters.ContainsKey('RetrievalStep')) {
-            $passVals.retrieval_step = $RetrievalStep
+            $passVals.retrieval_step = [bool]$RetrievalStep
             $shouldString += $RetrievalStep ? ', with a 1-click retrieval step' : ', without a retrieval step'
         }
 
