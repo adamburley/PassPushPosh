@@ -111,9 +111,9 @@ function Initialize-PassPushPosh {
 
         $apiKeySample = $_apiKey ? (Format-PasswordPusherSecret -Secret $_apiKey -ShowSample) : 'None'
 
-        $_AuthType = $PSCmdlet.ParameterSetName -iin 'Anonymous','Authenticated' ? $PSCmdlet.ParameterSetName : $UseLegacyAuthentication ? 'Legacy' : 'Automatic'
+        $_AuthType = $PSCmdlet.ParameterSetName -iin 'Anonymous', 'Authenticated' ? $PSCmdlet.ParameterSetName : $UseLegacyAuthentication ? 'Legacy' : 'Automatic'
 
-        switch ($_AuthType){
+        switch ($_AuthType) {
             'Anonymous' {
                 # module is reinitialized from an authenticated to an anonymous session
                 Remove-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -ErrorAction SilentlyContinue
@@ -132,23 +132,22 @@ function Initialize-PassPushPosh {
                 }
             }
             'Automatic' {
-                Write-Debug 'Legacy auth status not specified. Defaulting to attempting Bearer and falling back to legacy.'
-                Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
-                    'Authorization' = "Bearer $_apiKey"
-                }
-                Get-Dashboard -Dashboard Active -ErrorAction SilentlyContinue -ErrorVariable gdEr | Out-Null
-                if ($gdEr.count -gt 0) {
-                    Write-Warning 'Instance does not appear to support modern Bearer authentication, or the provided API key is incorrect.'
+                Write-Debug 'Legacy auth status not specified Checking for /up'
+                if ((Invoke-WebRequest "$_baseUrl/up" -SkipHttpErrorCheck).StatusCode -eq 200) {
+                    Write-Debug "Current version detected via /up"
+                    Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
+                        'Authorization' = "Bearer $_apiKey"
+                    }
+                } else {
+                    Write-Warning 'Instance does not appear to support modern Bearer authentication.'
                     Write-Warning 'The module will fall back to using legacy authentication.'
                     Write-Warning 'If you are connecting to a self-hosted instance, verify it is up to date.'
                     Write-Warning 'If you know you need legacy (X-User-Token) authentication include  Invoke-PassPushPosh -UseLegacyAuth $true'
+                    Write-Warning 'To skip the step check and this warning.'
                     Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Force -Value @{
                         'X-User-Email' = $EmailAddress
                         'X-User-Token' = $_apiKey
                     }
-                }
-                else {
-                    Write-Debug 'Bearer call successful.'
                 }
             }
         }
