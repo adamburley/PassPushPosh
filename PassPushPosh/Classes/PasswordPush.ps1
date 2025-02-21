@@ -41,9 +41,9 @@
         $this.RetrievalStep = $_j.retrieval_step
         $this.AccountId = $_j.account_id
         $this.UrlToken = $_j.url_token
-        $this.LinkDirect = $_j.json_url ? $_j.json_url.Replace('.json','') : "$Script:PPPBaseUrl/p/$($this.__UrlToken)"
+        $this.LinkDirect = $_j.json_url ? $_j.json_url.Replace('.json','') : "$Script:PPPBaseUrl/p/$($this.UrlToken)"
         $this.LinkRetrievalStep = $this.LinkDirect, '/r' -join ''
-        $this.Link = $_.html_url
+        $this.Link = $_j.html_url ?? $this.RetrievalStep -eq $true ? $this.LinkRetrievalStep : $this.LinkDirect
 
         if ($_j.Files) {
             $this | Add-Member -MemberType NoteProperty -Name Files -Value $_j.files
