@@ -13,6 +13,6 @@ Describe "Get-SecretLink" {
     It "Should return a secret link" {
         $push = New-Push -Payload 'I am a payload!'
         $secretLink = Get-SecretLink -URLToken $push.URLToken
-        $secretLink | Should -Be $push.LinkDirect
+        $secretLink | Should -Be $push.Link
     }
 }
