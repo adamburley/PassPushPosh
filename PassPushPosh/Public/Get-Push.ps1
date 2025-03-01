@@ -19,7 +19,7 @@
 
     .PARAMETER IncludePushObject
     When saving files from a file push, also save the push data itself. This will
-    create a JSON object in the same path as the files with the 
+    create a JSON object in the same path as the files with the
 
     .INPUTS
     [string]
@@ -35,12 +35,6 @@
 
     .LINK
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Get-Push.md
-
-    .LINK
-    https://pwpush.com/api/1.0/passwords.en.html
-
-    .LINK
-    https://github.com/pglombardo/PasswordPusher/blob/c2909b2d5f1315f9b66939c9fbc7fd47b0cfeb03/app/controllers/passwords_controller.rb#L89
 
     .LINK
     New-Push

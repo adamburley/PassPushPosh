@@ -32,7 +32,7 @@ $pesterResults = & .\dev\test.ps1
 # Rebuild Docs
 Import-Module '.\PassPushPosh\PassPushPosh.psd1' -Force
 New-MarkdownHelp -Module PassPushPosh -OutputFolder .\docs -ExcludeDontShow -Force -NoMetadata
-
+Remove-Module -Name PassPushPosh -Force
 # Readme Updates
 $ReadmeContent = Get-Content -Path '.\README.md' -Raw
 

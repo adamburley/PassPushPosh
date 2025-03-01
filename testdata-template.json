@@ -1,0 +1,17 @@
+{
+  "HostedPro": {
+      "Key": "longprokey",
+      "Type": "Hosted Pro Account",
+      "Url": "https://secret.burley.dev"
+  },
+  "OSSCurrent": {
+      "Key": "osscurrentkey",
+      "Type": "OSS Current Version",
+      "Url": "https://oss.pwpush.com"
+  },
+  "HostedFree": {
+      "Key": "longfreekey",
+      "Type": "Hosted Free Account",
+      "Url": "https://pwpush.com"
+  }
+}

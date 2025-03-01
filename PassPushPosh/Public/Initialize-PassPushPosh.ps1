@@ -10,17 +10,27 @@
 
     This function is called automatically if needed, defaulting to the public pwpush.com service.
 
-    .PARAMETER AccountType
-    For paid users, specify the account type as Premium or Pro. Not required for free accounts and self-hosted.
+    .PARAMETER Bearer
+    API key for authenticated calls. Supported on hosted instance and OSS v1.51.0 and newer.
+
+    .PARAMETER ApiKey
+    API key for authenticated calls. Supports older OSS installs.
+    Also supports Bearer autodetection. This will be removed in a future version.
 
     .PARAMETER EmailAddress
     Email address for authenticated calls.
+    NOTE: This is only required for legacy X-User-Token authentication. If using hosted pwpush.com
+    services or OSS v1.51.0 or newer use -Bearer
 
-    .PARAMETER ApiKey
-    API key for authenticated calls.
+    .PARAMETER UseLegacyAuth
+    Use legacy X-User-Token. Supportsversions of Password Pusher OSS older than v1.51.0.
+    If this is not set, but -ApiKey and -EmailAddress are specified the module will attempt to
+    auto-detect the correct connection.
 
     .PARAMETER BaseUrl
-    Base URL for API calls. Allows use of module with private instances of Password Pusher
+    Base URL for API calls. Allows use of custom domains with hosted Password Pusher as well as specifying
+    a private instance.
+
     Default: https://pwpush.com
 
     .PARAMETER UserAgent
@@ -33,23 +43,23 @@
 
     .PARAMETER Force
     Force setting new information. If module is already initialized you can use this to
-    Re-initialize with default settings. Implied if either ApiKey or BaseUrl is provided.
+    re-initialize the module. If not specified and there is an existing session the request is ignored.
 
     .EXAMPLE
-    # Initialize with default settings
+    # Default settings
     PS > Initialize-PassPushPosh
 
     .EXAMPLE
-    # Initialize with authentication
-    PS > Initialize-PassPushPosh -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
-
-    VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://pwpush.com
+    # Authentication
+    PS > Initialize-PassPushPosh -Bearer 'myreallylongapikey'
 
     .EXAMPLE
-    # Initialize with another server with authentication
-    PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.com -EmailAddress 'youremail@example.com' -ApiKey '239jf0jsdflskdjf' -Verbose
+    # Initialize with another domain - may be a private instance or a hosted instance with custom domain
+    PS > Initialize-PassPushPosh -BaseUrl https://myprivatepwpushinstance.example.com -Bearer 'myreallylongapikey'
 
-    VERBOSE: Initializing PassPushPosh. ApiKey: [x-kdjf], BaseUrl: https://myprivatepwpushinstance.com
+    .EXAMPLE
+    # Legacy authentication support
+    PS > Initialize-PassPushPosh -ApiKey 'myreallylongapikey' -EmailAddress 'myregisteredemail@example.com' -UseLegacyAuthentication -BaseUrl https://myprivatepwpushinstance.example.com
 
     .EXAMPLE
     # Set a custom User Agent
@@ -59,29 +69,30 @@
     https://github.com/adamburley/PassPushPosh/blob/main/Docs/Initialize-PassPushPosh.md
 
     .NOTES
-    -WhatIf setting for Set-Variable -Script is disabled, otherwise -WhatIf
-    calls for other functions would return incorrect data in the case this
-    function has not yet run.
+    The use of X-USER-TOKEN for authentication is depreciated and will be removed in a future release of the API.
+    This module will support it via legacy mode, initially by attempting to auto-detect if Bearer is supported.
+    New code using this module should use -Bearer (most cases) or -UseLegacyAuthentication (self-hosted older versions).
+    In a future release the module will default to Bearer unless the -UseLegacyAuthentication switch is set.
+
     #>
 function Initialize-PassPushPosh {
     [CmdletBinding(DefaultParameterSetName = 'Anonymous')]
     param (
-        [Parameter(ParameterSetName = 'Pro')]
-        [ValidateSet('Premium', 'Pro')]
-        [string]$AccountType = 'Pro',
+        [Parameter(ParameterSetName = 'Authenticated')]
+        [string]$Bearer,
 
-        [Parameter(Mandatory, Position = 0, ParameterSetName = 'Authenticated')]
-        [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
-        [string]$EmailAddress,
-
-        [Parameter(Mandatory, ParameterSetName = 'Pro')]
-        [Parameter(Mandatory, Position = 1, ParameterSetName = 'Authenticated')]
+        [Parameter(Mandatory, Position = 0, ParameterSetName = 'Legacy Auth')]
         [ValidateLength(5, 256)]
         [string]$ApiKey,
 
-        [Parameter(Position = 0, ParameterSetName = 'Anonymous')]
-        [Parameter(Position = 2, ParameterSetName = 'Authenticated')]
-        [Parameter(ParameterSetName = 'Pro')]
+        [Parameter(Mandatory, Position = 1, ParameterSetName = 'Legacy Auth')]
+        [ValidatePattern('.+\@.+\..+', ErrorMessage = 'Please specify a valid email address')]
+        [string]$EmailAddress,
+
+        [Parameter(ParameterSetName = 'Legacy Auth')]
+        [switch]$UseLegacyAuthentication,
+
+        [Parameter()]
         [ValidatePattern('^https?:\/\/[a-zA-Z0-9-_]+.[a-zA-Z0-9]+')]
         [string]$BaseUrl,
 
@@ -90,56 +101,61 @@ function Initialize-PassPushPosh {
         [string]
         $UserAgent,
 
-        [Parameter()][switch]$Force
+        [Parameter()]
+        [switch]$Force
     )
-    if ($Script:PPPBaseURL -and $true -inotin $Force, [bool]$ApiKey, [bool]$BaseUrl, [bool]$UserAgent) { Write-Debug -Message 'PassPushPosh is already initialized.' }
+    if ($Script:PPPBaseURL -and -not $Force) { Write-Debug -Message 'PassPushPosh is already initialized.' }
     else {
-        $defaultBaseUrl = 'https://pwpush.com'
-        $apiKeyOutput = $ApiKey ? (Format-PasswordPusherSecret -Secret $ApiKey -ShowSample) : 'None'
+        $_baseUrl = $PSBoundParameters.ContainsKey('BaseUrl') ? $BaseUrl : 'https://pwpush.com'
+        $_apiKey = $PSBoundParameters.ContainsKey('Bearer') ? $Bearer : $ApiKey
 
-        if (-not $Script:PPPBaseURL) {
-            # Not initialized
-            if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
-            Write-Verbose "Initializing PassPushPosh. ApiKey: [$apiKeyOutput], BaseUrl: $BaseUrl"
-        }
-        elseif ($Force -or $ApiKey -or $BaseURL) {
-            if (-not $BaseUrl) { $BaseUrl = $defaultBaseUrl }
-            $oldApiKeyOutput = if ($Script:PPPApiKey) { Format-PasswordPusherSecret -Secret $Script:PPPApiKey -ShowSample } else { 'None' }
-            Write-Verbose "Re-initializing PassPushPosh. Old ApiKey: [$oldApiKeyOutput] New ApiKey: [$apiKeyOutput], Old BaseUrl: $Script:PPPBaseUrl New BaseUrl: $BaseUrl"
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'Authenticated') {
+        $apiKeySample = $_apiKey ? (Format-PasswordPusherSecret -Secret $_apiKey -ShowSample) : 'None'
 
-            Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
-                'X-User-Email' = $EmailAddress
-                'X-User-Token' = $ApiKey
+        $_AuthType = $PSCmdlet.ParameterSetName -iin 'Anonymous', 'Authenticated' ? $PSCmdlet.ParameterSetName : $UseLegacyAuthentication ? 'Legacy' : 'Automatic'
+
+        switch ($_AuthType) {
+            'Anonymous' {
+                # module is reinitialized from an authenticated to an anonymous session
+                Remove-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -ErrorAction SilentlyContinue
+            }
+            'Authenticated' {
+                Write-Debug 'Bearer auth specified.'
+                Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
+                    'Authorization' = "Bearer $_apiKey"
+                }
+            }
+            'Legacy' {
+                Write-Debug 'Legacy auth specified.'
+                Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
+                    'X-User-Email' = $EmailAddress
+                    'X-User-Token' = $_apiKey
+                }
+            }
+            'Automatic' {
+                Write-Debug 'Legacy auth status not specified Checking for /version'
+                if ((Invoke-RestMethod "$_baseUrl/api/v1/version.json" -SkipHttpErrorCheck).Api_Version -gt 1.0) {
+                    Write-Debug "Current version detected via /version"
+                    Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
+                        'Authorization' = "Bearer $_apiKey"
+                    }
+                } else {
+                    Write-Warning 'Instance does not appear to support modern Bearer authentication.'
+                    Write-Warning 'The module will fall back to using legacy authentication.'
+                    Write-Warning 'If you are connecting to a self-hosted instance, verify it is up to date.'
+                    Write-Warning 'If you know you need legacy (X-User-Token) authentication include  Invoke-PassPushPosh -UseLegacyAuth $true'
+                    Write-Warning 'To skip the step check and this warning.'
+                    Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Force -Value @{
+                        'X-User-Email' = $EmailAddress
+                        'X-User-Token' = $_apiKey
+                    }
+                }
             }
         }
-        elseif ($PSCmdlet.ParameterSetName -eq 'Pro') {
-            Write-Debug "Initializing for paid tier $($AccountType)"
-            Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
-                'Authorization' = "Bearer $ApiKey"
-            }
-        }
-        elseif ($Script:PPPHeaders) {
-            # Remove if present - covers case where module is reinitialized from an authenticated to an anonymous session
-            Remove-Variable -Scope Script -Name PPPHeaders -WhatIf:$false
-        }
 
-        if (-not $UserAgent) {
-            $osVersion = [System.Environment]::OSVersion
-            $userAtDomain = '{0}@{1}' -f [System.Environment]::UserName, [System.Environment]::UserDomainName
-            $uAD64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($userAtDomain))
-            Write-Debug "$userAtDomain transformed to $uAD64. First 20 characters $($uAD64.Substring(0,20))"
-            # Version tag is replaced by the semantic version number at build time. See PassPushPosh/issues/11 for context
-            $UserAgent = "PassPushPosh/{{semversion}} $osVersion/$($uAD64.Substring(0,20))"
-            # $UserAgent = "PassPushPosh/$((Get-Module -Name PassPushPosh).Version.ToString()) $osVersion/$($uAD64.Substring(0,20))"
-            Write-Verbose "Generated user agent: $UserAgent"
-        }
-        else {
-            Write-Verbose "Using specified user agent: $UserAgent"
-        }
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPUserAgent -Value ($PSBoundParameters.ContainsKey('UserAgent') ? $UserAgent : (New-PasswordPusherUserAgent))
+        Set-Variable -WhatIf:$false -Scope Script -Name PPPBaseURL -Value $_baseUrl.TrimEnd('/')
 
-        Set-Variable -WhatIf:$false -Scope Script -Name PPPBaseURL -Value $BaseUrl.TrimEnd('/')
-        Set-Variable -WhatIf:$false -Scope Script -Name PPPUserAgent -Value $UserAgent
+        Write-Verbose -Message "PassPushPosh Initialized with these settings: Account type: [$_AuthType] API Key: $apiKeySample Base URL: [$_baseUrl]"
+        Write-Verbose -Message "User Agent: $Script:PPPUserAgent"
     }
 }
