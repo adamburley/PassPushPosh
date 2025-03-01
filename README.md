@@ -13,9 +13,12 @@
 
 ## Status
 
+**Files, QR codes, and URLs available as of PPP 1.3.2!**
+
 - ✅ **Passwords**: (text) All functions supported
-- ⬜ **URLs**: (link forwarding) Planned
-- ⬜ **Files**: Planned
+- ✅ **URLs**: (link forwarding) `New-Push -URL 'https://example.com/myurl'`
+- ✅ **QR Code**: `New-Push -QR 'thing to encode in a QR code'`.
+- ✅ **Files**: `New-Push -File C:\temp\secretfiles\myfile1.txt,C:\temp\secretfiles\myfile2.txt` or `New-Push -File C:\temp\secretfiles`. Supports up to 10 files total in folder paths and directly listed.
 - ✅ **Pro Accounts**: Supported as of PassPushPosh 1.2.0
 
 ## Getting Started
