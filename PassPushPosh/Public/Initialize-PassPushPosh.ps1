@@ -132,9 +132,9 @@ function Initialize-PassPushPosh {
                 }
             }
             'Automatic' {
-                Write-Debug 'Legacy auth status not specified Checking for /up'
-                if ((Invoke-WebRequest "$_baseUrl/up" -SkipHttpErrorCheck).StatusCode -eq 200) {
-                    Write-Debug "Current version detected via /up"
+                Write-Debug 'Legacy auth status not specified Checking for /version'
+                if ((Invoke-RestMethod "$_baseUrl/api/v1/version.json" -SkipHttpErrorCheck).Api_Version -gt 1.0) {
+                    Write-Debug "Current version detected via /version"
                     Set-Variable -Scope Script -Name PPPHeaders -WhatIf:$false -Value @{
                         'Authorization' = "Bearer $_apiKey"
                     }
