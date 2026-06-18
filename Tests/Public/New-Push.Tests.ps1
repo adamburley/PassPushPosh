@@ -1,11 +1,15 @@
+BeforeDiscovery {
+    $targets = Get-Content -Path $PSScriptRoot\..\..\testdata.json | ConvertFrom-Json -AsHashtable
+    Write-host "Test Targets:" $targets.Keys -ForegroundColor Cyan
+}
 BeforeAll {
     Import-Module $PSScriptRoot\..\..\Output\PassPushPosh -Force
 }
 
 Describe "New-Push" {
-    Context "Anonymous pushes" {
+    Context "<Type> Anonymous pushes" -ForEach ($targets.HostedFree, $targets.OSSCurrent) {
         BeforeAll {
-            Initialize-PassPushPosh -Force
+            Initialize-PassPushPosh -Force -BaseUrl $Url
         }
         It "should create a new push and set the payload correctly" {
             $payload = 'This is a test payload'
@@ -37,9 +41,9 @@ Describe "New-Push" {
             { New-Push -Payload $payload -Note 'This is a note' } | Should -Throw -ExpectedMessage "Cannot validate argument on parameter 'Note'. Adding a note requires authentication."
         }
     }
-    Context "Authenticated pushes" {
+    Context "<Type> Authenticated pushes" -ForEach ($targets.HostedProDomain, $targets.HostedFree, $targets.OSSCurrent) {
         BeforeAll {
-            Initialize-PassPushPosh -EmailAddress $env:pwpEmail -ApiKey $env:pwpKey -Force
+            Initialize-PassPushPosh -Bearer $ApiKey -BaseUrl $Url -Force
         }
         It "sends a push with a note" {
             $Global:authpayload = 'This is a test payload'
@@ -54,6 +58,17 @@ Describe "New-Push" {
             $dash = Get-Dashboard -Dashboard Active
             $thisDash = $dash | Where-Object { $_.UrlToken -eq $authpush.UrlToken }
             $thisDash.Note | Should -Be $note
+        }
+    }
+    Context "<Type> Account-based pushes" -ForEach ($targets.HostedProAccountId, $targets.HostedFreeAccountId) {
+        BeforeAll {
+            Initialize-PassPushPosh -Bearer $ApiKey -BaseUrl $Url -Force
+        }
+        It "Allows specifying account with an ID" {
+            $push = New-Push -Payload 'test' -AccountId $AccountId
+            $receivedPush = Get-Push -URLToken $push.UrlToken
+            $push.AccountId | Should -Be $AccountId
+            $receivedPush.AccountId | Should -Be $AccountId
         }
     }
 }

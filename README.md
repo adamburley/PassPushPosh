@@ -6,16 +6,19 @@
 ![GitHub License](https://img.shields.io/github/license/adamburley/PassPushPosh)
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/adamburley/PassPushPosh)
-![Code Coverage](https://img.shields.io/badge/coverage-74%25-orange.svg?maxAge=60)
+![Code Coverage](https://img.shields.io/badge/coverage-67%25-orange.svg?maxAge=60)
 
 
 *PassPushPosh* is a PowerShell 7 Module for [Password Pusher](https://pwpush.com), a secure sharing web service.
 
 ## Status
 
+**Files, QR codes, and URLs available as of PPP 1.3.2!**
+
 - ✅ **Passwords**: (text) All functions supported
-- ⬜ **URLs**: (link forwarding) Planned
-- ⬜ **Files**: Planned
+- ✅ **URLs**: (link forwarding) `New-Push -URL 'https://example.com/myurl'`
+- ✅ **QR Code**: `New-Push -QR 'thing to encode in a QR code'`.
+- ✅ **Files**: `New-Push -File C:\temp\secretfiles\myfile1.txt,C:\temp\secretfiles\myfile2.txt` or `New-Push -File C:\temp\secretfiles`. Supports up to 10 files total in folder paths and directly listed.
 - ✅ **Pro Accounts**: Supported as of PassPushPosh 1.2.0
 
 ## Getting Started
@@ -66,6 +69,12 @@ See **[Docs](Docs)** or `Get-Help [command]` for more information. Happy sharing
 ## Other
 
 - Used in the popular Microsoft 365 Partner management portal [CIPP](https://cipp.app/)!
+
+
+
+
+
+
 
 
 

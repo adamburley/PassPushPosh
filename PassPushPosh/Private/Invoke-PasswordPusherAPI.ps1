@@ -1,10 +1,10 @@
-function Invoke-PasswordPusherAPI {
+﻿function Invoke-PasswordPusherAPI {
     [CmdletBinding(DefaultParameterSetName = 'Body')]
     [OutputType([PSCustomObject])]
     param(
         [string]$Endpoint,
         [Microsoft.PowerShell.Commands.WebRequestMethod]$Method = [Microsoft.PowerShell.Commands.WebRequestMethod]::Get,
-        
+
         [Parameter(ParameterSetName = 'Body')]
         [object]$Body,
 

@@ -1,4 +1,4 @@
-<#
+﻿<#
     .SYNOPSIS
     Create a new Push
 
@@ -25,6 +25,10 @@
     Attach files to a push. Up to 10 files in all referenced folders and paths
     may be specified by passing a file or folder path or array of paths or a
     DirectoryInfo or FileInfo object.
+
+    File pushes can be files only, files with text, or files with a QR code.
+    To add text, simply use -Payload. To specify a QR code, use -QR or use
+    -Payload 'your value' -Type QR
 
     .PARAMETER Passphrase
     Require recipients to enter this passphrase to view the created push.
@@ -89,6 +93,10 @@
     PS > New-Push -URL 'https://example.com/coolplacetoforwardmyrecipientto'
 
     .EXAMPLE
+    Create a QR push
+    PS > New-Push -QR 'thing i want to show up when someone reads the QR code'
+
+    .EXAMPLE
     Create a file push
     PS > New-Push -File 'C:\mytwofiles\mycoolfile.txt', 'C:\mytwofiles\mycoolfile2.txt'
     or
@@ -96,6 +104,10 @@
     or
     PS > $myFolder = Get-ChildItem C:\mytwofiles
     PS > New-Push -File $myFolder
+
+    .EXAMPLE
+    Create a QR push using -Payload
+    PS > New-Push -Payload 'this is my qr code value' -Kind QR
 
 
     .LINK
@@ -208,14 +220,14 @@ function New-Push {
             $shouldString += ", expire after $ExpireAfterViews views"
         }
         if ($PSBoundParameters.ContainsKey('DeletableByViewer')) {
-            $passVals.deletable_by_viewer = $DeletableByViewer
+            $passVals.deletable_by_viewer = [bool]$DeletableByViewer
             $shouldString += $DeletableByViewer ? ', deletable by viewer' : ', not deletable by viewer'
         }
         if ($PSBoundParameters.ContainsKey('RetrievalStep')) {
-            $passVals.retrieval_step = $RetrievalStep
+            $passVals.retrieval_step = [bool]$RetrievalStep
             $shouldString += $RetrievalStep ? ', with a 1-click retrieval step' : ', without a retrieval step'
         }
-     
+
         if ($File) {
             $_Files = Get-ChildItem -Path $File
             Write-Debug "Attaching $($_Files.Name -join '; ')"
